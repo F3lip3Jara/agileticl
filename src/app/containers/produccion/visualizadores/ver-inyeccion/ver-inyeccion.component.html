@@ -1,0 +1,23 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div  *ngIf=" !inyecciones">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <ul ngbNav #nav="ngbNav" class="nav-tabs">
+            <li *ngFor="let items of inyecciones" ngbNavItem class="">
+                <a ngbNavLink>{{items.id_inye}} - {{items.lote_salida}}</a>
+                <ng-template ngbNavContent>
+                        <app-ver-inyeccion-det [orden_trabajo]="items"></app-ver-inyeccion-det>
+                </ng-template>
+            </li>            
+        </ul>        
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+    
+</div>

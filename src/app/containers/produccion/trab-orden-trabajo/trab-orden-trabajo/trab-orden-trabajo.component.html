@@ -1,0 +1,285 @@
+<div class="card">
+  <div class="card-header">
+    <h3 class="card-title">Orden de Trabajo</h3>
+    <div class="card-tools">
+      <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fas fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtroOp">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>N° OP</td>
+            <td><input type="text"   [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese N° Orden Producción"  formControlName='orpNumRea' /> </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroOp.controls['orpNumRea'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+    </form>
+    <div class="loading" *ngIf= "loading" >
+      <img src = "../../../assets/Circles-menu-3.gif">
+     </div>
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblOrdenPrd?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Nro Op</th>
+            <th>Fecha Op</th>
+            <th>Estado Ot</th>
+            <th>Prioridad</th>
+            <th>Etapa</th>
+            <th>Cód Producto</th>
+            <th>Producto</th>
+            <th>Cant. Solicitado</th>
+            <th>Cant. Producida</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let orden of tblOrdenPrd">
+            <th>{{orden.id}}</th>
+            <th>{{orden.usuario_genera}}</th>
+            <th>{{orden.orden_produccion}}</th>
+            <th>{{orden.orden_prod_fec}}</th>
+            <th>{{orden.estado}}</th>
+            <th>
+              <span [ngSwitch]="orden.prioridad">
+                <span *ngSwitchCase="'A'">
+                  <small class="badge badge-danger">Alta</small>
+                </span>
+                <span *ngSwitchCase="'M'">
+                    <small class="badge badge-primary">Medio</small>
+                </span>
+                <span *ngSwitchCase="'B'">
+                  <small class="badge badge-secondary">Bajo</small>
+                </span>
+              </span>
+            </th>
+            <th>{{orden.etapa}}</th>
+            <th>{{orden.cod_producto}}</th>
+            <th>{{orden.producto}}</th>
+            <th>{{orden.solicitado}}</th>
+            <th>{{orden.producido}}</th>
+            <th>  
+               <a style= "margin : 1px ;" (click) = "agregar(orden , modalGenera)" class="btn btn-warning btn-xs" ngbTooltip="Generar Tarea"><i class="fas fa-plus-circle"></i></a>
+               <a style= "margin : 1px;"  class="btn btn-success btn-xs" (click)="mAprOT(modalAprOT, 'A' , orden)"   ngbTooltip="Autorizar"><i class="fas fa-check-double"></i></a>
+               <a style= "margin : 1px;"  class="btn btn-danger btn-xs"  (click)="mAprOT(modalAprOT, 'R' , orden)"  ngbTooltip="Rechazar"><i class="fas fa-ban"></i></a>
+               <a style= "margin : 1px;"  class="btn btn-warning btn-xs" (click)="verOT(orden , modalVerOT)"  ngbTooltip="Ver"><i class="fas fa-eye"></i></a>
+            </th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+<ng-template #modalGenera let-modal>
+  <form   >
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de Generación de Tarea</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+        <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">Orden Producción</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_produccion}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Ordene Trabajo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_produccion}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Etapa</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.etapa}}" >               
+      </div> 
+    </div>                    
+    </div>
+   <!-- /.card-body -->
+   <div class="modal-footer">
+    <button class="btn btn-primary btn-block" (click)="genrarOT(orden)">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>      
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #modalVerOT let-modal>
+  <form >
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de orden de trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">ID Trabajo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true"  value="{{orden.id}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.usuario_genera}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Nro Op</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_produccion}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Fecha OP</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_prod_fec}}" >               
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Ot</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.estado}}" >                          
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Cód Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.cod_producto}}" >               
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>       
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.producto}}" >                           
+     </div>
+      <div class="form-group col-md-4">
+        <label for="">Cant Solicitada</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.solicitado}}" >                           
+      </div> 
+      <div class="form-group col-md-4">
+        <label for="">Cant Producida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.producido}}" >                           
+      </div>        
+    </div>                  
+  
+  <div class="row">
+    <div class="col-md-12">
+      <h6 >Tareas</h6>
+      <span *ngIf="orden.cod_etapa == 5">    
+        <app-ver-termoformado [orden]="orden"></app-ver-termoformado>
+      </span>
+      <span *ngIf="orden.cod_etapa == 7">
+        <app-ver-inyeccion [orden]="orden"></app-ver-inyeccion>
+      </span>
+      <span *ngIf="orden.cod_etapa == 8">
+        <app-ver-impresion [orden]="orden"></app-ver-impresion>
+      </span>
+    </div>
+    
+  </div>
+</div> 
+   <div class="modal-footer">  
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #modalAprOT let-modal>
+  <form >
+  <div class="modal-header">
+    <h5 class="modal-title">Modal de {{tipo}} orden de trabajo</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" >
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="">ID Trabajo</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true"  value="{{orden.id}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.usuario_genera}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Nro Op</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_produccion}}">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Fecha OP</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.orden_prod_fec}}" >               
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Estado Ot</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.estado}}" >                          
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Cód Producto</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.cod_producto}}" >               
+      </div>
+      <div class="form-group col-md-4">
+        <label for="">Producto</label>       
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.producto}}" >                           
+     </div>
+      <div class="form-group col-md-4">
+        <label for="">Cant Solicitada</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.solicitado}}" >                           
+      </div> 
+      <div class="form-group col-md-4">
+        <label for="">Cant Producida</label>
+        <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden.producido}}" >                           
+      </div>        
+    </div>                  
+  
+  <div class="row">
+    <div class="col-md-12">
+      <h6 >Tareas</h6>
+      <span *ngIf="orden.cod_etapa == 5">    
+        <app-ver-termoformado [orden]="orden"></app-ver-termoformado>
+      </span>
+      <span *ngIf="orden.cod_etapa == 7">
+        <app-ver-inyeccion [orden]="orden"></app-ver-inyeccion>
+      </span>
+      <span *ngIf="orden.cod_etapa == 8">
+        <app-ver-impresion [orden]="orden"></app-ver-impresion>
+      </span>
+    </div>
+    
+  </div>
+</div> 
+   <div class="modal-footer"> 
+    <button class="btn btn-primary btn-block"  (click)="AprOT(this.orden)"  [disabled]="val" >
+    <div *ngIf="val">
+     {{tipoAction}}..
+      <span class="spinner-border spinner-border-sm mr-2"></span>
+    </div>
+    <div *ngIf="!val">{{tipoAction}}</div>
+  </button> 
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+

@@ -1,0 +1,27 @@
+
+.ocultar{
+
+  visibility: hidden;
+  transition: 2s ease-in-out forwards;
+}
+
+ .number {
+    font-size: 30px;
+    font-weight: bold;
+    color: #180a0a4a;
+    animation: number-animation 2s ease-in-out forwards;
+    text-align: right;
+    opacity: 0;
+}
+@keyframes number-animation {
+  from {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+

@@ -1,0 +1,109 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Productos</h5>
+   </div>
+  <div class="card-body">
+      <h3 class="card-title">Filtros</h3>
+      <form
+      [formGroup] = "filtroPrd">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td>Descripción</td>
+            <td><input type="text"   [(ngModel)]="model"
+              [ngbTypeahead]="search"
+              (focus)="focus$.next($any($event).target.value)"
+              (click)="click$.next($any($event).target.value)"
+              #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese descripción de producto"  formControlName ='prdDes' /> </td>
+            <!--<td>Fecha de Creación</td>
+            <td>
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd"
+                       name="dp"  ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                </div>
+              </div>
+            </td>-->
+
+          </tr>
+
+        </tbody>
+      </table>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroPrd.controls['prdDes'].value , filtroPrd.controls['created_at'].value)" ngbTooltip="Buscar">
+        <fa-icon [icon]="faSearch"></fa-icon>
+        Buscar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()">
+        <fa-icon [icon]="faSyncAlt"></fa-icon>
+        Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()">
+        <fa-icon [icon]="faFileExcel"></fa-icon>
+        Excel</button>
+      <a (click)="prvNuevo()" class="btn  btn-outline-primary btn-sm" >
+        <fa-icon [icon]="faAddressCard"></fa-icon>
+        Nuevo</a>
+    </form>
+
+    <div class="loading" *ngIf= "loading" >
+      <img src = "assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div class="table-responsive">
+    <div  *ngIf="tblProductos?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cód Producto</th>
+            <th>Descripción</th>
+            <th>Cód Rápido</th>
+            <th>Cód Barra</th>
+            <th>Tipo</th>
+            <th>Grupo</th>
+            <th>Sub Grupo</th>
+            <th>Color</th>
+            <th>Mínimo</th>
+            <th>Inventariable</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let productos of tblProductos">
+            <th>{{productos.id}}</th>
+            <th>{{productos.cod_pareo}}</th>
+            <th>{{productos.descripcion}}</th>
+            <th>{{productos.cod_rapido}}</th>
+            <th>{{productos.cod_barra}}</th>
+              <th *ngIf=" productos.tipo == 'B'">Materia Base</th>
+              <th *ngIf=" productos.tipo == 'M'">Materia Prima</th>
+              <th *ngIf=" productos.tipo == 'V'">Materia Virgen</th>
+              <th *ngIf=" productos.tipo == 'P'">Producto Terminado</th>
+              <th *ngIf=" productos.tipo == 'I'">Insumo</th>
+              <th *ngIf=" productos.tipo == 'S'">Servicio</th>
+
+            <th>{{productos.grupo}}</th>
+            <th>{{productos.sub_grupo}}</th>
+            <th>{{productos.color}}</th>
+            <th>{{productos.minimo}}</th>
+            <th>
+              <span *ngIf="productos.inventariable =='S', else noena" >SI</span>
+            <ng-template #noena><span>NO</span></ng-template>
+            </th>
+            <th>  <a (click)="modelUp(productos)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+              <fa-icon [icon]="faPenToSquare"></fa-icon>
+            </a></th>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>

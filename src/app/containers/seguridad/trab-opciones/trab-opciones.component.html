@@ -1,0 +1,84 @@
+<div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Opciones</h5>
+    </div>
+    <div class="card-body">  
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel</button>
+          <a (click) = "modalIns(modalRolesIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo">
+            <fa-icon [icon]="faAddressCard"></fa-icon>
+            Nuevo</a>
+       
+        <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>
+  
+   <div>
+    <br>
+    <div  class="table-responsive"  *ngIf="tblOpciones?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Link</th>
+            <th>Sub Opción</th>           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let opcion of tblOpciones">
+            <th>{{opcion.idOpt}}</th>
+            <th>{{opcion.optDes}}</th>
+            <th>{{opcion.optLink}}</th>  
+            <th>{{opcion.optSub}}</th>                         
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      Marple
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  <
+  
+  
+  <ng-template #modalRolesIns let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso Opciones</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form >
+        <div class="card-body">
+          <div class="form-group">
+            <label for="">Descripción</label>
+            <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="" #insOptDes >
+          </div>
+          <div class="form-group">
+            <label for="">Link</label>
+            <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="" #insOptLink >
+          </div>         
+          <div class="form-group">
+            <label for="nombre">Sub - Opción</label>           
+              <select class="form-select input-group-sm" #insOptSub>
+                <option  value="S">SI</option>
+                <option  value="N">NO</option>
+              </select>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click) ="action(insOptDes.value, insOptLink.value ,insOptSub.value   , 'ins' )" [disabled]="loading">Guardar</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </ng-template>
+  

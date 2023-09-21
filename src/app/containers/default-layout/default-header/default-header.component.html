@@ -1,0 +1,117 @@
+<!--<c-header class="mb-4 d-print-none" position="sticky">-->
+<ng-container>
+  <c-container [fluid]="true">
+    <button
+      toggle="visible"
+      cHeaderToggler
+      [cSidebarToggle]="sidebarId"
+      class="ps-1"
+    >
+      <svg cIcon
+        name="cilMenu"
+        size="lg"
+      ></svg>
+    </button>
+    <c-header-nav class="d-none d-lg-flex me-auto">
+     
+    </c-header-nav>
+
+    <c-header-nav class="d-none d-lg-flex">
+      <c-header-nav class="ms-3">
+        <ng-container *ngTemplateOutlet="userNotificaciones"></ng-container>
+      </c-header-nav>
+
+      
+    </c-header-nav>
+    <c-header-nav class="ms-3">
+      <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
+    </c-header-nav>
+
+  </c-container>
+  <c-header-divider></c-header-divider>
+  <c-container [fluid]="true">
+    <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
+  </c-container>
+</ng-container>
+<!--</c-header>-->
+
+<ng-template #userDropdown>
+  <c-dropdown alignment="end" variant="nav-item">
+    <button  cButton  color=""  [caret]="false" cDropdownToggle class="py-0" >
+      <c-avatar 
+        cTextColor="primary"
+        shape="rounded-1"
+        size="md"
+        src="{{imgName}}"
+        status="success"
+      >
+      </c-avatar>
+    </button>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Cuenta</h6>
+      </li>
+      <li>
+        <a (click)="verNotificaciones()" cDropdownItem>
+          <svg cIcon class="me-2" name="cilBell"></svg>
+          Alertas
+          <c-badge class="ms-2 float-end" color="info">
+            {{contador}}
+          </c-badge>
+        </a>
+      </li> 
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Ajustes</h6>
+      </li>
+      <li></li>
+      <li>
+        <a routerLink="./" cDropdownItem>
+          <svg cIcon class="me-2" name="cilSettings"></svg>
+          Ajustes
+        </a>
+      </li> 
+      <li>
+        <hr cDropdownDivider/>
+      </li>
+      <li>
+        <a (click)="salir()" cDropdownItem>
+          <svg cIcon class="me-2" name="cilLockLocked"></svg>
+          Salir
+        </a>
+      </li>
+      <li></li>
+    </ul>
+  </c-dropdown> 
+</ng-template>
+
+
+<ng-template #userNotificaciones>
+  <c-dropdown variant="nav-item">
+    <button  cButton  color=""  [caret]="false" cDropdownToggle class="py-3" >
+         <c-badge class="ms-2 float-end" color="info">
+          {{contador}}
+        </c-badge>   
+        <svg cIcon name="cilBell" size="lg"></svg> 
+    </button>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Notificaciones</h6>
+      </li>
+      <li  *ngFor="let notificaciones of datos" >
+          <a  (click)="lectura(notificaciones)" cDropdownItem>
+            <fa-icon [icon]="faIndustry"></fa-icon> 
+            <span  >
+              {{notificaciones.notLotSal}}
+              {{notificaciones.notObs}}
+           </span>
+          </a>
+      </li>
+      <li >
+       <a cDropdownItem>  <span  style="font-size: 11px;" *ngIf="!datos?.length">Sin Notificaciones</span></a>
+      
+      </li>
+      
+      <li></li>
+    </ul>
+  </c-dropdown> 
+</ng-template>
