@@ -1,0 +1,156 @@
+<div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Orden de Trabajo - Inyección</h3>
+      <div class="card-tools">
+        <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+          <i class="fas fa-minus"></i></button>
+      </div>
+    </div>
+    <div class="card-body">
+        <h3 class="card-title">Filtros</h3>
+        <form
+        [formGroup] = "filtroOp">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td>N° OP</td>
+              <td><input type="text"   [(ngModel)]="model"
+                [ngbTypeahead]="search"
+                (focus)="focus$.next($any($event).target.value)"
+                (click)="click$.next($any($event).target.value)"
+                #instance="ngbTypeahead"  value="" class="form-control" placeholder="Ingrese N° Orden Producción"  formControlName='orpNumRea' /> </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "buscar(filtroOp.controls['orpNumRea'].value)" ngbTooltip="Buscar"><i class="fas fa-search"></i>Buscar</button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()" ngbTooltip="Refrescar"><i class="fas fa-sync-alt"></i>Refrescar</button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "Excel()"  ngbTooltip="Excel" ><i class="fas fa-file-csv"></i>Excel</button>
+      </form>
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>
+   <div>
+    <br>
+    <div class="table-responsive">
+      <div  *ngIf="tblOrdenPrd?.length > 0" class="{{carga}}">
+        <table #datatableElement datatable  id="tblOrdenPrd" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>ID Trabajo</th>
+              <th>ID Inye</th>
+              <th>Usuario OP</th>
+              <th>Nro OC</th>
+              <th>Nro Op</th>
+              <th>Fecha Op</th>                         
+              <th>Estado Ot</th>   
+              <th>Estado Inye Op</th>     
+              <th>Estado Inye Ctl</th>              
+              <th>Prioridad</th>            
+              <th>Producto</th>  
+              <th>Cantidad Solicitada</th>  
+              <th>Lote Salida</th>  
+              <th>Tipo de Empaque</th> 
+              <th>Maquina</th>
+              <th>Turno</th>    
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let orden of tblOrdenPrd">
+              <th>{{orden.id}}</th>
+              <th>{{orden.id_inye}}</th>
+              <th>{{orden.usuario_genera}}</th>
+              <th>{{orden.oc}}</th>
+              <th>{{orden.op}}</th>
+              <th>{{orden.orden_prod_fec}}</th>
+              <th>{{orden.estado_orden}}</th> 
+              <th>{{orden.estado_inye_op}}</th> 
+              <th>{{orden.estado_inye_ctl}}</th>                                          
+              <th>
+                <span [ngSwitch]="orden.prioridad">
+                  <span *ngSwitchCase="'A'">
+                    <small class="badge badge-danger">Alta</small>
+                  </span>
+                  <span *ngSwitchCase="'M'">
+                      <small class="badge badge-primary">Medio</small>
+                  </span>
+                  <span *ngSwitchCase="'B'">
+                    <small class="badge badge-secondary">Bajo</small>
+                  </span>
+                </span>
+              </th>
+              <th>{{orden.producto}}</th>  
+              <th>{{orden.cantidad_sol}}</th> 
+              <th>{{orden.lote_salida}}</th> 
+              <th>{{orden.tipo}} </th>   
+              <th>{{orden.maquina}}</th>  
+              <th>{{orden.turno}}</th>       
+              <th>
+                 <a style= "margin : 1px ;"  class="btn btn-warning btn-xs"  (click)="insInye(orden)"                      ngbTooltip="Actualizar Operador"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                 <a style= "margin : 1px ;"  class="btn btn-warning btn-xs"  (click)="upIny( orden)"                       ngbTooltip="Actualizar Calidad"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                 <a style= "margin : 1px;"  class="btn btn-success btn-xs"   (click)="accionIny(modalAprb, 'A' , orden)"   ngbTooltip="Autorizar"><i class="fas fa-check-double"></i></a>
+                 <a style= "margin : 1px;"  class="btn btn-danger btn-xs"    (click)="accionIny(modalAprb, 'R' , orden)"   ngbTooltip="Rechazar"><i class="fas fa-ban"></i></a>
+                 <a style= "margin : 1px;"  class="btn btn-warning btn-xs"   (click)="verIny(orden, modalVerExt)"       ngbTooltip="Ver"><i class="fas fa-eye"></i></a>
+                </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      Marple
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  
+  <ng-template #modalAprb let-modal>
+    <form   >
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de {{tipoAction}} Inyección</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" >
+      <app-ver-inyeccion-det [orden_trabajo]="orden_trabajo"></app-ver-inyeccion-det>           
+      </div>
+     <!-- /.card-body -->
+     <div class="modal-footer">
+      <button class="btn btn-primary btn-block" 
+        (click)="action()"  [disabled]="val" >
+        <div *ngIf="val">
+         {{tipoAction}}..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf="!val">{{tipoAction}}</div>
+      </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+    
+  
+  <ng-template #modalVerExt let-modal>
+    <form>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de {{tipoAction}} Inyección</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" >
+                             
+      <app-ver-inyeccion-det [orden_trabajo]="orden_trabajo"></app-ver-inyeccion-det>
+    </div>                 
+   
+     <!-- /.card-body -->
+     <div class="modal-footer">    
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+  
+  

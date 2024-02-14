@@ -1,0 +1,53 @@
+<div class="card card-outline card-primary">
+    <div class="card-header">
+      <h5 class="card-title">Gestión de Empresa - Módulos</h5>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body row">
+      <div cdkDropListGroup>
+        <div class="col-md-12">
+          <h6>Activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="optAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-info m-1" *ngFor="let item of optAsig" cdkDrag>
+              <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.optDes }}</span>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-12">
+          <h6>No activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="optnAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-warning m-1" *ngFor="let item of optnAsig" cdkDrag>
+            <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.optDes }}</span>
+        </div>
+          </div>
+        </div>     
+      </div>
+      <div class="col-md-12">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm mb-3 mt-2"
+          [disabled]="val"
+          (click)="guardar()"
+        >
+          <div *ngIf="val">
+            Guardando..
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+          </div>
+          <div *ngIf="!val">Guardar</div>
+        </button>
+        <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+          <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+          Volver
+        </a>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>

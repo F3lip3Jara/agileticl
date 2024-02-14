@@ -1,0 +1,102 @@
+<div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Acciones</h5>  
+    </div>
+    <div class="card-body">
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel</button>
+        <a  (click)="modalO(modalRolesIns)"  class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo">
+          <fa-icon [icon]="faAddressCard"></fa-icon>
+          Nuevo</a>  
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>  
+   <div>
+    <br>
+    <div    *ngIf="tblobj?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>          
+            <th>Acciones</th>
+            <th>Url</th>
+            <th>Tipo</th>
+            <th>Mensaje</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let accion of tblobj">
+            <th>{{accion.accId}}</th>
+            <th>{{accion.accDes}}</th>
+            <th>{{accion.accUrl}}</th>
+            <th>
+                <span class="badge text-bg-{{accion.accType}}">{{accion.accType}}</span></th>
+            <th>{{accion.accMessage}}</th>            
+            <th>              
+              <a style= "margin : 1px ;"  (click) = "del(accion)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+            <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+            Volver
+          </a>
+    </div>
+    <!-- /.card-footer-->
+  </div>
+ 
+  <ng-template #modalRolesIns let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso Acciones</h5>
+    </div> 
+    <form >          
+    <div class="modal-body">                                         
+          <div class="form-group">
+            <label for="">Url</label>
+            <input type="text" class="form-control"  placeholder="" value="" #accUrl
+             [ngClass]="(!accUrl.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!accUrl.value">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="">Acción</label>
+            <input type="text" class="form-control"  oninput="this.value = this.value.toUpperCase()" #accDes 
+            [ngClass]="(!accDes.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!accDes.value">
+              <span class="text-danger">Campo obligatorio!</span>
+             </div>
+          </div> 
+          <div class="form-group">
+            <label for="">Mensaje</label>
+            <input type="text" class="form-control"  oninput="this.value = this.value.toUpperCase()" #accMessage 
+            [ngClass]="(!accDes.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!accDes.value">
+              <span class="text-danger">Campo obligatorio!</span>
+             </div>
+          </div>      
+        <div *ngFor="let type of types"  class="form-check form-check-inline">          
+            <input class="form-check-input" id="{{type}}" [value]='type' type="radio" name="types" [(ngModel)]="accType">           
+            <label class="form-check-label" for="{{type}}"> <span class="badge text-bg-{{type}}">{{type}}</span></label>
+         </div> 
+         <div *ngIf="!accType">
+          <span class="text-danger">Campo obligatorio!</span>
+         </div>      
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  [disabled]="loading" (click)="guardar(accUrl.value, accDes.value , accMessage.value)" *ngIf="accUrl.value != '' && accDes.value != '' && accType != '' && accMessage.value != ''">Guardar</button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+  

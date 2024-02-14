@@ -1,0 +1,99 @@
+
+<div class="row">
+    <form [formGroup] = "ins"
+    (ngSubmit)="guardar(ins.controls['empDes'].value,
+                        ins.controls['empDir'].value,
+                        ins.controls['empRut'].value,
+                        ins.controls['empGiro'].value,
+                        ins.controls['empFono'].value)"
+    >
+          <div class="card card-outline card-primary">
+            <div class="card-header">
+              <h5 class="card-title">Ingreso de Empresa</h5>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">            
+                  <div class="row">                    
+                    <div class="col-md-6 form-group">
+                        <label for="empRut">Rut (99999999-0)</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="empRut" placeholder="Ingresar rut..." formControlName = 'empRut'
+                            [ngClass]="(ins.controls['empRut'].hasError('required') || ins.controls['empRut'].hasError('pattern') || !valRut )
+                             ? 'was-validated' : 'is-valid'" >
+                       </div>
+                       <div *ngIf = "ins.controls['empRut'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                      <div *ngIf = "ins.controls['empRut'].hasError('pattern')">
+                        <span class="text-danger">formato incorrecto!</span>
+                      </div>
+                      <div *ngIf="!valRut">
+                        <span class="text-danger">{{mensaje}}</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6  form-group">
+                        <label for="prvNom">Nombre</label>
+                        <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDes" placeholder="Ingresar nombre..." formControlName = 'empDes'   oninput="this.value = this.value.toUpperCase()"
+                          [ngClass]="(ins.controls['empDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                        </div>
+                        <div *ngIf = "ins.controls['empDes'].hasError('required')">
+                          <span class="text-danger">Campo obligatorio!</span>
+                        </div>
+                      </div>                
+                    <div class="col-md-6  form-group">
+                      <label for="prvNom">Teléfono</label>
+                      <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="empFono" placeholder="Ingresar nombre..." formControlName = 'empFono'   oninput="this.value = this.value.toUpperCase()"
+                        [ngClass]="(ins.controls['empFono'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                      </div>
+                      <div *ngIf = "ins.controls['empFono'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                    </div>                  
+                    <div class="col-md-6 form-group">
+                       <label for="prvGiro">Giro Comercial</label>
+                       <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empGiro" placeholder="Ingresar giro..." formControlName = 'empGiro'  oninput="this.value = this.value.toUpperCase()" 
+                          [ngClass]="(ins.controls['empGiro'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                        </div>
+                        <div *ngIf = "ins.controls['empGiro'].hasError('required')">
+                            <span class="text-danger">Campo obligatorio!</span>
+                          </div>
+                    </div>          
+                    <div class="col-md-6 form-group">
+                      <label for="prvDir">Dirección</label>
+                      <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDir" placeholder="Ingresar dirección..." formControlName = 'empDir'
+                          [ngClass]="(ins.controls['empDir'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                      </div>
+                      <div *ngIf = "ins.controls['empDir'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"  *ngIf ="ins.valid && valRut" [disabled]="val" >
+                        <div *ngIf= "val">
+                          Guardando..
+                          <span class="spinner-border spinner-border-sm mr-2"></span>
+                        </div>
+                        <div *ngIf= "!val">
+                          Guardar
+                        </div>      
+                      </button>                   
+                      <a routerLink="./.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+                        <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+                        Volver
+                      </a>
+                    </div>
+                </div>
+               
+              </div>            
+            <!-- /.card-body -->
+          </div>           
+    </form>
+    </div>
+    
+    
+    

@@ -1,0 +1,62 @@
+<div class="bg-light min-vh-100 d-flex flex-row align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">    
+                <h1>Marple</h1>
+                <div class="card">
+                  <div class="card-header">
+                    Login
+                  </div>
+                  <div class="card-body">
+                    <form
+                     [formGroup]="login"
+                    (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)"
+                    
+                    >
+                    <h6 class="mb-0 text-sm">Usuario</h6>
+                    <div class="input-group mb-3">
+                      <div class="input-group-text">
+                        <fa-icon [icon]="faUser"></fa-icon>
+                      </div>
+                      <input type="text" class="form-control" id="email" placeholder="Ingresar usuario..." formControlName = 'email' oninput="this.value = this.value.toUpperCase()" >
+                    </div>                    
+                      <div *ngIf = "login.controls['email'].hasError('required')">          
+                      </div>        
+                      
+                      <h6 class="mb-0 text-sm">Password</h6>
+                      <div class="input-group mb-3">
+                        <div class="input-group-text">
+                          <fa-icon [icon]="faLock"></fa-icon>
+                          </div>
+
+                        <input type="password" class="form-control" placeholder="Password" id="password" formControlName ='password'>
+                      
+                      </div>
+                      <div *ngIf = "login.controls['password'].hasError('required')">
+                    </div>
+                      <div class="row">
+                        <!-- /.col -->
+                        <div class="col-9">
+                          <button type="submit" class="btn btn-primary btn-block"  *ngIf ="login.valid">
+                            <div *ngIf= "log">
+                              Ingresando..
+                              <span class="spinner-border spinner-border-sm mr-2"></span>
+                            </div>
+                            <div *ngIf= "!log">
+                              Ingresar
+                            </div>
+                          </button>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                  </form>
+                  </div>
+                  <div class="card-footer">
+                    AgileTiCL v4.0.0
+                  </div>
+                </div>
+                <app-alert></app-alert>
+         </div>
+      </div>     
+  </div>
+</div>

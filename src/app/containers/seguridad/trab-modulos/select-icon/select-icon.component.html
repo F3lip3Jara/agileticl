@@ -1,0 +1,31 @@
+<div class="form-group">
+    <label for="">Icono</label>
+    <div class="col-md-6">
+       <div class="btn btn-sm btn-ghost-light mt-1">
+        <button class="btn btn-outline-secondary m-2" (click)="modalOpen(modalSelIcon)" type="button" ngbTooltip="Cambiar icono" >  <fa-icon [icon]="faMagnifyingGlass"></fa-icon></button>
+        <svg cIcon name="{{icono}}" size="xl"></svg> {{icono}}
+       </div>
+    </div>
+  </div>
+
+  <ng-template #modalSelIcon let-modal>
+    <div id="modal">
+    <div class="modal-header">
+      <h5 class="modal-title">Selección Icono</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card-body row col-md-12">         
+            <a class="col-md-3 btn btn-outline-primary btn-sm m-1" style="max-width:150px;" *ngFor="let item of iconSubset" (click)="cambio(item)" >
+                <svg cIcon name="{{item}}" size="xl" title="Numbered List Icon"></svg> {{item}}
+            </a>         
+        <!-- /.card-body -->
+    </div>
+   </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </div>
+  </ng-template>
+
+
+

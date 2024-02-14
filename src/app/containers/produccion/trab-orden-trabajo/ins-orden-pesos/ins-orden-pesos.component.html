@@ -1,0 +1,45 @@
+<h6>Pesos</h6>
+<div class="col-md-3">
+     <button type="button" (click)="insCtlPeso(modalInsPeso)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+ </div>
+ 
+<ng-template #modalInsPeso let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de ingreso de Peso</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup] = "insPeso"
+    (ngSubmit)  = "insPesos( insPeso.controls['inPeso'].value )" >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+         <div class="form-group">
+          <label>Peso</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="inPeso" >
+          <div *ngIf = "insPeso.controls['inPeso'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div *ngIf = "insPeso.controls['inPeso'].hasError('pattern')">
+            <span class="text-danger">formato incorrecto!</span>
+          </div>
+        </div>      
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="val" *ngIf="insPeso.valid" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>

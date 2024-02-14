@@ -1,0 +1,224 @@
+          <div class="row">
+        <div class="form-group col-md-4">
+          <label for="">Tipo Caja</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true"  value="{{orden_trabajo.tipo_caja}}">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Lote Caja</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.lote_caja}}">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Tipo Bolsa</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.tipo_bolsa}}">
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Lote Bolsa</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.lote_bolsa}}" >               
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Turno</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.turno}}" >                          
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Maquina</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.maquina}}" >               
+        </div>
+        <div class="form-group col-md-4">
+          <label for="">Pallet / Bins</label>       
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.tipo}}" >                           
+       </div>
+        <div class="form-group col-md-4">
+          <label for="">Lote Salida</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.lote_salida}}" >                           
+        </div>
+        <div class="form-group col-md-4">
+            <label for="">Estado Inye OP</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.estado_termo_op}}" >                           
+          </div>  
+          <div class="form-group col-md-4">
+            <label for="">Estado Inye Ctl</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true" value="{{orden_trabajo.estado_termo_ctl}}" >                           
+          </div> 
+      </div>
+      <hr>
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem class="">
+            <a ngbNavLink> Detalle Operacionales</a>
+            <ng-template ngbNavContent>
+              <div  *ngIf=" !termoDet.length">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="table-responsive" *ngIf="termoDet.length > 0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                      <tr>
+                          <td>Hora Inicio</td>                          
+                          <td>Bobina</td>
+                          <td>Peso</td>
+                          <td>Ancho</td>
+                          <td>Espesor</td>
+                          <td>Temperatura Trabajo</td>
+                          <td>Peso por unidad</td>
+                          <td>Caja / Bins totales</td>
+                          <td>Est Operacional</td>                               
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let termo of termoDet; let i= index;">
+                          <td>
+                              <span>{{termo.terdHorIni}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.terdLotExt}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.peso}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.ancho}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.espesor}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.terdTem}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.terdPesoUn}}</span>
+                          </td>
+                          <td>
+                            <span>{{termo.terdCaja}}</span>
+                          </td>
+                          <td *ngIf="termo.terdEst == 'P', else noact">PENDIENTE</td>
+                              <ng-template #noact> <td>APROBADO</td></ng-template>
+                         
+                      </tr>
+                  </tbody>
+                  </table>
+                </div>
+            </ng-template>
+        </li>  
+        <li  ngbNavItem class="">
+            <a ngbNavLink>Detalles de Calidad</a>
+            <ng-template ngbNavContent>
+              <div  *ngIf=" !termoDetC.length">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>      
+              <div class="table-responsive" *ngIf="termoDetC.length > 0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                      <tr>
+                          <td>Hora Inicio</td>                          
+                          <td>Tipo Defecto</td>
+                          <td>Rechazo</td>
+                          <td>Limpieza / Sanitización</td>
+                          <td>Peso promedio</td> 
+                      </tr>
+                  </thead>
+                  <tbody>
+                   <tr *ngFor="let termoC of termoDetC; let i= index;">
+                     <td>
+                         <span>{{termoC.terdHorIni}}</span>
+                     </td> 
+                     <td>
+                       <span>{{termoC.terdDefecto}}</span>
+                     </td>
+                     <td *ngIf="termoC.terdRechazo == 'S', else noact">SI</td>
+                         <ng-template #noact> <td>NO</td></ng-template>
+                    
+                     <td *ngIf="termoC.terdSani == 'S', else noact">SI</td>
+                     <ng-template #noact> <td>NO</td></ng-template>
+                     <td>
+                       <span>{{termoC.terdPesoUn}}</span>
+                    </td> 
+                    <td>
+                   
+                 </td>                                   
+                 </tr> 
+                  </tbody>
+                  </table>
+                </div>
+            </ng-template>
+          </li>   
+        <li ngbNavItem class="">
+          <a ngbNavLink>Pesos</a>
+          <ng-template ngbNavContent>
+            <div  *ngIf=" !termoPeso.length">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>             
+            <div class="table-responsive" *ngIf="termoPeso.length > 0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                      <tr>
+                          <td>Pesos</td>                          
+                          <td>Tipo</td>                              
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let peso of termoPeso; let i= index;">
+                          <td>
+                              <span>{{peso.terpPeso}}</span>
+                          </td>                                
+                          <td *ngIf="peso.terptip == 'O', else noact">OPERADOR</td>
+                              <ng-template #noact> <td>CALIDAD</td></ng-template>
+                         
+                      </tr>
+                  </tbody>
+                  </table>                      
+                 </div>
+                             
+                     
+          </ng-template>
+        </li> 
+            
+        <li  ngbNavItem class="">
+          <a ngbNavLink>Archivos</a>
+          <ng-template ngbNavContent>
+            <div  *ngIf="!termoArchivo.length">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>  
+            <div class="table-responsive" *ngIf="termoArchivo.length > 0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                      <tr>
+                          <td>Nombre</td> 
+                          <td>Descargar</td> 
+                     </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let archivo of termoArchivo; let i= index;">
+                          <td>
+                              <span>{{archivo.terarlink}}</span>
+                          </td>                                                        
+                          <td>
+                            <a style= "margin : 1px;"  class="btn btn-warning btn-xs"    (click)="downloadDoc(archivo.terarlink)"  ngbTooltip="Descargar"><i class="fa fa-download"></i></a>
+                         </td> 
+                      </tr>
+                  </tbody>
+                  </table>                      
+                  </div>                         
+          </ng-template>
+        </li>     
+      </ul>        
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+     

@@ -1,0 +1,392 @@
+<div class="row" >
+    <div class="col-md-8">
+      <div class="col-md-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Ingreso de Impresión - Operador</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="modal-body">
+              <div class="loading" *ngIf= "loading" >
+                <img src = "assets/Circles-menu-3.gif">
+               </div>
+              <div class="row"  class="{{carga}}">
+               <div *ngIf = "valJul">
+                 <span class="text-danger">Debe cargar calendario Juliano!</span>
+                </div>
+                <form
+                [formGroup]   = "insImp"
+                (ngSubmit)  = "insInyeccion(insImp.controls['impMaq'].value ,                                       
+                                          insImp.controls['impPrdCaja'].value,
+                                          insImp.controls['impPrdBolsa'].value,
+                                          insImp.controls['impLotCaja'].value,
+                                          insImp.controls['impLotBolsa'].value,
+                                          insImp.controls['impTurn'].value,
+                                          insImp.controls['extMez'].value
+                )">
+                <div class="form-group">
+                  <label for="">Tipo Caja</label>                  
+                  <app-sel-insumo (onItemAdded) = 'selProducto($event)'></app-sel-insumo>
+                  <div *ngIf = "insImp.controls['impPrdCaja'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>               
+                 
+                </div>
+                <div class="form-group">
+                  <label for="">Lote Caja</label>
+                  <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impLotCaja" [attr.disabled]="isEnabled ? '': null"  >               
+                  <div *ngIf = "insImp.controls['impLotCaja'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>   
+                </div>  
+                  <div class="form-group">
+                    <label for="">Tipo Bolsa</label>                  
+                    <app-sel-insumo (onItemAdded) = 'selProducto2($event)'></app-sel-insumo>                  
+                    <div *ngIf = "insImp.controls['impPrdBolsa'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>  
+                  </div>
+                  <div class="form-group">
+                    <label for="">Lote Bolsa</label>
+                    <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impLotBolsa" [attr.disabled]="isEnabled ? '': null" >               
+                    <div *ngIf = "insImp.controls['impLotBolsa'].hasError('required')">
+                      <span class="text-danger">Campo obligatorio!</span>
+                    </div>
+                  </div>               
+               <div class="form-group">
+                <label for="">Turno</label>
+                <div class="input-group input-group-sm">
+                  <select  class="custom-select rounded-0 " style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  [attr.disabled]="isEnabled ? '': null" formControlName="impTurn">
+                    <option  value="">Seleccione</option>
+                    <option value="1">Turno 1</option>
+                    <option value="2">Turno 2</option>
+                  </select>
+                  <div *ngIf = "insImp.controls['impTurn'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                </div>
+                 </div>
+                <div class="form-group">
+                  <label for="">Maquina</label>
+                  <div  *ngIf=" !maquinas.length ">
+                    <div class="spinner-border spinner-border-sm" role="status" >
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow spinner-grow-sm" role="status">
+                      <span class="sr-only">Loading...</span>                    </div>
+                </div> 
+                  <div class="input-group input-group-sm" *ngIf="maquinas.length > 0">
+                  <select  id="impMaq" name= "impMaq" class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"   [attr.disabled]="isEnabled ? '': null" formControlName="impMaq">
+                    <option  value="">Seleccione</option>
+                    <option  *ngFor = "let maquina of maquinas"  value="{{maquina.maqCod}}">{{maquina.maqDes}}</option>
+                  </select>
+                  <div *ngIf = "insImp.controls['impMaq'].hasError('required')">
+                    <span class="text-danger">Campo obligatorio!</span>
+                  </div>
+                  </div>   
+                </div>                    
+                <div class="form-group">                   
+                  <app-sel-termoformado (onItemAdded) = 'selTermoformado($event)'></app-sel-termoformado>                   
+                      <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="extMez" [hidden]="true">               
+                         
+                    <div *ngIf = "insImp.controls['extMez'].hasError('required')">
+                      <span class="text-danger">Campo obligatorio!</span>
+                    </div>                    
+                  </div>
+                <div *ngIf="idImp == 0">
+                  <button type="submit" class="btn btn-primary btn-block"  [disabled]="val" *ngIf="insImp.valid">
+                    <div *ngIf= "val" >
+                      Guardando..
+                      <span class="spinner-border spinner-border-sm mr-2"></span>
+                    </div>
+                    <div *ngIf= "!val">
+                      Guardar
+                    </div>
+                  </button>
+                  <br>
+                  <br>
+                  <a (click)="volver()" class="btn btn-outline-primary btn-sm mb-3 mt-2">
+                    <i class="fas fa-arrow-left me-3"></i>Volver
+                  </a>
+                </div>                
+              </form>
+              </div>
+            </div>
+            <div  *ngIf="idImp > 0">
+              <div class="form-group">
+                <label for="">Lote de Salida</label>
+                <br>
+                <br>
+                <strong>{{impLotSal}}</strong>
+              </div>
+              <hr>
+              <h6>Detalles</h6>
+              <div class="col-md-3">
+                <button type="button" (click)="insCtlProd(modalInsCtl)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+              </div>
+              <div  *ngIf=" !impDet.length ">
+                <div class="spinner-border spinner-border-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <div class="spinner-grow spinner-grow-sm" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+                  <br>             
+                  <br>
+                  <div class="table-responsive" *ngIf="impDet.length > 0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                          <tr>
+                              <td>Hora Inicio</td>                          
+                              <td>Cajas acumladas</td>
+                              <td>Peso por caja</td>
+                              <td>Defecto</td>
+                              <td>Est Operacional</td>                                          
+                              <td>Acciones</td>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let impresion of impDet; let i= index;">
+                          <td>
+                              <span>{{impresion.impdHorIni}}</span>
+                          </td>
+                          <td>
+                            <span>{{impresion.impdCajaAcu}}</span>
+                          </td>
+                          <td>
+                            <span>{{impresion.impdPesoCaja}}</span>
+                          </td>
+                          <td>
+                            <span>{{impresion.impdDefecto}}</span>
+                          </td>
+                                               
+                          <td *ngIf="impresion.impdEst == 'P', else noact">PENDIENTE</td>
+                              <ng-template #noact> <td>APROBADO</td></ng-template>
+                          <td>
+                              <div>
+                                <a style= "margin : 1px ;" (click) = "delPrd(i , impresion)"  class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+                              </div>
+                          </td>
+                        </tr>                        
+                      </tbody>
+                      </table>
+                    </div>
+                    <br>                  
+                    <app-ins-orden-tinta (onItemAdded) = 'insTinta($event)'></app-ins-orden-tinta>
+                    <div  *ngIf=" !impTinta.length ">
+                      <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      <div class="spinner-grow spinner-grow-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                    </div>                    
+                    <br>
+                    <div class="table-responsive" *ngIf="impTinta.length > 0">
+                      <table class="table table-hover text-nowrap">
+                        <thead>
+                            <tr>
+                                <td>Tinta</td>
+                                <td>Lote</td>                           
+                                <td>Acciones</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let tinta of impTinta; let i= index;">
+                                <td>
+                                    <span>{{tinta.imptPrdDes}}</span>
+                                   
+                                </td>
+                                <td>
+                                  <span>{{tinta.imptPrdLote}}</span>
+                                </td>
+                                <td>
+                                  <a style= "margin : 1px ;" (click) = "delTinta(i)"  class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table> 
+                      </div>
+                  
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-block" *ngIf="impDet.length > 0" [disabled]="val" (click)="terminar(modalCierre)">
+                      <div *ngIf= "val">
+                        Terminando..
+                        <span class="spinner-border spinner-border-sm mr-2"></span>
+                      </div>
+                      <div *ngIf= "!val">
+                        Terminar
+                      </div>
+                    </button>
+                    <a (click)="volver()" class="btn btn-outline-primary btn-sm mb-3 mt-2">
+                      <i class="fas fa-arrow-left me-3"></i>Volver
+                    </a>
+                  </div>
+                </div>
+          </div>             
+             <!-- /.card-body -->
+          </div>
+        </div>
+      </div>
+ 
+  <div class="col-md-4">
+    <app-info-orden-produccion [orden_trabajo]="orden_trabajo"></app-info-orden-produccion>
+  </div>
+</div>
+  
+  <ng-template #modalInsCtl let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso registro operacional</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup]   = "insImpDet"
+    (ngSubmit)  = "insImpDetalle(insImpDet.controls['impdHorIni'].value ,  
+                                insImpDet.controls['impdPesoCaja'].value,
+                                insImpDet.controls['impdCajaAcu'].value,
+                                insImpDet.controls['impdDefecto'].value
+                )"
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+      <div class="form-group">
+        <label>Hora Inicio</label>
+        <div class="input-group input-group-sm">
+        <ngb-timepicker  [spinners]="spinners" formControlName="impdHorIni"></ngb-timepicker>
+        </div>
+        <div *ngIf = "insImpDet.controls['impdHorIni'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+     </div>    
+    <div class="form-group">
+      <label for="">Cajas Acumuladas</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impdCajaAcu"  >               
+      <div *ngIf = "insImpDet.controls['impdCajaAcu'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "insImpDet.controls['impdCajaAcu'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>    
+    <div class="form-group">
+      <label for="">Peso por caja</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impdPesoCaja">               
+      <div *ngIf = "insImpDet.controls['impdPesoCaja'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "insImpDet.controls['impdPesoCaja'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+    <div class="form-group">
+        <label>Tipo de defecto</label>
+        <div  *ngIf="!rechazo.length">
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <select  *ngIf="rechazo.length > 0" class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName="impdDefecto">
+          <option  value="">Seleccione</option>             
+            <option   *ngFor = "let item of rechazo"  value="{{[ item.idMot , item.motDes ]}}">{{item.motDes}}</option>                        
+        </select>
+        <div *ngIf = "insImpDet.controls['impdDefecto'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>        
+      </div> 
+   </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="val" *ngIf="insImpDet.valid" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+  
+  <ng-template #modalCierre let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de ingreso de termino operacional </h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form 
+    [formGroup]   = "insCtl"
+    (ngSubmit)  = "insTermCierre(insCtl.controls['impReproceso'].value ,                                       
+                                insCtl.controls['impBasura'].value,
+                                insCtl.controls['impMerma'].value
+    )"
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+         <div class="form-group">
+          <label>Lote de Salida</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true"  value="{{impLotSal}}">
+        </div> 
+        <div class="form-group">
+          <label>Reproceso</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impReproceso" >
+          <div *ngIf = "insCtl.controls['impReproceso'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div *ngIf = "insCtl.controls['impReproceso'].hasError('pattern')">
+            <span class="text-danger">formato incorrecto!!</span>
+          </div>
+        </div>       
+          <div class="form-group">
+            <label>Basura</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impBasura" >
+            <div *ngIf = "insCtl.controls['impBasura'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>           
+          </div> 
+          <div class="form-group">
+            <label>Merma</label>
+            <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="impMerma" >
+            <div *ngIf = "insCtl.controls['impMerma'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+            <div *ngIf = "insCtl.controls['impMerma'].hasError('pattern')">
+              <span class="text-danger">formato incorrecto!!</span>
+            </div>
+          </div>     
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="val" *ngIf="insCtl.valid" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>

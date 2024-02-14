@@ -1,0 +1,23 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <div  *ngIf=" !impresion">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <ul ngbNav #nav="ngbNav" class="nav-tabs">
+            <li *ngFor="let items of impresion" ngbNavItem class="">
+                <a ngbNavLink>{{items.id_impre}} - {{items.lote_salida}}</a>
+                <ng-template ngbNavContent>
+                        <app-ver-impresion-det [orden_trabajo]="items"></app-ver-impresion-det>
+                </ng-template>
+            </li>            
+        </ul>        
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </div>
+    
+</div>

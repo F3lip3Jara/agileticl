@@ -1,0 +1,103 @@
+<div class="card card-outline card-primary">
+    <div class="card-header">
+      <h5 class="card-title">Gestión de Empresa - Módulos - Roles</h5>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body row">       
+            <h5>Formulario</h5>
+                <div class="col-md-6  form-group">
+                    <form [formGroup] = "ins">
+                        <label for="molDes">Descripción</label>
+                        <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="molDes" placeholder="Ingresar descripción..." formControlName='molDes'
+                        [ngClass]="(ins.controls['molDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                        </div>
+                        <div *ngIf = "ins.controls['molDes'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                        </div>
+                   </form>
+                  </div>
+                  <div class="col-md-6"> <app-select-icon [icono]="modulo.molIcon" (onItemAdded)="icono($event)"></app-select-icon>
+                    <div *ngIf="icon === ''">
+                      <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                  </div>
+                  
+      <div cdkDropListGroup>        
+        <hr>
+        <div class="col-md-12">
+          <h5>Opciones</h5>
+          <h6>Activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="optAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-info m-1" *ngFor="let item of optAsig" cdkDrag>
+              <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.optDes }}</span>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <h6>No activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="optnAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-warning m-1" *ngFor="let item of optnAsig" cdkDrag>
+            <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.optDes }}</span>
+        </div>
+          </div>
+        </div>     
+      </div>
+      <div cdkDropListGroup>        
+        <hr>
+        <div class="col-md-12">
+          <h5>Roles</h5>
+          <h6>Activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="rolAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-info m-1" *ngFor="let item of rolAsig" cdkDrag>
+              <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.rolDes }}</span>
+          </div>
+        </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <h6>No activo</h6>
+          <div
+          cdkDropList
+          [cdkDropListData]="rolSnAsig"
+          class="example-list"
+          (cdkDropListDropped)="drop($event)">
+          <div class="btn btn-warning m-1" *ngFor="let item of rolSnAsig" cdkDrag>
+            <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.rolDes }}</span>
+        </div>
+          </div>
+        </div>     
+      </div>
+      <div class="col-md-12">
+        <button
+          *ngIf="ins.valid && icono"
+          type="button"
+          class="btn btn-outline-primary btn-sm mb-3 mt-2"
+          [disabled]="val"
+          (click)="guardar(ins.controls['molDes'].value)"
+        >
+          <div *ngIf="val">
+            Guardando..
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+          </div>
+          <div *ngIf="!val">Guardar</div>
+        </button>
+        <a routerLink=".." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+          <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+          Volver
+        </a>
+      </div>
+      <!-- /.card-body -->
+    </div>
+  </div>

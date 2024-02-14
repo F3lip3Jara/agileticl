@@ -1,0 +1,47 @@
+<h6>Archivos</h6>
+<div class="col-md-3">
+  <button type="button" (click)="insDoc(modalInsDoc)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+</div> 
+
+<ng-template #modalInsDoc let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de ingreso documentos de calidad</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup] = "insArch"
+    (ngSubmit)  = "insArchivos()"  enctype="multipart/form-data" >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="">Archivo</label>
+          <div class="input-group input-group-sm mb-3">
+            <div class="custom-file">
+              <input (change) = "capturarFile($event)" type="file" class="custom-file-input" accept =".xls , .xlsx , .csv" formControlName="archivos">
+              <label class="custom-file-label"><i class="fas fa-search"></i> {{nombreArch}}</label>
+            </div>
+          </div>
+          <div *ngIf = "insArch.controls['archivos'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>          
+        </div>  
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="val" *ngIf="insArch.valid" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>

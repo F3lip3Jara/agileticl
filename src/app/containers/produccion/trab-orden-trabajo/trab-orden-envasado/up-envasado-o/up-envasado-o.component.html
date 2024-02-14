@@ -1,0 +1,234 @@
+<div class="row" >
+    <div class="col-md-8">
+      <div class="col-md-12">
+        <div class="card card-outline card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Ingreso de Envasado - Operador</h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+            <!-- /.card-tools -->
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="modal-body">
+              <div class="loading" *ngIf= "loading" >
+                <img src = "assets/Circles-menu-3.gif">
+               </div>
+              <div class="row"  class="{{carga}}">
+               <div *ngIf = "valJul">
+                 <span class="text-danger">Debe cargar calendario Juliano!</span>
+                </div>
+                <div class="form-group">
+                  <label for="">Tipo Caja</label>
+                  <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.tipo_caja}}" >               
+                  
+                </div>
+                <div class="form-group">
+                  <label for="">Lote Caja</label>
+                  <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.lote_caja}}">               
+                 </div>  
+                  <div class="form-group">
+                    <label for="">Tipo Bolsa</label>
+                    <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.tipo_bolsa}}">               
+                  </div>
+                  <div class="form-group">
+                    <label for="">Lote Bolsa</label>
+                    <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.lote_bolsa}}">               
+                  </div>
+               
+               <div class="form-group">
+                <label for="">Turno</label>
+                <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.turno}}">               
+                 </div>
+                <div class="form-group">
+                  <label for="">Maquina</label>                 
+                  <input type="text" class="form-control form-control-sm"  [attr.disabled]="true"  value="{{orden_trabajo.maquina}}">               
+                </div>
+              </div>
+            </div>            
+              <div class="form-group">
+                <label for="">Lote de Salida</label>
+                <br>
+                <br>
+                <strong>{{envLotSal}}</strong>
+              </div>
+              <hr>
+              <h6>Detalles</h6>
+              <div class="col-md-3">
+                <button type="button" (click)="insCtlProd(modalInsCtl)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+              </div>
+                  <br>
+                  <br>               
+                  <div class="table-responsive" *ngIf="envDet.length > 0">
+                    <table class="table table-hover text-nowrap">
+                      <thead>
+                          <tr>
+                              <td>Hora Inicio</td>                          
+                              <td>Hora Fin</td> 
+                              <td>Total Cajas</td>
+                              <td>Número de Pallet</td>                            
+                              <td>Acciones</td>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let envasado of envDet; let i= index;">
+                              <td>
+                                  <span>{{envasado.envdHorIni}}</span>
+                              </td>
+                              <td>
+                                <span>{{envasado.envdHorFin}}</span>
+                              </td>
+                              <td>
+                                <span>{{envasado.envdCaja}}</span>
+                              </td>
+                              <td>
+                                <span>{{envasado.envdPallet}}</span>
+                              </td>
+                              <td>
+                                  <div>
+                                    <a style= "margin : 1px ;" (click)="delPrd(i , envasado)"  class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+                                    <a style= "margin : 1px;"  class="btn btn-warning btn-xs"  ngbTooltip="Ver"><i class="fas fa-eye"></i></a>
+                                  </div>
+                              </td>
+                          </tr>
+                      </tbody>
+                      </table>
+                    </div>
+            
+          </div>
+           <!-- /.card-body -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-block" [disabled]="val" (click)="terminar(modalCierre)" *ngIf="envDet.length > 0">
+              <div *ngIf= "val">
+                Terminando..
+                <span class="spinner-border spinner-border-sm mr-2"></span>
+              </div>
+              <div *ngIf= "!val">
+                Terminar
+              </div>
+            </button>
+            <a (click)="volver()" class="btn btn-outline-primary btn-sm mb-3 mt-2">
+              <i class="fas fa-arrow-left me-3"></i>Volver
+            </a>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-4">
+    <app-info-orden-produccion [orden_trabajo]="orden_trabajo"></app-info-orden-produccion>
+  </div>
+</div>
+
+
+  
+<ng-template #modalInsCtl let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso registro operacional</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form
+    [formGroup] = "insEnvDet"
+    (ngSubmit)  = "insEnvDetalle( insEnvDet.controls['envdHorIni'].value,
+                                   insEnvDet.controls['envdHorFin'].value,
+                                   insEnvDet.controls['envdCaja'].value,
+                                   insEnvDet.controls['envdPallet'].value )"
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+      <div class="form-group">
+        <label>Hora Inicio</label>
+        <div class="input-group input-group-sm">
+        <ngb-timepicker  [spinners]="spinners" formControlName="envdHorIni"></ngb-timepicker>
+        </div>
+        <div *ngIf = "insEnvDet.controls['envdHorIni'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+     </div>
+     
+    <div class="form-group">
+        <label>Hora Fin</label>
+        <div class="input-group input-group-sm">
+        <ngb-timepicker  [spinners]="spinners" formControlName="envdHorFin"></ngb-timepicker>
+        </div>
+        <div *ngIf = "insEnvDet.controls['envdHorFin'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+    </div>
+    <div class="form-group">
+      <label for="">Total Caja</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="envdCaja">               
+      <div *ngIf = "insEnvDet.controls['envdCaja'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "insEnvDet.controls['envdCaja'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="">Número de Pallet</label>
+      <input type="text" class="form-control form-control-sm" id="" placeholder="" formControlName="envdPallet">               
+      <div *ngIf = "insEnvDet.controls['envdPallet'].hasError('required')">
+        <span class="text-danger">Campo obligatorio!</span>
+      </div>
+      <div *ngIf = "insEnvDet.controls['envdPallet'].hasError('pattern')">
+        <span class="text-danger">formato incorrecto!</span>
+      </div>
+    </div>
+   </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="val" *ngIf="insEnvDet.valid" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+  
+  
+<ng-template #modalCierre let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal de ingreso de termino operacional</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form 
+    >
+    <div class="modal-body" >
+      <div class="row">
+      <div class="col-md-12">
+         <div class="form-group">
+          <label>Lote de Salida</label>
+          <input type="text" class="form-control form-control-sm" id="" placeholder="" [attr.disabled]="true"  value="{{envLotSal}}">
+        </div>           
+    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary btn-block" [disabled]="val" (click)="insTermCierre()" >
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+    </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>

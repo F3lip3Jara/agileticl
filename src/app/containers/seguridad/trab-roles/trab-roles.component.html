@@ -1,0 +1,104 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Roles</h5>  
+  </div>
+  <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+        <fa-icon [icon]="faFileExcel"></fa-icon>
+        Excel</button>
+      <a (click) = "modalIns(modalRolesIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo">
+        <fa-icon [icon]="faAddressCard"></fa-icon>
+        Nuevo</a>
+    <div class="loading" *ngIf= "loading" >
+      <img src = "assets/Circles-menu-3.gif">
+     </div>
+ <div>
+  <br>
+  <div    *ngIf="tblRoles?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let roles of tblRoles">
+          <th>{{roles.rolId}}</th>
+          <th>{{roles.rolDes}}</th>
+          <th>
+            <a style= "margin : 1px ;" (click) = "modelUp(modalRolesUdp , roles)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+              <fa-icon [icon]="faPenToSquare"></fa-icon>
+            </a>
+            <a style= "margin : 1px ;"  (click) = "delRoles(roles)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </a>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+<ng-template #modalRolesUdp let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal actualiza Rol</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  <!-- /.card-header -->
+  <div class="modal-body">
+    <form >
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Código</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{roles.rolId}}"  oninput="this.value = this.value.toUpperCase()"  disabled>
+        </div>
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder=""  oninput="this.value = this.value.toUpperCase()" value="{{roles.rolDes}}" #uprolDes >
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </form>
+
+    <!-- form start -->
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click) ="action(uprolDes.value , 'up' )" [disabled]="loading">Guardar</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</ng-template>
+
+
+<ng-template #modalRolesIns let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Roles</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form >
+      <div class="card-body">
+        <div class="form-group">
+          <label for="">Descripción</label>
+          <input type="text" class="form-control" name = "rolDes" id="rolDes" placeholder="" value="" oninput="this.value = this.value.toUpperCase()" #insrolDes >
+        </div>
+      </div>
+      <!-- /.card-body -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click) ="action(insrolDes.value , 'ins' )" [disabled]="loading">Guardar</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</ng-template>

@@ -1,0 +1,243 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title">Comuna</h5>
+   
+  </div>
+  <div class="card-body">
+
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel">
+        <fa-icon [icon]="faFileExcel"></fa-icon>
+        Excel</button>
+      <a (click) = "modalIns(modalComIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo" >
+        <fa-icon [icon]="faAddressCard"></fa-icon>
+        Nuevo</a>
+    <div class="loading" *ngIf= "loading" >
+      <img src = "assets/Circles-menu-3.gif">
+     </div>
+
+ <div>
+  <br>
+  <div    *ngIf="tblComuna?.length > 0" class="{{carga}}">
+    <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>País</th>
+          <th>Región</th>
+          <th>Ciudad</th>
+          <th>Cód. Comuna</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor = "let comuna of tblComuna">
+          <th>{{comuna.idCom}}</th>
+          <th>{{comuna.paiDes}}</th>
+          <th>{{comuna.regDes}}</th>
+          <th>{{comuna.ciuDes}}</th>
+          <th>{{comuna.comCod}}</th>
+          <th>{{comuna.comDes}}</th>
+          <th>
+            <a style= "margin : 1px ;" (click) = "modelUp(modalComUpd , comuna)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+              <fa-icon [icon]="faPenToSquare"></fa-icon>
+            </a>
+            <a style= "margin : 1px ;" (click) = "delComuna(comuna)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </a>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+  <!-- /.card-body -->
+  <div class="card-footer">
+    Marple
+  </div>
+  <!-- /.card-footer-->
+</div>
+
+
+<ng-template #modalComIns let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Comuna</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "insComuna"
+         (ngSubmit)  = "action(insComuna.controls['idPai'].value ,
+                              insComuna.controls['idReg'].value ,
+                              insComuna.controls['idCiu'].value ,
+                              insComuna.controls['comCod'].value,
+                              insComuna.controls['comDes'].value,
+                               'ins' )"
+                         >
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="nombre">Pais</label>
+          <div class=" input-group-sm" *ngIf="paises.length > 0">
+            <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idPai'>
+              <option  *ngFor = "let pais of paises"  value="{{pais.idPai}}">{{pais.paiDes}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insComuna.controls['idPai'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Región</label>
+
+          <div  *ngIf=" !regiones.length ">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+
+          <div class=" input-group-sm" *ngIf="regiones.length  > 0 && paises.length > 0">
+            <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idReg'>
+              <option  *ngFor = "let region of regiones"  value="{{region.idReg}}">{{region.regDes}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insComuna.controls['idReg'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+
+
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Ciudad</label>
+
+          <div  *ngIf=" !ciudades.length ">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+            <div class="spinner-grow spinner-grow-sm" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+
+          <div class=" input-group-sm" *ngIf="regiones.length  > 0 && ciudades.length > 0">
+            <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCiu'>
+              <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.idCiu}}">{{ciudad.ciuDes}}</option>
+            </select>
+          </div>
+          <div *ngIf = "insComuna.controls['idReg'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+
+
+        </div>
+        <div class="form-group">
+          <label for="regDes">Código</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="comCod" placeholder="Ingresar descripción..." formControlName = 'comCod'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+      </div>
+        <div *ngIf = "insComuna.controls['comCod'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+        <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+        <div class="form-group">
+          <label for="regDes">Descripción</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'comDes'  oninput="this.value = this.value.toUpperCase()">
+        </div>
+      </div>
+        <div *ngIf = "insComuna.controls['comDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      <!-- /.card-body -->
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insComuna.valid && validCod == false" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
+
+
+<ng-template #modalComUpd let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Modal ingreso Comuna</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form  [formGroup] = "updComuna"
+         (ngSubmit)  = "action(upidPai.value,
+                               upidReg.value,
+                               upidCiu.value,
+                               upcomCod.value,
+                               updComuna.controls['upcomDes'].value ,
+                               'up' )"
+                         >
+  <div class="modal-body">
+      <div class="card-body">
+        <div class="form-group">
+          <label for="nombre">Pais</label>
+          <div class=" input-group-sm">
+            <input type="text" class="form-control" id="" placeholder="" value="{{comuna.paiDes}}" disabled>
+            <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{comuna.idPai}}" disabled  #upidPai>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="nombre">Región</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{comuna.regDes}}" disabled>
+          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{comuna.idReg}}" disabled  #upidReg>
+        </div>
+        <div class="form-group">
+          <label for="nombre">Ciudad</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{comuna.ciuDes}}" disabled>
+          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{comuna.idCiu}}" disabled  #upidCiu>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Cód Comuna</label>
+          <input type="text" class="form-control" id="" placeholder="" value="{{comuna.comCod}}" disabled #upcomCod>
+        </div>
+        <div class="form-group">
+          <label for="regDes">Descripción</label>
+          <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="comDes" placeholder="Ingresar descripción..." formControlName = 'upcomDes' oninput="this.value = this.value.toUpperCase()">
+        </div>
+      </div>
+        <div *ngIf = "updComuna.controls['upcomDes'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+        </div>
+      <!-- /.card-body -->
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="updComuna.valid" [disabled]="val">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+  </div>
+</form>
+</ng-template>
