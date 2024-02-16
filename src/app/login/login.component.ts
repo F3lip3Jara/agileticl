@@ -62,11 +62,12 @@ export class LoginComponent {
         let menu    : string = data.menu;
         let rol     : string = data.rol;
         let usuario : string = data.name;
-
+        let img     : string = data.img;
+        let empresa : string = data.empresa;
 
         this.UsersService.setToken(token);
         this.UsersService.setTokenCrf(crf);
-        this.UsersService.setUsuario(usuario , rol , menu);
+        this.UsersService.setUsuario(usuario , rol , menu, img, empresa);
 
         if (reinicio == 'S') {
           this.router.navigate(['/changePassword']);

@@ -12,21 +12,44 @@
         size="lg"
       ></svg>
     </button>
-    <c-header-nav class="d-none d-lg-flex me-auto">
-     
+    <c-header-nav  class="d-none d-lg-flex me-auto">
+          
+      <div class="input-group input-group-sm">
+        <input type="text"
+               [(ngModel)]="model"
+               [ngbTypeahead]="search"
+               (focus)="focus$.next($any($event).target.value)"
+               (click)="click$.next($any($event).target.value)"
+               #instance="ngbTypeahead"
+               class="form-control"
+               placeholder="Buscar" 
+               (selectItem)="onSelect($event)"/>
+        <div class="input-group-append">
+          <span class="input-group-text">
+            <svg cIcon class="me-2" name="cilMagnifyingGlass"></svg>
+          </span>
+        </div>
+      </div>
+    
+    </c-header-nav> 
+    <c-header-nav class="d-none d-lg-flex me-auto">     
+    </c-header-nav>    
+    <c-header-nav class="d-none d-lg-flex ms-5">
+      <span class=" badge text-bg-warning">QA</span>     
     </c-header-nav>
-
     <c-header-nav class="d-none d-lg-flex">
       <c-header-nav class="ms-3">
         <ng-container *ngTemplateOutlet="userNotificaciones"></ng-container>
       </c-header-nav>
-
-      
+    </c-header-nav>
+    <c-header-nav class="d-none d-lg-flex">
+      <c-header-nav class="ms-3">
+        <ng-container *ngTemplateOutlet="userMonedas"></ng-container>
+      </c-header-nav>
     </c-header-nav>
     <c-header-nav class="ms-3">
       <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
     </c-header-nav>
-
   </c-container>
   <c-header-divider></c-header-divider>
   <c-container [fluid]="true">
@@ -108,6 +131,36 @@
       </li>
       <li >
        <a cDropdownItem>  <span  style="font-size: 11px;" *ngIf="!datos?.length">Sin Notificaciones</span></a>
+      
+      </li>
+      
+      <li></li>
+    </ul>
+  </c-dropdown> 
+</ng-template>
+
+<ng-template #userMonedas>
+  <c-dropdown variant="nav-item">
+    <button  cButton  color=""  [caret]="false" cDropdownToggle class="py-3" >
+        <svg cIcon name="cilBank" size="lg"></svg> 
+    </button>
+    <ul cDropdownMenu class="pt-0 pr-5 w-auto">
+      <li>
+        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Indicadores</h6>
+      </li>
+      <li  *ngFor="let datos of indicadores" >
+          <a   cDropdownItem>
+            <fa-icon [icon]="faMoneyBillTransfer"></fa-icon> 
+            <i class="fa-solid fa"></i>
+            <span>
+              {{datos.monCod}}  
+              {{datos.monValor}} 
+              {{datos.moncValor}} 
+           </span>
+          </a>
+      </li>
+      <li >
+       <a cDropdownItem>  <span  style="font-size: 11px;" *ngIf="!indicadores?.length">Sin datos</span></a>
       
       </li>
       

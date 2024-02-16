@@ -4,7 +4,7 @@ import { UsersService } from '../../../../servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
-import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -29,6 +29,7 @@ export class TrabOpcionesComponent {
   faAddressCard                       = faAddressCard;
   faPenToSquare                       = faPenToSquare;
   faSquarePlus                        = faSquarePlus;
+  faTrash                             = faTrash;
   accion      : string                =  '';
   opcion      : any                   =  {};
 
@@ -113,18 +114,26 @@ export class TrabOpcionesComponent {
     }else{
       url      = 'insOpciones';
     }
-
-    let opcion = {optId:this.opcion.optId ,optDes: optDes , optLink:optLink};
-    
+    let opcion = {optId:this.opcion.optId ,optDes: optDes , optLink:optLink};    
     this.serviLoad.sumar.emit(1);
     this.rest.post(url, this.token, opcion ).subscribe(resp => {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
     });
-
     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     return false;
   }
 
+  del(opcion: any){
+    let url = 'delOpciones';
+    this.serviLoad.sumar.emit(1);
+    this.rest.post(url, this.token, opcion ).subscribe(resp => {
+      this.modal.dismissAll(); 
+      this.loading = false; 
+      this.tblData();
+    });
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    return false;
+  }
 }

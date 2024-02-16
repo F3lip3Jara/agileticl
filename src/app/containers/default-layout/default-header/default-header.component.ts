@@ -1,14 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { faIndustry} from '@fortawesome/free-solid-svg-icons';
+import { faIndustry, faMoneyBillTransfer} from '@fortawesome/free-solid-svg-icons';
 import Echo from 'laravel-echo';
 import { webSocket , WebSocketSubject } from 'rxjs/webSocket';
 import { WebSocketService } from 'src/app/servicios/web-socket.service';
+import { Observable, OperatorFunction, Subject, debounceTime, distinctUntilChanged, filter, map, merge, switchMap, tap } from 'rxjs';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-default-header',
@@ -19,33 +21,92 @@ export class DefaultHeaderComponent extends HeaderComponent {
   @Input() sidebarId: string = "sidebar";
 
 
-  public usuario    : string  = '';
+  public usuario    : any     = {};
   public rol        : string  = '';
   public imgName    : string  = '';
   public idRol      : number  = 0;
-  public token       : string ='';
+  public token      : string  = '';
   public parametros : any[]   = []; 
   public datos      : any;
   public contador   : any;
-  public socket      : any;
+  public socket     : any;
   faIndustry                  = faIndustry;
+  indicadores       :any      = {};
+  faMoneyBillTransfer         = faMoneyBillTransfer;
 
-  constructor(private classToggler: ClassToggleService, 
-               private rest        : RestService ,
-               private servicioUser:  UsersService,
-               private servicioAler: AlertasService,
-               private router      : Router,
+  @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+  states       : string[]             = []; 
+  statesx      : any[]                = [];
+  model        : any;
+  
+
+
+  
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+        tap(term => { 
+            this.statesx.forEach(element => {
+                if(element.optDes == term){                 
+                  this.router.navigate(['home/'+ element.optLink]);
+                }
+            });          
+        }),
+        map(term => {
+            if (term.length >= 2) {
+                return term === '' ? this.states : this.states.filter((v: any) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
+            } else {
+                return [];
+            }
+        })
+    );
+};
+
+onSelect(item: any) {
+  this.statesx.forEach(element => {
+    if(element.optDes == item.item){                 
+      this.router.navigate(['home/'+ element.optLink]);
+    }
+});      
+}
+
+
+
+  constructor(private classToggler      : ClassToggleService, 
+               private rest             : RestService ,
+               private servicioUser     :  UsersService,
+               private servicioAler     : AlertasService,
+               private router           : Router,
                private webSocketService : WebSocketService 
               
               ) {
     super();
-    this.token = this.servicioUser.getToken();
+    this.token   = this.servicioUser.getToken();
+    this.usuario = this.servicioUser.getUser();
+    this.imgName = this.usuario.img;
+   
+    this.usuario.menu.forEach((element:any) => {
+      element.opciones.forEach((opcion:any) => {
+        this.states.push(opcion.optDes);
+        this.statesx.push({optDes : opcion.optDes, optLink : opcion.optLink})
+      });
+      
+    });
 
+    if(this.imgName == ''){
+      this.imgName = this.servicioUser.getImgDe();
+    }
    
   }
 
 
   ngOnInit(): void {
+
+    
  /* 
   this.rest.get('getUsuario' , this.token, this.parametros).subscribe(respuesta  => {
      let usuariox = respuesta;    
@@ -76,11 +137,14 @@ export class DefaultHeaderComponent extends HeaderComponent {
       this.contador = data.contador;   
       
     });
+    this.rest.get('indicadores' , this.token, this.parametros).subscribe((data:any)=>{      
+      this.indicadores = data;
+      
+      console.log(data);
+      
+    });
     
     this.webSocketService.startListening();
-
-
-
   }
 
 
@@ -150,20 +214,16 @@ socket.subscribe(
     });
 }
 
-verNotificaciones(){
-
-  this.rest.post('lecturaNotAll' , this.token, this.datos).subscribe(data =>{
-    console.log(data)
-  });
-
-  this.rest.get('notificaciones' , this.token, this.parametros).subscribe((data:any)=>{      
-    this.datos    = data.notificaciones;
-    this.contador = data.contador;       
-  });
-
-  this.router.navigate(['home/seguridad/notificaciones']);
-
-}
+  verNotificaciones(){
+    this.rest.post('lecturaNotAll' , this.token, this.datos).subscribe(data =>{
+      console.log(data)
+    });
+    this.rest.get('notificaciones' , this.token, this.parametros).subscribe((data:any)=>{      
+      this.datos    = data.notificaciones;
+      this.contador = data.contador;       
+    });
+    this.router.navigate(['home/seguridad/notificaciones']);
+  }
 
 
 }

@@ -13,13 +13,13 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 
 })
 export class AlertComponent {
-  position   = 'top-end';
-  visible    = false;
-  percentage = 0;
-  show       = false;
+  position           = 'top-end';
+  visible            = false;
+  percentage         = 0;
+  show               = false;
   type     : string  = '';
   alerta   : Alert   ;
-
+  mensaje  : string  = '';
  
 
   onVisibleChange($event: boolean) {
@@ -42,8 +42,12 @@ export class AlertComponent {
   ngOnInit() {
     this.servicio.disparador.subscribe(data=>{   
       //  this.alerta  = data;
+      setTimeout(()=> {
         this.show    = true; 
-        this.visible = !this.visible;      
+        this.visible = !this.visible;  
+        this.mensaje = this.alerta.getMessage();    
+     },1500 );
+      
     
    });
   }

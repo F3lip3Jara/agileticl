@@ -7,3 +7,24 @@
 }
 
 .sidebar{background-color: #dc3545;}
+
+
+.user-panel {
+  .info {
+    display: inline-block;
+    padding: 5px;
+
+    a{
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+  .image {
+  display: inline-block;
+  padding-left: .8rem;
+      img{
+        width: 33px;
+        height: 33px;
+      }
+  }
+}

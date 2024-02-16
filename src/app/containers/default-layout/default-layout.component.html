@@ -22,6 +22,14 @@
   />
 
   <ng-scrollbar pointerEventsMethod="scrollbar">
+    <div class="user-panel mt-3  d-flex">
+      <div class="image">
+      <img src="{{usrimg}}" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+         <a  class="d-block">{{usrname}} - {{rol}}</a>
+      </div>
+      </div>
     <c-sidebar-nav
       [navItems]="navItems"
       dropdownMode="close"

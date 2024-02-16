@@ -17,13 +17,22 @@ export class DefaultLayoutComponent {
   modulos          : any        = [];
   public navItems  : INavData[] = []; 
   menu             : any        = {};
-
+  usrimg           :string      = '';           
+  usrname          :string      = '';
+  rol              :string      = '';
 
   constructor(  private rest        : RestService ,
                 private servicioUser: UsersService) {
 
                   this.token    = servicioUser.getToken();                
                   this.menu     = this.servicioUser.getUser().menu;
+                  this.usrimg   = this.servicioUser.getUser().img;
+                  this.usrname  = this.servicioUser.getUser().name;
+                  this.rol      = this.servicioUser.getUser().rol;
+
+                  if(this.usrimg == ''){
+                    this.usrimg = this.servicioUser.getImgDe();
+                  }
                
                   this.menu.forEach((element:any) => {
                     let icono             ={};

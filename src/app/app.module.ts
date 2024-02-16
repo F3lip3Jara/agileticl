@@ -46,9 +46,10 @@ import {
   TabsModule,
   ToastModule,
   UtilitiesModule,
+
   
 } from '@coreui/angular';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -99,7 +100,8 @@ const APP_CONTAINERS = [
     DataTablesModule,
     FontAwesomeModule,
     ToastModule,
-    NgbModule
+    NgbModule,
+    NgbTypeaheadModule
   ],
   providers: [
     CookieService,    
