@@ -1,16 +1,13 @@
 import { LoadingService } from './../../../servicios/loading.service';
-import { Alert } from 'src/app/model/alert.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Gerencia } from 'src/app/model/gerencia.model';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import {  faPenToSquare,faTrash,faFileExcel,faAddressCard} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -91,7 +88,6 @@ export class TrabGerenciaComponent implements OnInit {
  public modelUp(content :any , xgerencia: Gerencia ){
   this.gerencia.setId(xgerencia.gerId);
   this.gerencia.setGerDes(xgerencia.gerDes);
-  console.log(this.gerencia);
   this.modal.open(content);
 }
 
@@ -100,33 +96,10 @@ public delGerencia( gerencia : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-
    this.rest.post(url ,this.token, gerencia).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-           this.modal.dismissAll();
-           let des        = 'Gerencia eliminada ' + gerencia.gerDes ;
-           let log        = new LogSys(2, '' , 16 , 'ELIMINAR GERENCIA' , des);       
-           setTimeout(()=>{
-            this.serviLoad.sumar.emit(1);
-             this.tblGerencia = {};
-             this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
-                 this.tblGerencia = data;
-             });
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-      });
-   });
-
-   this.servicioaler.disparador.emit();
+    this.tblData();
+    this.servicioaler.disparador.emit();
+  });
    return false;
 }
 
@@ -135,56 +108,24 @@ public action(gerDesx : any , tipo :string ) : boolean{
   this.carga    = 'invisible';
   this.loading  = true;
   let gerenciax = new Gerencia(this.gerencia.gerId , gerDesx  );
-  let des       = '';
-  let lgName    = '';
-  let idEtaDes  = 0;
-
   if(tipo =='up'){
      url      = 'updGerencia';
-     des      = 'Actualiza gerencia ' + gerDesx;
-     lgName   = 'ACTUALIZAR GERENCIA';
-     idEtaDes = 15;
-
-  }else{
+   }else{
     url      = 'insGerencia';
-    des      = 'Ingreso gerencia ' + gerDesx;
-    lgName   = 'INGRESO GERENCIA';
-    idEtaDes = 14;
-  }
+   }
 
  this.serviLoad.sumar.emit(2);
  this.rest.post(url, this.token, gerenciax).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){        
-        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-        this.serLog.insLog(log);
-        this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblGerencia = {};
-            this.rest.get('trabGerencia' , this.token, this.parametros).subscribe(data => {
-                this.tblGerencia = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-            this.carga    = 'visible';
-            this.loading  = false;
-          },1500);
-
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-      }
-    });
+     this.tblData();
+     this.servicioaler.disparador.emit();
+     this.modal.dismissAll();
   });
-
-  this.servicioaler.disparador.emit();
   return false;
 }
 
 
 public Excel(){
-  this.excel.exportAsExcelFile(this.tblGerencia, 'roles');
+  this.excel.exportAsExcelFile(this.tblGerencia, 'gerencia');
    return false;
 }
 

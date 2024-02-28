@@ -2,30 +2,30 @@ export class Empleado {
 
   private emploNom    : string;
   private emploApe    : string;
-  private emploAvatar : string;
-  private empid       : number;
+  private emploAvatar : any;
+  private empId       : number;
   private emploFecNac : string;
-  private idRol       : number;
+  private rol         : number;
   private gerId       : number;
   private empName     : string;
 
-    constructor (emploNomx: string, emploApex: string, emploAvatarx: string, empidx: number,  emploFecNacx : string , idRolx : number  , idGerx:number , empNamex : string){
+    constructor (emploNomx: string, emploApex: string, emploAvatarx: any, empIdx: number,  emploFecNacx : string , rolIdx : number  , idGerx:number , empNamex : string){
       this.emploNom    = emploNomx;
       this.emploApe    = emploApex;
       this.emploAvatar = emploAvatarx;
-      this.empid       = empidx;
+      this.empId       = empIdx;
       this.emploFecNac = emploFecNacx;
-      this.idRol       = idRolx;
+      this.rol         = rolIdx;
       this.gerId       = idGerx;
       this.empName     = empNamex;
     }
 
-    public getIdRol () : number {
-       return this.idRol;
+    public getrolId () : number {
+       return this.rol;
     }
 
-    public setIdRol (idRolx : number){
-      this.idRol = idRolx;
+    public setrolId (rolIdx : number){
+      this.rol = rolIdx;
     }
 
     public getGerId () : number {
@@ -59,20 +59,20 @@ export class Empleado {
       this.emploApe = emploApe;
     }
 
-    public getEmploAvatar() :string {
+    public getEmploAvatar() :any {
       return this.emploAvatar;
     }
 
-    public  setEmploAvatar (emploAvatar:string) {
+    public  setEmploAvatar (emploAvatar:any) {
     this.emploAvatar= emploAvatar ;
   }
 
-    public getEmpid () :number{
-    return this.empid;
+    public getempId () :number{
+    return this.empId;
   }
 
-    public  setEmpid(empid : number) {
-    this.empid = empid ;
+    public  setempId(empId : number) {
+    this.empId = empId ;
   }
 
     public geEmploFecNac () : string {

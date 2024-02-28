@@ -1,5 +1,4 @@
 import { Component, Input, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -19,8 +18,6 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 export class DefaultHeaderComponent extends HeaderComponent {
 
   @Input() sidebarId: string = "sidebar";
-
-
   public usuario    : any     = {};
   public rol        : string  = '';
   public imgName    : string  = '';
@@ -30,53 +27,20 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public datos      : any;
   public contador   : any;
   public socket     : any;
+
   faIndustry                  = faIndustry;
   indicadores       :any      = {};
   faMoneyBillTransfer         = faMoneyBillTransfer;
+  val                         = true;
 
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
   states       : string[]             = []; 
   statesx      : any[]                = [];
-  model        : any;
+  model        : string               = '';
   
-
-
-  
-  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
-    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
-    const inputFocus$ = this.focus$;
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-        tap(term => { 
-            this.statesx.forEach(element => {
-                if(element.optDes == term){                 
-                  this.router.navigate(['home/'+ element.optLink]);
-                }
-            });          
-        }),
-        map(term => {
-            if (term.length >= 2) {
-                return term === '' ? this.states : this.states.filter((v: any) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
-            } else {
-                return [];
-            }
-        })
-    );
-};
-
-onSelect(item: any) {
-  this.statesx.forEach(element => {
-    if(element.optDes == item.item){                 
-      this.router.navigate(['home/'+ element.optLink]);
-    }
-});      
-}
-
-
-
-  constructor(private classToggler      : ClassToggleService, 
+   constructor(private classToggler      : ClassToggleService, 
                private rest             : RestService ,
                private servicioUser     :  UsersService,
                private servicioAler     : AlertasService,
@@ -88,6 +52,7 @@ onSelect(item: any) {
     this.token   = this.servicioUser.getToken();
     this.usuario = this.servicioUser.getUser();
     this.imgName = this.usuario.img;
+    
    
     this.usuario.menu.forEach((element:any) => {
       element.opciones.forEach((opcion:any) => {
@@ -98,8 +63,8 @@ onSelect(item: any) {
     });
 
     if(this.imgName == ''){
-      this.imgName = this.servicioUser.getImgDe();
-    }
+     this.imgName = this.usuario.usuario.substring(0,2);
+    } 
    
   }
 
@@ -132,16 +97,16 @@ onSelect(item: any) {
     });*/
 
 
-    this.rest.get('notificaciones' , this.token, this.parametros).subscribe((data:any)=>{      
+    /*this.rest.get('notificaciones' , this.token, this.parametros).subscribe((data:any)=>{      
       this.datos    = data.notificaciones;
       this.contador = data.contador;   
       
-    });
+    });*/
     this.rest.get('indicadores' , this.token, this.parametros).subscribe((data:any)=>{      
       this.indicadores = data;
-      
-      console.log(data);
-      
+      if(data.length > 0){
+        this.val = true;
+      } 
     });
     
     this.webSocketService.startListening();
@@ -225,5 +190,37 @@ socket.subscribe(
     this.router.navigate(['home/seguridad/notificaciones']);
   }
 
+  
+search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
+  const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+  const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
+  const inputFocus$ = this.focus$;
+  return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
+      tap(term => { 
+          this.statesx.forEach(element => {
+              if(element.optDes == term){                 
+                this.router.navigate(['home/'+ element.optLink]);
+                this.model = '';
+              } 
+          });          
+      }),
+      map(term => {
+          if (term.length >= 2) {
+              return term === '' ? this.states : this.states.filter((v: any) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10);
+          } else {
+              return [];
+          }
+      })
+  );
+};
+
+onSelect(item: any) {
+this.statesx.forEach(element => {
+  if(element.optDes == item.item){                 
+    this.router.navigate(['home/'+ element.optLink]);
+    this.model = '';
+  }
+});      
+}
 
 }

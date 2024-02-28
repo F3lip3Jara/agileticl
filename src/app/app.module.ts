@@ -14,6 +14,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertComponent } from './containers/alert/alert.component';
 import { ProgresoComponent } from './containers/progreso/progreso.component';
 import { ScrollToTopButtonComponent } from './containers/scroll-to-top-button/scroll-to-top-button.component';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 //import { TrabUserComponent } from './containers/seguridad/trab-user/trab-user.component';  
 
 // Import routing module
@@ -101,7 +103,8 @@ const APP_CONTAINERS = [
     FontAwesomeModule,
     ToastModule,
     NgbModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    NgSelectModule
   ],
   providers: [
     CookieService,    
@@ -119,5 +122,7 @@ const APP_CONTAINERS = [
   ],
   bootstrap: [AppComponent]
 })
+
+
 export class AppModule {
 }

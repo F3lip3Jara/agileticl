@@ -10,7 +10,11 @@ import { InsEmpOpcionesComponent } from './trab-empresa/ins-emp-opciones/ins-emp
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { TrabOpcionesComponent } from './trab-opciones/trab-opciones.component';
 import { TrabAccionesComponent } from './trab-opciones/trab-acciones/trab-acciones.component';
-
+import { TrabUsuariosComponent } from './trab-usuarios/trab-usuarios.component';
+import { InsUsuariosComponent } from './trab-usuarios/ins-usuarios/ins-usuarios.component';
+import { NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [
@@ -19,6 +23,8 @@ import { TrabAccionesComponent } from './trab-opciones/trab-acciones/trab-accion
     InsEmpOpcionesComponent,
     TrabOpcionesComponent,
     TrabAccionesComponent,
+    TrabUsuariosComponent,
+    InsUsuariosComponent,
       ],
   imports: [
     CommonModule,
@@ -27,7 +33,11 @@ import { TrabAccionesComponent } from './trab-opciones/trab-acciones/trab-accion
     DataTablesModule,
     AdministacionRoutingModule,
     FontAwesomeModule,
-    DragDropModule
-  ]
+    DragDropModule,
+    NgbModule,
+    NgSelectModule,
+    ImageCropperModule
+    
+  ],
 })
 export class AdministracionModule { }

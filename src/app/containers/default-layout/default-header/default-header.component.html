@@ -23,7 +23,7 @@
                #instance="ngbTypeahead"
                class="form-control"
                placeholder="Buscar" 
-               (selectItem)="onSelect($event)"/>
+               (selectItem)="onSelect($event)" value="{{model}}"/>
         <div class="input-group-append">
           <span class="input-group-text">
             <svg cIcon class="me-2" name="cilMagnifyingGlass"></svg>
@@ -67,8 +67,10 @@
         size="md"
         src="{{imgName}}"
         status="success"
+       *ngIf="imgName.length > 2"
       >
       </c-avatar>
+      <c-avatar color="secondary" status="success" *ngIf="imgName.length === 2">{{imgName}}</c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">
       <li>
@@ -157,13 +159,9 @@
               {{datos.monValor}} 
               {{datos.moncValor}} 
            </span>
+           <span  style="font-size: 11px;"  *ngIf="!val">Sin datos</span>
           </a>
       </li>
-      <li >
-       <a cDropdownItem>  <span  style="font-size: 11px;" *ngIf="!indicadores?.length">Sin datos</span></a>
-      
-      </li>
-      
       <li></li>
     </ul>
   </c-dropdown> 

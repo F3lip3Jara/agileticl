@@ -39,6 +39,7 @@
             "styles": [
               "src/scss/styles.scss",
               "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
+              
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

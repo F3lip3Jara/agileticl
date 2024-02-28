@@ -6,7 +6,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { SeguridadRoutingModule } from './seguridad-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule, NgbDatepicker , NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {  ModalModule } from '@coreui/angular';
+import {  AvatarModule, ModalModule } from '@coreui/angular';
 import { InsUserComponent } from './trab-user/ins-user/ins-user.component';
 import {TrabEtapasComponent} from './trab-etapas/trab-etapas.component';
 import {TrabEtapaDetalleComponent} from './trab-etapa-detalle/trab-etapa-detalle.component';
@@ -19,6 +19,9 @@ import { UpModuloOptComponent } from './trab-modulos/up-modulo-opt/up-modulo-opt
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { IconModule } from '@coreui/icons-angular';
 import { InsModuloOptComponent } from './trab-modulos/ins-modulo-opt/ins-modulo-opt.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { NgSelectModule } from '@ng-select/ng-select';
+import {UpUserComponent} from './trab-user/up-user/up-user.component';
 
 
 @NgModule({
@@ -33,6 +36,7 @@ import { InsModuloOptComponent } from './trab-modulos/ins-modulo-opt/ins-modulo-
                  SelectIconComponent,
                  UpModuloOptComponent,
                  InsModuloOptComponent,
+                 UpUserComponent
                 
                 ],
   imports: [
@@ -46,8 +50,10 @@ import { InsModuloOptComponent } from './trab-modulos/ins-modulo-opt/ins-modulo-
     NgbModule,
     NgbDatepicker,
     DragDropModule,
-    IconModule
-    
+    IconModule,
+    ImageCropperModule,
+    NgSelectModule,
+    AvatarModule
   ]
 })
 export class SeguridadModule { }

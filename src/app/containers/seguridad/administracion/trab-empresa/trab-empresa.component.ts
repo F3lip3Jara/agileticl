@@ -4,7 +4,7 @@ import { UsersService } from '../../../../servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
-import { faAddressCard, faFileExcel, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 
@@ -16,8 +16,6 @@ import { Router } from '@angular/router';
 export class TrabEmpresaComponent implements OnInit {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
-
-
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
   tblEmpresa   : any                  = {};
@@ -27,6 +25,7 @@ export class TrabEmpresaComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPenToSquare                       = faPenToSquare;
+  faSquarePlus                        = faSquarePlus;
   constructor(
               private servicio     : UsersService,
               private rest         : RestService,
@@ -83,7 +82,7 @@ export class TrabEmpresaComponent implements OnInit {
   }
 
   public opciones(empresa : any){   
-    const empresaString = JSON.stringify(empresa);
+    const empresaString = JSON.stringify(empresa);    
     this.router.navigate(['home/seguridad/administracion/empresa/opciones/' + empresaString]);
   }
 

@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-import { LinksService } from 'src/app/servicios/links.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
-import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 
@@ -23,6 +22,9 @@ export class InsEmpresaComponent {
   valRut          : boolean = false;
   mensaje         : string  = '';
   faArrowTurnDown           = faArrowTurnDown;
+  imageChangedEvent: any    = '';
+  croppedImage     : any    =  '';
+  avatar           : any    =  '';
  
   constructor(fgIns                : FormBuilder,
               private servicio     : UsersService,
@@ -78,7 +80,7 @@ export class InsEmpresaComponent {
     }
 
   public guardar(empDes: any , empDir:any , empRut:any, empGiro:any , empFono:any ){
-    let empresa                = {empDes: empDes , empDir:empDir , empRut: empRut ,  empGiro:empGiro ,empFono:empFono};
+    let empresa                = {empDes: empDes , empDir:empDir , empRut: empRut ,  empGiro:empGiro ,empFono:empFono , empImg:this.avatar};
     this.val                   = true;
     this.serviLoad.sumar.emit(1);
 
@@ -91,5 +93,64 @@ export class InsEmpresaComponent {
       });
     });
     this.servicioalert.disparador.emit();
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+
+  imageCropped(event: ImageCroppedEvent): void {
+    this.croppedImage = event.blob;   
+    var myReader: FileReader = new FileReader();
+     myReader.readAsDataURL(this.croppedImage);
+     myReader.onloadend = (event) => {
+      this.avatar =event.target?.result;
+     }
+  }
+
+  imageLoaded(): void {
+    // Imagen cargada
+  }
+
+  cropperReady(): void {
+    // El recortador está listo
+  }
+
+  loadImageFailed(): void {
+    this.avatar = '';
+    this.croppedImage = '';
+  }
+
+  resizeImage(file: File): Promise<string | ArrayBuffer | null> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = new Image();
+        img.src = e.target.result;
+
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Ajusta el tamaño deseado, por ejemplo, 800x600
+          canvas.width  = 800;
+          canvas.height = 600;
+
+          // Dibuja la imagen en el lienzo
+          ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          // Convierte el lienzo a base64
+          const resizedImage = canvas.toDataURL('image/jpeg');
+
+          resolve(resizedImage);
+        };
+
+        img.onerror = (error) => {
+          reject(error);
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
   }
 }

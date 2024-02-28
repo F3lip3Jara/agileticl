@@ -7,13 +7,13 @@
 >
   <c-sidebar-brand
     [brandFull]="{
-      src: 'assets/Logo_MARPLE2.png',
-      width: 170,
-      height: 91,
+      src: logo,
+      width: 140,
+      height: 50,
       alt: 'Logo Empresa'
     }"
     [brandNarrow]="{
-      src: 'assets/Logo_MARPLE2.png',
+      src: logo,
       width: 46,
       height: 46,
       alt: 'Logo empresa'
@@ -24,10 +24,19 @@
   <ng-scrollbar pointerEventsMethod="scrollbar">
     <div class="user-panel mt-3  d-flex">
       <div class="image">
-      <img src="{{usrimg}}" class="img-circle elevation-2" alt="User Image">
+        <c-avatar 
+        cTextColor="primary"
+        shape="rounded-1"
+        size="md"
+        src="{{usrimg}}"
+        status="success"
+       *ngIf="usrimg.length > 2"
+      >
+      </c-avatar>
+      <c-avatar color="secondary" status="success" *ngIf="usrimg.length ===2">{{usrimg}}</c-avatar>
       </div>
       <div class="info">
-         <a  class="d-block">{{usrname}} - {{rol}}</a>
+         <a  class="d-block">{{usrname}} <span>( {{rol}} )</span> </a>         
       </div>
       </div>
     <c-sidebar-nav

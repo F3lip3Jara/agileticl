@@ -1,15 +1,15 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";;
 import {TrabUserComponent} from './trab-user/trab-user.component'
-import {InsUserComponent} from './trab-user/ins-user/ins-user.component'
 import {TrabEtapasComponent} from './trab-etapas/trab-etapas.component'
 import { TrabLogComponent } from "./trab-log/trab-log.component";
 import { TrabModulosComponent } from "./trab-modulos/trab-modulos.component";
 import { TrabNotificacionesComponent } from "./trab-notificaciones/trab-notificaciones.component";
 import { TrabRolesComponent } from "./trab-roles/trab-roles.component";
-
 import { UpModuloOptComponent } from "./trab-modulos/up-modulo-opt/up-modulo-opt.component";
 import { InsModuloOptComponent } from "./trab-modulos/ins-modulo-opt/ins-modulo-opt.component";
+import { InsUserComponent } from "./trab-user/ins-user/ins-user.component";
+import { UpUserComponent } from "./trab-user/up-user/up-user.component";
 
 const routes: Routes = [
   {
@@ -30,6 +30,13 @@ const routes: Routes = [
         component: InsUserComponent,
         data: {
           title: 'Usuarios / Ingreso',
+        }
+      },
+      {
+        path: 'usuarios/actualizar/:usuario',
+        component: UpUserComponent,
+        data: {
+          title: 'Usuarios / Actualizar',
         }
       },
       {

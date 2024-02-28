@@ -20,6 +20,7 @@ export class DefaultLayoutComponent {
   usrimg           :string      = '';           
   usrname          :string      = '';
   rol              :string      = '';
+  logo             :string      = '';
 
   constructor(  private rest        : RestService ,
                 private servicioUser: UsersService) {
@@ -27,11 +28,12 @@ export class DefaultLayoutComponent {
                   this.token    = servicioUser.getToken();                
                   this.menu     = this.servicioUser.getUser().menu;
                   this.usrimg   = this.servicioUser.getUser().img;
-                  this.usrname  = this.servicioUser.getUser().name;
+                  this.usrname  = this.servicioUser.getUser().usuario;
                   this.rol      = this.servicioUser.getUser().rol;
-
+                  this.logo     = this.servicioUser.getUser().imgEmp;
+                 
                   if(this.usrimg == ''){
-                    this.usrimg = this.servicioUser.getImgDe();
+                    this.usrimg = this.usrname.substring(0,2);
                   }
                
                   this.menu.forEach((element:any) => {

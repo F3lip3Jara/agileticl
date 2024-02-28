@@ -64,10 +64,11 @@ export class LoginComponent {
         let usuario : string = data.name;
         let img     : string = data.img;
         let empresa : string = data.empresa;
+        let imgEmp  : string = data.imgEmp;
 
         this.UsersService.setToken(token);
         this.UsersService.setTokenCrf(crf);
-        this.UsersService.setUsuario(usuario , rol , menu, img, empresa);
+        this.UsersService.setUsuario(usuario , rol , menu, img, empresa, imgEmp);
 
         if (reinicio == 'S') {
           this.router.navigate(['/changePassword']);

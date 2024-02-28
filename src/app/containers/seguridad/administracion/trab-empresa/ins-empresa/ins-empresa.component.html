@@ -72,6 +72,19 @@
                         <span class="text-danger">Campo obligatorio!</span>
                       </div>
                     </div>
+                    <div class="col-md-12 form-group mt-4">
+                      <label for="">Logo</label>                     
+                        <image-cropper
+                          [imageChangedEvent]="imageChangedEvent"
+                          [maintainAspectRatio]="true"
+                          [aspectRatio]="3 / 1"
+                          (imageCropped)="imageCropped($event)"
+                          (imageLoaded)="imageLoaded()"
+                          (cropperReady)="cropperReady()"
+                          (loadImageFailed)="loadImageFailed()"
+                        ></image-cropper> 
+                        <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)" />                        
+                    </div>
                     <div class="col-md-12">
                       <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"  *ngIf ="ins.valid && valRut" [disabled]="val" >
                         <div *ngIf= "val">

@@ -1,26 +1,24 @@
-import { LoadingService } from './../../../servicios/loading.service';
-import { LogSysService } from './../../../servicios/log-sys.service';
-import { LogSys } from './../../../model/logSys.model';
-import { tblUsuario } from './../../../model/tblUsuario.model';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { faAddressCard, faCalendarWeek, faFileExcel, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
+import { LogSys } from 'src/app/model/logSys.model';
+import { tblUsuario } from 'src/app/model/tblUsuario.model';
+import { AlertasService } from 'src/app/servicios/alertas.service';
+import { ExcelService } from 'src/app/servicios/excel.service';
+import { LoadingService } from 'src/app/servicios/loading.service';
+import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { Component,  OnInit,  ViewChild , ElementRef } from '@angular/core';
-import { FormBuilder,  FormGroup,  Validators } from '@angular/forms';
-import {  NgbDateStruct,  NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ExcelService } from 'src/app/servicios/excel.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
-import { faFileExcel , faAddressCard, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
-
-import { faCalendarWeek} from '@fortawesome/free-solid-svg-icons';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-trab-user',
-  templateUrl: './trab-user.component.html',
-  styleUrls: ['./trab-user.component.css']
+  selector: 'app-trab-usuarios',
+  templateUrl: './trab-usuarios.component.html',
+  styleUrls: ['./trab-usuarios.component.scss']
 })
-export class TrabUserComponent implements OnInit {
+export class TrabUsuariosComponent {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
 
@@ -34,10 +32,10 @@ export class TrabUserComponent implements OnInit {
   token           : string               = '';
   parametros      : any []               = [];
   archivos        : any []               = [];
-  roles           : any;
+  rol             : any;
   gerencia        : any;
   fileToUpload?   : File;
-  usuario         : tblUsuario           = new tblUsuario (0 , '', '','','','','','','','', '') ;
+  usuario         : any                  = {} ;
   valGuar         : boolean              = false;
   udpUser         : FormGroup;
   faFileExcel                            = faFileExcel;
@@ -46,7 +44,6 @@ export class TrabUserComponent implements OnInit {
   public visible                         = false;
   model: NgbDateStruct | undefined;
   faCalendarWeek                         = faCalendarWeek;
-  val                                    = false;
 
       
   constructor(
@@ -73,7 +70,7 @@ export class TrabUserComponent implements OnInit {
           Validators.required
          ])],
      gerencias : [ '',Validators.compose([
-        
+          
         ])]
 
     });
@@ -84,13 +81,11 @@ export class TrabUserComponent implements OnInit {
     this.serviLoad.sumar.emit(3);
     this.tblData();
     this.rest.get('trabRoles', this.token , this.parametros).subscribe(data => {
-      this.roles = data;
+      this.rol = data;
    });
    this.rest.get('trabGerencia', this.token , this.parametros).subscribe(data => {
      this.gerencia = data;  
   });
-
-
 
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -117,7 +112,7 @@ export class TrabUserComponent implements OnInit {
 
   public tblData(){
     this.tblUsuarios = {};
-    this.rest.get('trabUsuarios' , this.token, this.parametros).subscribe(data => {
+    this.rest.get('trabUsuariosAdm' , this.token, this.parametros).subscribe(data => {
       this.tblUsuarios = data;
     });
     setTimeout(()=> {
@@ -127,7 +122,7 @@ export class TrabUserComponent implements OnInit {
     }
 
    public userNuevo(){
-    this.router.navigate(['home/seguridad/usuarios/ingreso']);
+    this.router.navigate(['home/seguridad/administracion/usuarios/ingreso']);
    }
 
 
@@ -151,10 +146,9 @@ export class TrabUserComponent implements OnInit {
   }
 
 
+  
   public actualizar(usuario : any){
-    const dato = JSON.stringify(usuario);    
-    this.router.navigate(['home/seguridad/usuarios/actualizar/' + dato]);
-  } 
-
-
+    const dato = JSON.stringify(usuario);
+    this.router.navigate(['home/seguridad/administracion/usuarios/actualizar/' + dato]);
+  }
 }

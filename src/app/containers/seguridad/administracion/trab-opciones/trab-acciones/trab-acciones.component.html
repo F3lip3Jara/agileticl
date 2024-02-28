@@ -14,7 +14,7 @@
        </div>  
    <div>
     <br>
-    <div    *ngIf="tblobj?.length > 0" class="{{carga}}">
+    <div   class="table-responsive"  *ngIf="tblobj?.length > 0" class="{{carga}}">
       <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
         <thead>
           <tr>
@@ -79,7 +79,7 @@
           </div> 
           <div class="form-group">
             <label for="">Mensaje</label>
-            <input type="text" class="form-control"  oninput="this.value = this.value.toUpperCase()" #accMessage 
+            <input type="text" class="form-control"  #accMessage 
             [ngClass]="(!accDes.value)? 'was-validated' : 'is-valid'" >
              <div *ngIf="!accDes.value">
               <span class="text-danger">Campo obligatorio!</span>

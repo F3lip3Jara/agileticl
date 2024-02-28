@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 // If you want to override variables do it here
 @import "variables";
-
+@import "~@ng-select/ng-select/themes/default.theme.css";
 $enable-ltr: true;
 $enable-rtl: true;
 
@@ -129,4 +129,12 @@ $text-error-final-font-size:1em;
   
   .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
     transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .ng-dropdown-panel{
+    max-width: 1144px !important;
+  }
+
+  .previsualizar-img{
+    max-width: 200px;
   }

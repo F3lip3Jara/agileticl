@@ -1,0 +1,65 @@
+<div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Usuarios- Administración</h5>
+    </div>
+    <div class="card-body">
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel</button>
+        <a (click) = "userNuevo()" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo" >
+          <fa-icon [icon]="faAddressCard"></fa-icon>
+          Nuevo</a>
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>  
+   <div>
+    <br>
+    <div  class="table-responsive" *ngIf="tblUsuarios?.length > 0" class="{{carga}}">  
+        <table #datatableElement datatable  id="tblUsuarios" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Empresa</th>
+              <th>Usuario</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Rol</th>
+              <th>Gerencia</th>
+              <th>Activado</th>
+              <th>Reinicio</th>
+              <th>Fec.Creación</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor = "let usuario of tblUsuarios">
+              <th>{{usuario.id}}</th>
+              <th>{{usuario.empresa}}</th>
+              <th>{{usuario.name}}</th>
+              <th>{{usuario.emploNom}}</th>
+              <th>{{usuario.emploApe}}</th>
+              <th>{{usuario.rolDes}}</th>
+              <th>{{usuario.gerDes}}</th>
+              <th>{{usuario.activado}}</th>
+              <th>{{usuario.reinicio}}</th>
+              <th>{{usuario.created_at.substr(0 , 10)}}</th>
+              <th>
+                <a (click)="actualizar(usuario)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+                  <fa-icon [icon]="faPenToSquare"></fa-icon>
+                </a>  
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  
+  
+ 
