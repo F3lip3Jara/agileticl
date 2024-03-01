@@ -1,0 +1,141 @@
+<div class="card card-outline card-primary">
+    <div class=  "card-header">
+      <h5 class="card-title">Ajustes de Usuario</h5>    
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <form
+         [formGroup] = "up"
+         (ngSubmit)  = "actualizar(
+                            up.controls['empNombre'].value,
+                            up.controls['empApe'].value,
+                            up.controls['password'].value,
+                            up.controls['empFecNac'].value,
+                            mantpass.checked
+                            
+                        )">
+  <div class="row modal-body">
+      <div class="col-md-6 form-group">
+            <label for="empNombre">Nombre Usuario</label>
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="empNombre" placeholder="Ingresar nombre..." disabled value="{{usuario.name}}"
+                >
+            </div>          
+      </div>
+      <div class="col-md-6 form-group">
+        <label for="empNombre">Nombre </label>
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName = 'empNombre'  
+            [ngClass]="(up.controls['empNombre'].hasError('required') )
+            ? 'was-validated' : 'is-valid'" >
+          </div>
+          <div *ngIf= "up.controls['empNombre'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+        </div>
+      <div class="col-md-6 form-group">
+        <label for="empApe">Apellido</label>
+        <div class="input-group input-group-sm">
+          <input type="text" class="form-control" id="empApe" placeholder="Ingresar apellido..." formControlName = 'empApe'  
+          [ngClass]="(up.controls['empApe'].hasError('required'))
+          ? 'was-validated' : 'is-valid'" >
+       </div>
+       <div *ngIf = "up.controls['empApe'].hasError('required')">
+          <span class="text-danger">Campo obligatorio!</span>
+       </div>
+      </div>
+      <div class="col-md-6 form-group ">
+            <label for="nombre">Fecha Nacimiento</label>
+            <div class="input-group input-group-sm" *ngIf="dia > 0">           
+              <input class="form-control" placeholder="yyyy-mm-dd"
+              name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
+              formControlName='empFecNac' [minDate]="{year: 1921, month: 1, day: 1}" 
+              [startDate]="{year: ano, month: mes, day: dia}" [ngModel]="dateModel">
+               <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
+                <fa-icon [icon]="faCalendarWeek"></fa-icon>
+              </button>           
+            </div>
+      </div>
+      <div class="col-md-12 mt-2 mb-2">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" checked #mantpass>
+          <label class="form-check-label" for="flexSwitchCheckDefault">Mantener Password</label>
+        </div>
+      </div>
+      <div class="col-md-6 form-group" *ngIf="!mantpass.checked" >      
+        <label for="empNombre">Nueva Contraseña</label>
+          <div class="input-group input-group-sm">
+           <input  type="password" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName='password'  
+            [ngClass]="(( up.controls['password'].value.length == 0) ||  password  )
+            ? 'was-validated' : 'is-valid'"  >
+          </div>
+          <div *ngIf= "up.controls['password'].value.length == 0">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+          <div *ngIf= "password">
+            <span class="text-danger">Las contraseñas no coinciden!</span>
+          </div>
+      </div>
+      <div class="col-md-6 form-group" *ngIf="!mantpass.checked">
+          <label for="empNombre">Confirmar nueva Contraseña </label>
+            <div class="input-group input-group-sm">
+              <input type="password" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName='password2'  
+              [ngClass]="(( up.controls['password2'].value.length == 0) ||  password  )
+              ? 'was-validated' : 'is-valid'" >
+            </div>
+            <div *ngIf= "up.controls['password2'].value.length == 0">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+            <div *ngIf= "password">
+              <span class="text-danger">Las contraseñas no coinciden!</span>
+            </div>
+      </div>
+      <div class="col-md-12 form-group mt-4">
+            <label for="">Avatar</label>
+            <br>
+            <br>
+            <c-avatar 
+            cTextColor="primary"
+            shape="rounded-1"
+            size="md"
+            src="{{avatar}}"
+           *ngIf="avatar.length > 2"
+          >
+          </c-avatar>
+          <div   *ngIf="avatar.length ==0">
+            <i class="spinner-grow spinner-grow-sm"></i>
+            <i class="spinner-grow spinner-grow-sm"></i>
+            <i class="spinner-grow spinner-grow-sm"></i>
+          </div>
+          <c-avatar color="secondary"  *ngIf="avatar.length === 2">{{avatar}}</c-avatar>
+            <image-cropper            
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1 / 1"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()"
+              ></image-cropper> 
+            <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
+                                      
+      </div>
+      <div class="col-md-12">
+        <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2" *ngIf="(up.valid && mantpass.checked) || (up.valid && !mantpass.checked && up.controls['password'].value.length > 0 && !password)"  [disabled]="val">
+          <div *ngIf= "val">
+            Guardando..
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+          </div>
+          <div *ngIf= "!val">
+            Guardar
+          </div>
+        </button>
+        <a  routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+          <fa-icon [icon]=" faArrowTurnDown"></fa-icon>             
+          Volver
+        </a>
+      </div>
+    </div>
+      </form>
+  </div>
+  </div>

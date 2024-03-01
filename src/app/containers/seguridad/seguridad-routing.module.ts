@@ -10,6 +10,7 @@ import { UpModuloOptComponent } from "./trab-modulos/up-modulo-opt/up-modulo-opt
 import { InsModuloOptComponent } from "./trab-modulos/ins-modulo-opt/ins-modulo-opt.component";
 import { InsUserComponent } from "./trab-user/ins-user/ins-user.component";
 import { UpUserComponent } from "./trab-user/up-user/up-user.component";
+import { AjustesComponent } from "./ajustes/ajustes.component";
 
 const routes: Routes = [
   {
@@ -18,6 +19,13 @@ const routes: Routes = [
       title: 'Seguridad',
     },
     children: [
+      {
+        path: 'ajustes/:usuario',
+        component: AjustesComponent,
+        data: {
+          title: 'Usuarios',
+        }
+      },
       {
         path: 'usuarios',
         component: TrabUserComponent,

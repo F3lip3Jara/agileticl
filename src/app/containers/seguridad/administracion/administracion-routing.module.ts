@@ -7,6 +7,7 @@ import { TrabOpcionesComponent } from "./trab-opciones/trab-opciones.component";
 import { TrabAccionesComponent } from "./trab-opciones/trab-acciones/trab-acciones.component";
 import { TrabUsuariosComponent } from "./trab-usuarios/trab-usuarios.component";
 import { InsUsuariosComponent } from "./trab-usuarios/ins-usuarios/ins-usuarios.component";
+import { UpUsuariosComponent } from "./trab-usuarios/up-usuarios/up-usuarios.component";
 
 const routes: Routes = [
   {
@@ -68,6 +69,14 @@ const routes: Routes = [
         component:InsUsuariosComponent,
         data: {
           title: 'UsuariosAdm - Ingreso',
+        }
+      },
+
+ {
+        path: 'usuarios/actualizar/:usuario',
+        component:UpUsuariosComponent,
+        data: {
+          title: 'UsuariosAdm - Actualizar',
         }
       },
       

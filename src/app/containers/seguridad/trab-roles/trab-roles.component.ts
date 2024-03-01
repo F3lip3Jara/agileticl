@@ -101,7 +101,7 @@ export class TrabRolesComponent implements OnInit {
     let url      = '';
     this.carga   = 'invisible';
     this.loading = true;
-    let rolesx   = new Roles(this.roles.rolId , rolDesx);  
+    let rolesx   = {'idRol' : this.roles.rolId ,'rolDes':rolDesx};  
 
     if(tipo =='up'){
       url      = 'updRoles';
@@ -114,9 +114,10 @@ export class TrabRolesComponent implements OnInit {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
+      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
 
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    
     return false;
   }
 

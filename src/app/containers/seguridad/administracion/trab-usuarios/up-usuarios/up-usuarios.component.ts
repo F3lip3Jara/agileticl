@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
-import { NgbDateStruct, NgbDatepickerI18n} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { Empleado } from 'src/app/model/empleado.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 
 @Component({
-  selector: 'app-ins-usuarios',
-  templateUrl: './ins-usuarios.component.html',
-  styleUrls: ['./ins-usuarios.component.scss'],
-  
+  selector: 'app-up-usuarios',
+  templateUrl: './up-usuarios.component.html',
+  styleUrls: ['./up-usuarios.component.scss']
 })
-export class InsUsuariosComponent {
-  ins              : FormGroup;
+export class UpUsuariosComponent {
+
+  usuario :any               = {};
+  up              : FormGroup;
   token            : string  = '';
   roles            : any     = {};
   parms            : any     = [];
@@ -33,19 +33,26 @@ export class InsUsuariosComponent {
   imageChangedEvent: any    = '';
   croppedImage     : any    =  '';
   avatar           : any    =  '';
+  password         : boolean= false;
+  showPassword     : boolean= false;
+  dia              : number  = 0;
+  mes              : number  = 0;
+  ano              : number  = 0;
+  fecha?           : Date;
+  dateModel?       : NgbDateStruct ;
+  
 
-  constructor(fgInsUser            : FormBuilder,
+  constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
               private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
-              private router       : Router
+              private router       : Router,
+              private route        : ActivatedRoute
      ) {
 
-      this.ins = fgInsUser.group({
-        empId  : ['' , Validators.compose([
-          Validators.required,
-         ])],
+      this.up = fgUser.group({
+       
         empApe : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -60,67 +67,82 @@ export class InsUsuariosComponent {
         gerencia : ['' , Validators.compose([
             
           ])],
-        empName : ['' , Validators.compose([
-            Validators.required
+        password : ['' , Validators.compose([
+          
+          ])],
+        password2 : ['' , Validators.compose([
+           
           ])],
       });
 
     this.token = this.servicio.getToken();
     }
 
-    public guardar(empId:number, nombre: string , apellido: string , fecha: string , rol: number , gerId: number , empName : string){
-      this.serviLoad.sumar.emit(1);
-      this.val          = true;
-      let empleado : any = new Empleado(nombre,apellido,this.avatar,empId,fecha,rol,gerId,empName)
-      this.rest.post('insUserAdm', this.token , empleado).subscribe(data => {
-        this.alertas.disparador.emit();
-        this.val          = true; 
-        this.router.navigate(['home/seguridad/administracion/usuarios']);         
-      });
-    }
+  ngOnInit(){
+    this.serviLoad.sumar.emit(3);
 
-  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      const dato   = params['usuario'];
+      this.usuario = JSON.parse(dato);
+      let name     = this.usuario.name;
+      this.parms = [{key : 'userid', value:this.usuario.id}];     
+      this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any)=>{
+         if(data.length > 0 ){         
+            if(data[0].emploAvatar === null){             
+              this.avatar =name.substring(0,2);
+            }else{
+              this.avatar = data[0].emploAvatar;               
+            }
+         }
+      } );
+    });
 
     
-    this.serviLoad.sumar.emit(1);
+    this.parms = [{key : 'empId', value:this.usuario.empId}];
     
-
-  this.rest.get('trabEmpresa', this.token , this.parms).subscribe(data => {
-    this.empresa = data;
-  });
-
- this.ins.controls['empId'].valueChanges.pipe(  
-  debounceTime(200),
-  distinctUntilChanged()).subscribe(field => {
-    this.ins.controls['empName'].setValue('');
-    this.serviLoad.sumar.emit(2);
-    this.parms        = [ {key: 'empId' , value: this.ins.controls['empId'].value}];
     this.rest.get('trabRolesAdm', this.token , this.parms).subscribe(data => {
-        this.roles = data;
-    });
-    this.rest.get('trabGerenciaAdm', this.token , this.parms).subscribe(data => {
-      this.gerencia = data;
-    });
+      this.roles = data;
+      this.up.controls['rol'].setValue(this.usuario.rolId);
+   });
 
+   this.rest.get('trabGerenciaAdm', this.token , this.parms).subscribe((data:any) => {
+     if(data.length > 0){
+        this.gerencia = data;
+     }
+     this.up.controls['gerencia'].setValue(this.usuario.gerId);
   });
+ 
+ 
+ let emploFecNAc = this.usuario.emploFecNac;
+ this.fecha      = new Date(emploFecNAc);
+ this.dia        = this.fecha.getUTCDate();
+ this.mes        = this.fecha.getUTCMonth()+1;
+ this.ano        = this.fecha.getUTCFullYear();
+ this.dateModel  = { year: this.ano, month: this.mes, day: this.dia };
 
-  this.ins.controls['empName'].valueChanges.pipe(
-    filter(text => text.length > 3),
+  this.up.controls['empApe'].setValue(this.usuario.emploApe);
+  this.up.controls['empNombre'].setValue(this.usuario.emploNom);
+  this.up.controls['empFecNac'].setValue(this.fecha);
+  
+  this.up.controls['password'].valueChanges.pipe(
+    filter(text => text.length >=1 ),
     debounceTime(200),
     distinctUntilChanged()).subscribe(field => {
-      this.validaNombre(field);
+        this.up.controls['password2'].setValue('');
+        this.password  = false;
     });
-  }
-  public validaNombre(name : string){
-    this.parms        = [{key :'emploName' ,value: name.trim()} , {key: 'empId' , value: this.ins.controls['empId'].value}];
-    this.rest.get('valUsuarioAdm' , this.token , this.parms).subscribe((cant : any)=>{
-        this.dato =  cant;
-        if(this.dato != 0){
-          this.validNombre = true;
+  this.up.controls['password2'].valueChanges.pipe(
+    filter(text => text.length >= 1),
+    debounceTime(200),
+    distinctUntilChanged()).subscribe(field => {
+        let xpassword = this.up.controls['password'].value;
+        if(field === xpassword){
+            this.password = false;
         }else{
-          this.validNombre = false;
+          this.password = true;
         }
     });
+
   }
 
   fileChangeEvent(event: any): void {
@@ -134,8 +156,6 @@ export class InsUsuariosComponent {
      myReader.onloadend = (event) => {
       this.avatar =event.target?.result;
      }
-  
-    
   }
 
   imageLoaded(): void {
@@ -183,6 +203,14 @@ export class InsUsuariosComponent {
       reader.readAsDataURL(file);
     });
   }
-
- 
+  actualizar(emploNom : any , emploApe : any ,  emploPassword : any , rol:any ,empFecNac:any , mantenerPassword:any , gerencia:any ){
+      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:rol , mantenerPassword : mantenerPassword , gerencia:gerencia};
+      let xuser = {'user':btoa(JSON.stringify(user))};
+      this.val  = true;
+      this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
+        this.val = false;
+        this.alertas.disparador.emit();
+            
+      });
+  }
 }

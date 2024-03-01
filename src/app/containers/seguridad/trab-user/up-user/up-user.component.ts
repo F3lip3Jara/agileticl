@@ -43,7 +43,7 @@ export class UpUserComponent{
   dateModel?       : NgbDateStruct ;
   
 
-  constructor(fgUser            : FormBuilder,
+  constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
               private alertas      : AlertasService,             
@@ -80,13 +80,24 @@ export class UpUserComponent{
     }
 
   ngOnInit(){
-    this.serviLoad.sumar.emit(2);
+    this.serviLoad.sumar.emit(4);
     this.route.params.subscribe(params => {
-      const dato = params['usuario'];
+      const dato   = params['usuario'];
       this.usuario = JSON.parse(dato);
+      let name     = this.usuario.name;
+      this.parms = [{key : 'userid', value:this.usuario.id}];     
+      this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any)=>{
+         if(data.length > 0 ){                  
+            if(data[0].emploAvatar === null){             
+              this.avatar =name.substring(0,2);
+            }else{
+              this.avatar = data[0].emploAvatar;               
+            }
+         }
+      } );
+     
     });
-
-    this.serviLoad.sumar.emit(2);
+    
     this.rest.get('trabRoles', this.token , this.parms).subscribe(data => {
       this.roles = data;
       this.up.controls['rol'].setValue(this.usuario.rolId);
@@ -98,12 +109,8 @@ export class UpUserComponent{
      }
      this.up.controls['gerencia'].setValue(this.usuario.gerId);
   });
-  this.parms = [{key : 'userid', value:this.usuario.id}]
-  this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any) => {
-    if(data.length > 0 ){
-      this.avatar = data[0].emploAvatar;      
-    }
- });
+ 
+ 
  let emploFecNAc = this.usuario.emploFecNac;
  this.fecha      = new Date(emploFecNAc);
  this.dia        = this.fecha.getUTCDate();

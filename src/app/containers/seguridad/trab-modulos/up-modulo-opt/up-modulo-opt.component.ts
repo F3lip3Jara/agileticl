@@ -97,8 +97,9 @@ export class UpModuloOptComponent {
     this.serviLoad.sumar.emit(1);
     this.rest.post('upModulo', this.token, this.parametros).subscribe(resp => {
         this.val = false;
+        this.servicioalert.disparador.emit();
     });
-    this.servicioalert.disparador.emit();
+    
   }
 
   icono(icono :any){

@@ -223,4 +223,17 @@ this.statesx.forEach(element => {
 });      
 }
 
+ajustes(){
+  let parm : any[] =[];
+
+  this.rest.get('getUsuario', this.token , parm).subscribe((data:any) => {
+    data.forEach((element:any) => {
+      const dato = JSON.stringify(element); 
+        this.router.navigate(['home/seguridad/ajustes/' + dato]);  
+      
+      });
+  });
+
+}
+
 }

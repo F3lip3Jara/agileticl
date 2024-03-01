@@ -140,6 +140,12 @@
          *ngIf="avatar.length > 2"
         >
         </c-avatar>
+        <div   *ngIf="avatar.length ==0">
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+        </div>
+        <c-avatar color="secondary"  *ngIf="avatar.length === 2">{{avatar}}</c-avatar>
           <image-cropper            
               [imageChangedEvent]="imageChangedEvent"
               [maintainAspectRatio]="true"
@@ -149,7 +155,7 @@
               (cropperReady)="cropperReady()"
               (loadImageFailed)="loadImageFailed()"
             ></image-cropper> 
-          <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"    *ngIf="avatar.length > 0" />
+          <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
                                     
     </div>
     <div class="col-md-12">

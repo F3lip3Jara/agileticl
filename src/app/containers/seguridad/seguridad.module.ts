@@ -22,6 +22,7 @@ import { InsModuloOptComponent } from './trab-modulos/ins-modulo-opt/ins-modulo-
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {UpUserComponent} from './trab-user/up-user/up-user.component';
+import { AjustesComponent } from './ajustes/ajustes.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {UpUserComponent} from './trab-user/up-user/up-user.component';
                  SelectIconComponent,
                  UpModuloOptComponent,
                  InsModuloOptComponent,
-                 UpUserComponent
+                 UpUserComponent,
+                 AjustesComponent
                 
                 ],
   imports: [

@@ -15,6 +15,8 @@ import { InsUsuariosComponent } from './trab-usuarios/ins-usuarios/ins-usuarios.
 import { NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.component';
+import { AvatarModule } from '@coreui/angular';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     TrabAccionesComponent,
     TrabUsuariosComponent,
     InsUsuariosComponent,
+    UpUsuariosComponent,
       ],
   imports: [
     CommonModule,
@@ -36,7 +39,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     DragDropModule,
     NgbModule,
     NgSelectModule,
-    ImageCropperModule
+    ImageCropperModule,
+    AvatarModule
     
   ],
 })
