@@ -23,6 +23,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgSelectModule } from '@ng-select/ng-select';
 import {UpUserComponent} from './trab-user/up-user/up-user.component';
 import { AjustesComponent } from './ajustes/ajustes.component';
+import { UsuarioNoautorizadoComponent } from './usuario-noautorizado/usuario-noautorizado.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { AjustesComponent } from './ajustes/ajustes.component';
                  UpModuloOptComponent,
                  InsModuloOptComponent,
                  UpUserComponent,
-                 AjustesComponent
+                 AjustesComponent,
+                 UsuarioNoautorizadoComponent
                 
                 ],
   imports: [

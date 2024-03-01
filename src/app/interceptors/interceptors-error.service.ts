@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import {throwError,catchError, tap} from 'rxjs';
 
 import { AlertasService } from '../servicios/alertas.service';
+import { Router } from '@angular/router';
 
 export interface MensajesSystem{
     url    :string ,
@@ -23,9 +24,9 @@ private servidor: string = 'http://127.0.0.1:8000/';
 
 
 
-  constructor(private servicio : AlertasService , private serLoad : LoadingService) { }
+  constructor(private servicio : AlertasService , private serLoad : LoadingService ,    private router : Router) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler , ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler ,  ): Observable<HttpEvent<any>> {
 
 
     const cloneReq= req.clone({url:  this.servidor + req.url});
@@ -66,7 +67,8 @@ private servidor: string = 'http://127.0.0.1:8000/';
           case  204 :{
             this.servicio.setAlert('Registro posiblemente no encontrado','warning');
             break;
-        }
+          }
+         
           }
         }
       }),
@@ -81,6 +83,10 @@ private servidor: string = 'http://127.0.0.1:8000/';
                   this.servicio.setAlert('No se encuentra información', 'danger');
                   break;
                 }
+                case 403:{
+                                  this.router.navigate(['home/seguridad/noautorizado']);
+                }
+
             }
           }
           return throwError(errorMessage);

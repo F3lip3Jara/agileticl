@@ -11,6 +11,7 @@ import { InsModuloOptComponent } from "./trab-modulos/ins-modulo-opt/ins-modulo-
 import { InsUserComponent } from "./trab-user/ins-user/ins-user.component";
 import { UpUserComponent } from "./trab-user/up-user/up-user.component";
 import { AjustesComponent } from "./ajustes/ajustes.component";
+import { UsuarioNoautorizadoComponent } from "./usuario-noautorizado/usuario-noautorizado.component";
 
 const routes: Routes = [
   {
@@ -19,6 +20,13 @@ const routes: Routes = [
       title: 'Seguridad',
     },
     children: [
+      {
+        path: 'noautorizado',
+        component: UsuarioNoautorizadoComponent,
+        data: {
+          title: 'No autorizado',
+        }
+      },
       {
         path: 'ajustes/:usuario',
         component: AjustesComponent,

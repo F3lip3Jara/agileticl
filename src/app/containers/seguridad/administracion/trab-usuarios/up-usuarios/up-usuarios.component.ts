@@ -204,6 +204,7 @@ export class UpUsuariosComponent {
     });
   }
   actualizar(emploNom : any , emploApe : any ,  emploPassword : any , rol:any ,empFecNac:any , mantenerPassword:any , gerencia:any ){
+      this.serviLoad.sumar.emit(1);
       let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:rol , mantenerPassword : mantenerPassword , gerencia:gerencia};
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;

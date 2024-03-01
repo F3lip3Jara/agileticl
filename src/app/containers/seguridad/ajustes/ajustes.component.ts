@@ -71,7 +71,7 @@ export class AjustesComponent {
     }
 
   ngOnInit(){
-    this.serviLoad.sumar.emit(2);
+    this.serviLoad.sumar.emit(1);
     this.route.params.subscribe(params => {
       const dato   = params['usuario'];
       this.usuario = JSON.parse(dato);
@@ -179,7 +179,7 @@ export class AjustesComponent {
     });
   }
   actualizar(emploNom : any , emploApe : any ,  emploPassword : any , empFecNac:any , mantenerPassword:any  ){
-      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword,  mantenerPassword : mantenerPassword };
+      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:0 , mantenerPassword : mantenerPassword , gerencia:null};
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
