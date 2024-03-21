@@ -1,5 +1,4 @@
-import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
@@ -12,19 +11,17 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 
 @Component({
-  selector: 'app-up-usuarios',
-  templateUrl: './up-usuarios.component.html',
-  styleUrls: ['./up-usuarios.component.scss']
+  selector: 'app-cambiopass',
+  templateUrl: './cambiopass.component.html',
+  styleUrls: ['./cambiopass.component.scss']
 })
-export class UpUsuariosComponent {
-
+export class CambiopassComponent {
+    
   usuario :any               = {};
-  up              : FormGroup;
+  up               : FormGroup;
   token            : string  = '';
-  roles            : any     = {};
   parms            : any     = [];
   val              : boolean = false;
-  gerencia         : any     = {};
   validNombre      : boolean = false;
   dato             : number  = 0;
   empresa          : any     = {};
@@ -40,7 +37,8 @@ export class UpUsuariosComponent {
   mes              : number  = 0;
   ano              : number  = 0;
   fecha?           : Date;
-  dateModel?       : any ;
+  dateModel?       : NgbDateStruct ;
+  show             : boolean = false;
   
 
   constructor(fgUser               : FormBuilder,
@@ -50,7 +48,7 @@ export class UpUsuariosComponent {
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute,
-              public datepipe      : DatePipe
+              private render       : Renderer2
      ) {
 
       this.up = fgUser.group({
@@ -63,12 +61,6 @@ export class UpUsuariosComponent {
           ])],
         empFecNac : ['' , Validators.compose([
            ])],
-        rol : ['' , Validators.compose([
-            Validators.required
-           ])],
-        gerencia : ['' , Validators.compose([
-            
-          ])],
         password : ['' , Validators.compose([
           
           ])],
@@ -81,48 +73,42 @@ export class UpUsuariosComponent {
     }
 
   ngOnInit(){
-    this.serviLoad.sumar.emit(3);
-    this.route.params.subscribe(params => {
-      const dato   = params['usuario'];
-      this.usuario = JSON.parse(dato);
-      let name     = this.usuario.name;
-      this.parms = [{key : 'userid', value:this.usuario.id}];     
-      this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any)=>{
-         if(data.length > 0 ){         
-            if(data[0].emploAvatar === null){             
-              this.avatar =name.substring(0,2);
-            }else{
-              this.avatar = data[0].emploAvatar;               
-            }
-         }
-      } );
-    });
-
+    this.serviLoad.sumar.emit(1);
+    this.render.setStyle(document.body, 'background-color', '#EBEDEF');
+    let parm : any[] =[];
+  
     
-    this.parms = [{key : 'empId', value:this.usuario.empId}];
-    this.rest.get('trabRolesAdm', this.token , this.parms).subscribe(data => {
-      this.roles = data;
-      this.up.controls['rol'].setValue(this.usuario.rolId);
-   });
-
-   this.rest.get('trabGerenciaAdm', this.token , this.parms).subscribe((data:any) => {
-     if(data.length > 0){
-        this.gerencia = data;
-     }
-     this.up.controls['gerencia'].setValue(this.usuario.gerId);
+  this.rest.get('getUsuario', this.token , parm).subscribe((data:any) => {
+    data.forEach((element:any) => {      
+      this.usuario = element;
+      if(this.usuario.reinicio =='NO'){
+        this.router.navigate(['./login']);
+      }else{
+        let name     = this.usuario.name;
+        this.parms = [{key : 'userid', value:this.usuario.id}];
+          this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any) => {
+            if(data.length > 0 ){
+              this.avatar = data[0].emploAvatar;      
+            }else{      
+                this.avatar =name.substring(0,2);
+            }
+          });
+          let emploFecNAc = this.usuario.emploFecNac;
+          this.fecha      = new Date(emploFecNAc);
+          this.dia        = this.fecha.getUTCDate();
+          this.mes        = this.fecha.getUTCMonth()+1;
+          this.ano        = this.fecha.getUTCFullYear();
+          this.dateModel  = { year: this.ano, month: this.mes, day: this.dia };
+        
+          this.up.controls['empApe'].setValue(this.usuario.emploApe);
+          this.up.controls['empNombre'].setValue(this.usuario.emploNom);
+          this.up.controls['empFecNac'].setValue(this.fecha);
+          this.show = true;
+      }
+     
+      });
   });
   
- this.fecha      = new Date(this.usuario.emploFecNac);
- this.dia        = this.fecha.getUTCDate();
- this.mes        = this.fecha.getUTCMonth()+1;
- this.ano        = this.fecha.getUTCFullYear();
- this.dateModel  = this.datepipe.transform(this.fecha, 'yyyy-MM-dd')?.toString();
-
-  this.up.controls['empApe'].setValue(this.usuario.emploApe);
-  this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.fecha);
-
-  console.log(this.dateModel);
   
   
   this.up.controls['password'].valueChanges.pipe(
@@ -204,15 +190,21 @@ export class UpUsuariosComponent {
       reader.readAsDataURL(file);
     });
   }
-  actualizar(emploNom : any , emploApe : any ,  emploPassword : any , rol:any ,empFecNac:any , mantenerPassword:any , gerencia:any ){
-      this.serviLoad.sumar.emit(1);
-      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: '', emploFecNac:empFecNac, emploPassword:emploPassword, rol:rol , mantenerPassword : mantenerPassword , gerencia:gerencia};
+  actualizar(emploNom : any , emploApe : any ,  emploPassword : any , empFecNac:any , mantenerPassword:any  ){
+      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:0 , mantenerPassword : mantenerPassword , gerencia:null};
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;
+      this.up.enable();
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
-        this.val = false;
-        this.alertas.disparador.emit();
-            
+        this.alertas.disparador.emit();    
+        if(data[0].error == 0){ 
+          setTimeout(()=> {
+            this.val  = false;
+            this.router.navigate(['./login']);
+         },3500 );  
+         
+        }
+       
       });
   }
 }

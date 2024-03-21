@@ -1,0 +1,15 @@
+<!-- Modal -->
+<ng-template #miModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">¿Sigues activo?</h4>
+  </div>
+  <div class="modal-body">
+    <p>Se ha detectado inactividad en la aplicación. ¿Sigues ahí?</p>
+    <div class="counter mt-5">
+      <p  class="text-center modal-counter"> {{timeLeft}}</p>
+    </div>
+  </div>
+  <div class="modal-footer">   
+    <button type="button" class="btn btn-primary" (click)="modal.close('ok')">Sí</button>
+  </div>
+</ng-template>

@@ -80,12 +80,8 @@ export class InsUsuariosComponent {
     }
 
   ngOnInit(): void {
-
-    
     this.serviLoad.sumar.emit(1);
-    
-
-  this.rest.get('trabEmpresa', this.token , this.parms).subscribe(data => {
+    this.rest.get('trabEmpresa', this.token , this.parms).subscribe(data => {
     this.empresa = data;
   });
 

@@ -1,21 +1,25 @@
-<div class="card card-outline card-primary">
-    <div class=  "card-header">
-      <h5 class="card-title">Actualizar Usuario</h5>    
+<app-alert></app-alert>
+<div class="fade show" style="text-align: center; padding-top: calc(100vh / 2); height: 100vh" *ngIf="!show">
+    <i class="spinner-grow spinner-grow-sm"></i>
+    <span class="m-1">Cargando...</span>
+  </div>
+  <div class="row mt-4 col-md-6 mx-auto" *ngIf="show">
+  <div class="card card-outline " >
+    <div class="card-header bg-transparent">
+      <h5 class="card-title">Registro primer ingreso</h5>    
     </div>
     <!-- /.card-header -->
-    <div class="card-body">
+    <div class="card-body" >
       <form
          [formGroup] = "up"
          (ngSubmit)  = "actualizar(
                             up.controls['empNombre'].value,
                             up.controls['empApe'].value,
                             up.controls['password'].value,
-                            up.controls['rol'].value,
                             up.controls['empFecNac'].value,
-                            mantpass.checked,
-                            up.controls['gerencia'].value
+                            0
                         )">
-  <div class="row modal-body">
+  <div class="row modal-body" >
       <div class="col-md-6 form-group">
             <label for="empNombre">Nombre Usuario</label>
             <div class="input-group input-group-sm">
@@ -45,61 +49,19 @@
           <span class="text-danger">Campo obligatorio!</span>
        </div>
       </div>
-      
-      <div class="col-md-6 form-group">
-        <label for="nombre">Rol</label>
-        <div  *ngIf="!roles.length">
-          <i class="spinner-grow spinner-grow-sm"></i>
-          <i class="spinner-grow spinner-grow-sm"></i>
-          <i class="spinner-grow spinner-grow-sm"></i>
-        </div>
-        <div class="" *ngIf="roles.length > 0" >
-            <ng-select  [items]="roles"
-                        bindLabel="rolDes"
-                        bindValue="rolId"
-                        formControlName="rol"
-                        [ngClass]="(up.controls['rol'].hasError('required'))
-                        ? 'was-validated' : 'is-valid'" >
-            </ng-select >
-          </div>
-            <div *ngIf = "up.controls['rol'].hasError('required')">
-              <span class="text-danger">Campo obligatorio!</span>
-            </div>
-      </div>
-      <div class="col-md-6 form-group">
-            <label for="nombre">Gerencia</label>
-            <div  *ngIf="!gerencia.length">
-              <i class="spinner-grow spinner-grow-sm"></i>
-              <i class="spinner-grow spinner-grow-sm"></i>
-              <i class="spinner-grow spinner-grow-sm"></i>
-            </div>
-            <div class="" *ngIf="gerencia.length > 0">
-              <ng-select  [items]="gerencia"
-                bindLabel="gerDes"
-                bindValue="gerId"
-                formControlName="gerencia"
-                >
-              </ng-select >
-            </div>
-      </div>
       <div class="col-md-6 form-group ">
-        <label for="nombre">Fecha Nacimiento</label>
-        <div class="input-group input-group-sm">
-          <input type="text" class="form-control" placeholder="yyyy-mm-dd"  name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName='empFecNac'
-          [minDate]="{year: 1921, month: 1, day: 1}"  [startDate]="{year: ano, month: mes, day: dia}" >
-          <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
-            <fa-icon [icon]="faCalendarWeek"></fa-icon>
-          </button>           
-        </div>
-            PTW - {{this.usuario.emploFecNac}}
+            <label for="nombre">Fecha Nacimiento</label>
+            <div type="date" class="input-group input-group-sm" *ngIf="dia > 0">           
+              <input type="text" class="form-control" placeholder="yyyy-mm-dd"
+              name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
+              formControlName='empFecNac' [minDate]="{year: 1921, month: 1, day: 1}" 
+              [startDate]="{year: ano, month: mes, day: dia}" [ngModel]="dateModel">
+               <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
+                <fa-icon [icon]="faCalendarWeek"></fa-icon>
+              </button>           
+            </div>
       </div>
-      <div class="col-md-12 mt-2 mb-2">
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" checked #mantpass>
-          <label class="form-check-label" for="flexSwitchCheckDefault">Mantener Password</label>
-        </div>
-      </div>
-      <div class="col-md-6 form-group" *ngIf="!mantpass.checked" >      
+      <div class="col-md-6 form-group" >      
         <label for="empNombre">Nueva Contraseña</label>
           <div class="input-group input-group-sm">
            <input  type="password" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName='password'  
@@ -113,7 +75,7 @@
             <span class="text-danger">Las contraseñas no coinciden!</span>
           </div>
       </div>
-      <div class="col-md-6 form-group" *ngIf="!mantpass.checked">
+      <div class="col-md-6 form-group" >
           <label for="empNombre">Confirmar nueva Contraseña </label>
             <div class="input-group input-group-sm">
               <input type="password" class="form-control" id="empName" placeholder="Ingresar nombre..." formControlName='password2'  
@@ -158,7 +120,7 @@
                                       
       </div>
       <div class="col-md-12">
-        <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2" *ngIf="(up.valid && mantpass.checked) || (up.valid && !mantpass.checked && up.controls['password'].value.length > 0 && !password)"  [disabled]="val">
+        <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2" *ngIf="( up.controls['password'].value.length > 0 && !password)"  [disabled]="val">
           <div *ngIf= "val">
             Guardando..
             <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -167,7 +129,7 @@
             Guardar
           </div>
         </button>
-        <a  routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+        <a  routerLink="./.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
           <fa-icon [icon]=" faArrowTurnDown"></fa-icon>             
           Volver
         </a>
@@ -176,3 +138,4 @@
       </form>
   </div>
   </div>
+</div>

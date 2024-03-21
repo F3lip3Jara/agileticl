@@ -20,6 +20,7 @@ const routes: Routes = [
       title: 'Seguridad',
     },
     children: [
+    
       {
         path: 'noautorizado',
         component: UsuarioNoautorizadoComponent,

@@ -3,6 +3,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { INavData } from '@coreui/angular';
 import Echo from 'laravel-echo';
+import { AlertasService } from 'src/app/servicios/alertas.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,9 +22,12 @@ export class DefaultLayoutComponent {
   usrname          :string      = '';
   rol              :string      = '';
   logo             :string      = '';
+  isLoading        :boolean     = false;
+  altura           :number      = 100;
 
   constructor(  private rest        : RestService ,
-                private servicioUser: UsersService) {
+                private servicioUser: UsersService,
+                private servicioAlerta : AlertasService) {
 
                   this.token    = servicioUser.getToken();                
                   this.menu     = this.servicioUser.getUser().menu;
@@ -65,8 +69,39 @@ export class DefaultLayoutComponent {
   }
 
   ngOnInit(): void {
+    this.servicioAlerta.loading.subscribe(data=>{   
+      this.isLoading = data;   
+      const elemento = document.getElementById('loading');
+      let xaltura    = 0;
+      const xelemento = document.getElementsByClassName('wrapper')[0];
+      const alto = window.innerHeight;
 
+     // console.log(xelemento);
+     // console.log(alto);
+      if (xelemento instanceof HTMLElement) {
+        xaltura  = xelemento.offsetHeight; 
+      }
+      if(this.isLoading ){        
+        this.altura  = xaltura
+      }
+  })
    
+  }
+
+  public getHeight(): number {
+    const body = document.body;
+    const html = document.documentElement;
+  
+    // Calcula la altura máxima entre varias propiedades
+    const bodyHeight = Math.max(
+      body.scrollHeight,
+     // body.offsetHeight,
+      //body.getBoundingClientRect().height,
+     // html.scrollHeight,
+     // html.offsetHeight
+    );
+  
+    return bodyHeight;
   }
 
 }

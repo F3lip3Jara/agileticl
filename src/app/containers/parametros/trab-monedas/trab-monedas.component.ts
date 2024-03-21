@@ -117,7 +117,7 @@ export class TrabMonedasComponent implements OnInit {
     setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
-     },3000 );
+     },1500 );
    }
 
   public modalIns(content : any ){
@@ -125,7 +125,7 @@ export class TrabMonedasComponent implements OnInit {
   }
 
  public modelUp(content :any , xmoneda: Moneda ){
-  this.moneda.setId(xmoneda.idMon);
+  this.moneda.setId(xmoneda.monId);
   this.moneda.setmonDes(xmoneda.monDes);
   this.moneda.setmonCod(xmoneda.monCod);
   this.upMon.controls['monDes'].setValue(xmoneda.monDes);
@@ -138,35 +138,13 @@ public del( moneda : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, moneda).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-          this.serviLoad.sumar.emit(1);
-           this.modal.dismissAll();
-           let des        = 'Moneda eliminada ' + moneda.monCod ;
-           let log        = new LogSys(2, '' , 19 , 'ELIMINAR MONEDA' , des);
-           this.serLog.insLog(log);
-
-           setTimeout(()=>{
-             this.tblMoneda = {};
-             this.rest.get('trabMoneda' , this.token, this.parametros).subscribe(data => {
-                 this.tblMoneda = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
+    this.servicioaler.disparador.emit();     
+    this.modal.dismissAll();
+    this.carga    = 'visible';
+    this.loading  = false;
+    this.tblData();         
    });
-   this.servicioaler.disparador.emit();
+ 
    return false;
 }
 
@@ -175,53 +153,25 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.val     = true;
-  let monedax  = new Moneda(this.moneda.idMon , xmonDes  , xmonCod );
-  let des      = '';
-  let lgName   = '';
-  let idEtaDes = 0;
+  let monedax  = new Moneda(this.moneda.monId , xmonDes  , xmonCod );
 
   if(tipo =='up'){
      url      = 'updMoneda';
-     des      = 'Actualiza moneda ' + xmonCod;
-     lgName   = 'ACTUALIZAR MONEDA';
-     idEtaDes = 18;
   }else{
     url       = 'insMoneda';
-    des       = 'Ingreso de moneda ' + xmonCod;
-     lgName   = 'INGRESO MONEDA';
-     idEtaDes = 17;
   }
-  this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, monedax).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        this.serviLoad.sumar.emit(1);
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblMoneda = {};
-            this.rest.get('trabMoneda' , this.token, this.parametros).subscribe(data => {
-                this.tblMoneda = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-            
-            let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-            this.serLog.insLog(log);
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-            this.limpiar();
-          },1500);
 
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
+ this.serviLoad.sumar.emit(1);
+ this.rest.post(url, this.token, monedax).subscribe(resp => {
+    this.servicioaler.disparador.emit();     
+    this.modal.dismissAll();
+    this.carga    = 'visible';
+    this.loading  = false;
+    this.val      = false;
+    this.tblData();    
+    this.limpiar();
   });
-  this.servicioaler.disparador.emit();
+ 
   return false;
 }
 

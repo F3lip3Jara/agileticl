@@ -110,8 +110,8 @@ export class TrabRolesComponent implements OnInit {
     }
 
     this.serviLoad.sumar.emit(1);
-    this.rest.post(url, this.token, rolesx).subscribe(resp => {
-      this.modal.dismissAll(); 
+    this.modal.dismissAll(); 
+    this.rest.post(url, this.token, rolesx).subscribe(resp => {      
       this.loading = false; 
       this.tblData();
       this.servicioaler.disparador.emit(this.servicioaler.getAlert());

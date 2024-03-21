@@ -31,3 +31,25 @@
       }
   }
 }
+
+
+#loading{
+.loading-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.5); /* Fondo blanco semi-transparente */
+  z-index: 9990; /* Asegura que esté en la parte superior */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .loading-content {
+    text-align: center;
+  }
+}
+}
+

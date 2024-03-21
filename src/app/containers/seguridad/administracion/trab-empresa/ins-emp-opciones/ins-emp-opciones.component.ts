@@ -14,7 +14,7 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
   styleUrls: ['./ins-emp-opciones.component.scss']
 })
 export class InsEmpOpcionesComponent {
-
+  isLoading       : boolean = true;
   token           : string  = '';
   parametros      : any     = [];
   val             : boolean = false;
@@ -78,7 +78,8 @@ export class InsEmpOpcionesComponent {
     this.serviLoad.sumar.emit(1);
     this.rest.post('insEmpOpt', this.token, this.parametros).subscribe(resp => {
         this.val = false;
+        this.servicioalert.disparador.emit();
     });
-    this.servicioalert.disparador.emit();
+  
   }
 }

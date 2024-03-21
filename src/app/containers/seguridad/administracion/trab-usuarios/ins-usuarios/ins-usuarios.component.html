@@ -108,7 +108,7 @@
       <div class="col-md-6 form-group ">
             <label for="nombre">Fecha Nacimiento</label>
             <div class="input-group input-group-sm">
-              <input class="form-control" placeholder="yyyy-mm-dd"
+              <input type="text" class="form-control" placeholder="yyyy-mm-dd"
                      name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName = 'empFecNac'  [minDate]="{year: 1921, month: 1, day: 1}" [startDate]="{year: 1990, month: 1}"  value="fechaS" >
               <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
                 <fa-icon [icon]="faCalendarWeek"></fa-icon>

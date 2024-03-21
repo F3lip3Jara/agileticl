@@ -106,7 +106,8 @@ export class TrabModulosComponent implements OnInit {
      this.rest.post(url ,this.token, modulo).subscribe(resp => {
          this.tblData();
          this.loading = false;
+         this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      });
-     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    
   }
 }

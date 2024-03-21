@@ -139,8 +139,9 @@ export class TrabAccionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
+      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+   
     return false;
   } 
 

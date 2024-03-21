@@ -43,6 +43,7 @@
     "@popperjs/core": "^2.11.6",
     "@types/file-saver": "^2.0.5",
     "angular-datatables": "^16.0.0",
+    "angular-user-idle": "^4.0.0",
     "bootstrap": "^5.2.3",
     "chart.js": "^3.9.1",
     "datatables.net": "^1.11.3",

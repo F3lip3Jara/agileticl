@@ -4,7 +4,7 @@ import { ClassToggleService, HeaderComponent } from '@coreui/angular';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { faIndustry, faMoneyBillTransfer} from '@fortawesome/free-solid-svg-icons';
+import { faIndustry, faMagnifyingGlass, faMoneyBillTransfer} from '@fortawesome/free-solid-svg-icons';
 import Echo from 'laravel-echo';
 import { webSocket , WebSocketSubject } from 'rxjs/webSocket';
 import { WebSocketService } from 'src/app/servicios/web-socket.service';
@@ -32,7 +32,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   indicadores       :any      = {};
   faMoneyBillTransfer         = faMoneyBillTransfer;
   val                         = true;
-
+  faMagnifyingGlass           = faMagnifyingGlass;
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();

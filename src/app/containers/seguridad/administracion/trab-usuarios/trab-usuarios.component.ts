@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { faAddressCard, faCalendarWeek, faFileExcel, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faCalendarWeek, faFileExcel, faHand, faPenToSquare, faRetweet, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { LogSys } from 'src/app/model/logSys.model';
@@ -25,7 +25,7 @@ export class TrabUsuariosComponent {
   @ViewChild('modalRolesUdp') modal: ElementRef | undefined;
 
 
-  loading         : boolean              = true;
+  val             : boolean              = true;
   dtOptions       : DataTables.Settings  = {} ;
   carga           : string               = "invisible";
   tblUsuarios     : any                  = {};
@@ -44,8 +44,10 @@ export class TrabUsuariosComponent {
   public visible                         = false;
   model: NgbDateStruct | undefined;
   faCalendarWeek                         = faCalendarWeek;
+  faHand                                 = faHand;
+  faThumbsUp                             = faThumbsUp;
+  faRetweet                              = faRetweet;
 
-      
   constructor(
     private servicio        : UsersService,
     private rest            : RestService, 
@@ -117,7 +119,7 @@ export class TrabUsuariosComponent {
     });
     setTimeout(()=> {
         this.carga = 'visible';
-        this.loading = false;        
+        this.val= false;        
      },1500 );  
     }
 
@@ -145,10 +147,54 @@ export class TrabUsuariosComponent {
    return false;
   }
 
-
-  
   public actualizar(usuario : any){
     const dato = JSON.stringify(usuario);
     this.router.navigate(['home/seguridad/administracion/usuarios/actualizar/' + dato]);
   }
+
+  
+  public reiniciar(usuario:any){
+    this.carga      = 'invisible';        
+    this.serviLoad.sumar.emit(1);
+    let user        = {usrid : usuario.id , name:usuario.name , empId:usuario.empId };
+    let xuser       = {'user':btoa(JSON.stringify(user))};
+    this.val        = true;
+    this.rest.post('reiniciarAdm', this.token , xuser).subscribe(data=>{
+      this.val = false;
+      this.alertas.disparador.emit();
+      this.tblData();
+    });
+  }
+  public deshabilitar(usuario:any){
+    this.serviLoad.sumar.emit(1); 
+    this.carga        = 'invisible';
+    this.val          = true;     
+    this.tblUsuarios  = {}; 
+    let user          = {usrid : usuario.id , name:usuario.name , empId:usuario.empId };
+    let xuser         = {'user':btoa(JSON.stringify(user))};
+    this.val          = true;
+    this.rest.post('deshabilitarAdm', this.token , xuser).subscribe(data=>{
+      this.val = false;
+      this.alertas.disparador.emit();
+      this.tblData();
+    });
+  }
+
+  public habilitar(usuario:any){    
+    this.serviLoad.sumar.emit(1);
+    this.carga        = 'invisible';
+    this.val          = true;      
+    this.tblUsuarios  = {}; 
+    let user          = {usrid : usuario.id , name:usuario.name , empId:usuario.empId };
+    let xuser         = {'user':btoa(JSON.stringify(user))};
+    this.val          = true;
+    this.rest.post('habilitarAdm', this.token , xuser).subscribe(data=>{
+      this.alertas.disparador.emit();
+      this.val = false;
+      this.tblData();
+    });
+  }
+
+
+
 }

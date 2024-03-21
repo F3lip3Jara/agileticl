@@ -1,12 +1,12 @@
 export class Moneda {
 
-  public  idMon     :number;
+  public  monId     :number;
   public  monDes    :string;
   public  monCod    :string;
 
 
   constructor(xid :number , xmonDes: string , xmonCod : string  ) {
-     this.idMon       = xid;
+     this.monId       = xid;
      this.monDes      = xmonDes;
      this.monCod      = xmonCod;
 
@@ -14,12 +14,12 @@ export class Moneda {
 
 
   getId () {
-      return this.idMon;
+      return this.monId;
   }
 
   setId (xid:number) : number {
-      this.idMon = xid;
-      return this.idMon;
+      this.monId = xid;
+      return this.monId;
   }
 
   getmonDes () {

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './containers';
 import {LoginComponent} from './login/login.component';
+import { CambiopassComponent } from './containers/seguridad/cambiopass/cambiopass.component';
 
 const routes: Routes = [
   {
@@ -10,13 +11,17 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'cambiopass',
+    component: CambiopassComponent,
+  },
+  {
     path: 'home',
     component: DefaultLayoutComponent,
     data: {
       title: 'Home'
     },
     children: [
-     
+      
       {
         path: 'seguridad',
         loadChildren: () =>

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-progreso',
@@ -8,13 +9,17 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 export class ProgresoComponent implements OnInit {
 
   @Input() value: number | undefined;
-  progreso: number = 0;
+  progreso: number        = 0;
   val          : boolean  = true;
+  isLoading               = false;
 
 
+  
   constructor() { }
 
   ngOnInit(): void {
+
+      
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -22,7 +27,7 @@ export class ProgresoComponent implements OnInit {
       if(changes['value'].currentValue < 100){
         setInterval(() => {
           if (this.progreso < 100) {
-            this.val = true;
+            this.val       = true;
             this.progreso++;
           }
         }, 60);

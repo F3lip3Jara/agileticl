@@ -1,6 +1,5 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { LogSysService } from './../../../servicios/log-sys.service';
-import { LogSys } from './../../../model/logSys.model';
 import { tblUsuario } from './../../../model/tblUsuario.model';
 import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -10,7 +9,7 @@ import { FormBuilder,  FormGroup,  Validators } from '@angular/forms';
 import {  NgbDateStruct,  NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-import { faFileExcel , faAddressCard, faPenToSquare} from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel , faAddressCard, faPenToSquare, faRetweet, faHand, faThumbsUp} from '@fortawesome/free-solid-svg-icons';
 
 import { faCalendarWeek} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
@@ -46,9 +45,10 @@ export class TrabUserComponent implements OnInit {
   public visible                         = false;
   model: NgbDateStruct | undefined;
   faCalendarWeek                         = faCalendarWeek;
+  faRetweet                              = faRetweet;
   val                                    = false;
-
-      
+  faHand                                 = faHand;
+  faThumbsUp                             = faThumbsUp;
   constructor(
     private servicio        : UsersService,
     private rest            : RestService, 
@@ -59,6 +59,7 @@ export class TrabUserComponent implements OnInit {
     private serLog          : LogSysService,
     private serviLoad       : LoadingService,
     private router          : Router
+
     ) {
     this.token = this.servicio.getToken();
 
@@ -156,5 +157,48 @@ export class TrabUserComponent implements OnInit {
     this.router.navigate(['home/seguridad/usuarios/actualizar/' + dato]);
   } 
 
+  public reiniciar(usuario:any){
+    this.carga      = 'invisible';
+    this.loading    = true;        
+    this.serviLoad.sumar.emit(1);
+    let user        = {usrid : usuario.id , name:usuario.name };
+    let xuser       = {'user':btoa(JSON.stringify(user))};
+    this.val        = true;
+    this.rest.post('reiniciar', this.token , xuser).subscribe(data=>{
+      this.val = false;
+      this.alertas.disparador.emit();
+      this.tblData();
+    });
+  }
+  public deshabilitar(usuario:any){
+    this.serviLoad.sumar.emit(1); 
+    this.carga        = 'invisible';
+    this.loading      = true;     
+     this.tblUsuarios = {}; 
+    let user          = {usrid : usuario.id , name:usuario.name };
+    let xuser         = {'user':btoa(JSON.stringify(user))};
+    this.val          = true;
+    this.rest.post('deshabilitar', this.token , xuser).subscribe(data=>{
+      this.val = false;
+      this.alertas.disparador.emit();
+      this.tblData();
+    });
+  }
 
+  public habilitar(usuario:any){
+    this.serviLoad.sumar.emit(1);
+    this.carga        = 'invisible';
+    this.loading      = true;      
+    this.tblUsuarios  = {}; 
+    let user          = {usrid : usuario.id , name:usuario.name };
+    let xuser         = {'user':btoa(JSON.stringify(user))};
+    this.val          = true;
+    this.rest.post('habilitar', this.token , xuser).subscribe(data=>{
+      this.alertas.disparador.emit();
+      this.val = false;
+      this.tblData();
+    });
+  }
+
+  
 }

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { DatePipe, HashLocationStrategy, LocationStrategy, PathLocationStrategy, registerLocaleData } from '@angular/common';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +15,8 @@ import { AlertComponent } from './containers/alert/alert.component';
 import { ProgresoComponent } from './containers/progreso/progreso.component';
 import { ScrollToTopButtonComponent } from './containers/scroll-to-top-button/scroll-to-top-button.component';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { provideUserIdleConfig } from 'angular-user-idle';
+import {ModalEsperaComponent} from './containers/modal-espera/modal-espera.component'
 //import { TrabUserComponent } from './containers/seguridad/trab-user/trab-user.component';  
 
 // Import routing module
@@ -48,11 +49,17 @@ import {
   TabsModule,
   ToastModule,
   UtilitiesModule,
+  InputGroupComponent
 
   
 } from '@coreui/angular';
 import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { CambiopassComponent } from './containers/seguridad/cambiopass/cambiopass.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import localeDe from '@angular/common/locales/es';
+import localeDeExtra from '@angular/common/locales/extra/es';
 
+registerLocaleData(localeDe, 'es', localeDeExtra);
 
 
 const APP_CONTAINERS = [
@@ -67,6 +74,8 @@ const APP_CONTAINERS = [
   AlertComponent,
   ProgresoComponent,
   ScrollToTopButtonComponent,
+  ModalEsperaComponent,
+  CambiopassComponent
   //TrabUserComponent
 
 ],
@@ -104,10 +113,15 @@ const APP_CONTAINERS = [
     ToastModule,
     NgbModule,
     NgbTypeaheadModule,
-    NgSelectModule
+    NgSelectModule,
+    ImageCropperModule,
+    InputGroupComponent
+    
   ],
   providers: [
-    CookieService,    
+    CookieService,
+    DatePipe,
+    { provide: LOCALE_ID, useValue: 'es-ES' },
     { provide: HTTP_INTERCEPTORS,
       useClass: InterceptorsErrorService,
       multi: true
@@ -117,6 +131,8 @@ const APP_CONTAINERS = [
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },
+    provideUserIdleConfig({ idle: 300, timeout: 60, ping: 120 }),
+
     IconSetService,
     Title
   ],

@@ -16,7 +16,7 @@ export class InicioSessionGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     if(this.auth.getToken() ==''){
-      window.location.href = '/';
+      window.location.href = '/login';
     }
     return true;
   }

@@ -12,6 +12,7 @@
     animation: number-animation 2s ease-in-out forwards;
     text-align: right;
     opacity: 0;
+    z-index: 9999; /* Asegura que esté en la parte superior */
 }
 @keyframes number-animation {
   from {
@@ -23,5 +24,3 @@
     transform: translateY(0);
   }
 }
-
-

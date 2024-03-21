@@ -25,7 +25,6 @@ import {UpUserComponent} from './trab-user/up-user/up-user.component';
 import { AjustesComponent } from './ajustes/ajustes.component';
 import { UsuarioNoautorizadoComponent } from './usuario-noautorizado/usuario-noautorizado.component';
 
-
 @NgModule({
   declarations: [TrabUserComponent , 
                  InsUserComponent ,
@@ -40,7 +39,9 @@ import { UsuarioNoautorizadoComponent } from './usuario-noautorizado/usuario-noa
                  InsModuloOptComponent,
                  UpUserComponent,
                  AjustesComponent,
-                 UsuarioNoautorizadoComponent
+                 UsuarioNoautorizadoComponent,
+                
+                 
                 
                 ],
   imports: [

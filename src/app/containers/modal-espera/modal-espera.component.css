@@ -1,0 +1,24 @@
+
+.counter{
+  margin: auto;
+  width: 100px;
+  height: 100px;
+}
+
+.modal-counter { 
+  font-size: 40px;
+  color: #fff;
+  font-weight: bold;
+  animation-name: bounce;
+  animation-duration: 0.5s;
+  animation-iteration-count: 30;
+  background: linear-gradient(87deg,#f5365c 0,#f56036 100%) !important;
+  border: 2px solid  linear-gradient(87deg,#f5365c 0,#f56036 100%) !important;
+  border-radius: 10%;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}

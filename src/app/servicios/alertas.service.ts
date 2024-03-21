@@ -8,6 +8,7 @@ import { Alert } from '../model/alert.model';
 export class AlertasService {
 
   @Output() disparador :EventEmitter <Alert> = new EventEmitter();
+  @Output() loading :EventEmitter <any> = new EventEmitter();
 
   alerta : Alert = new Alert('', '');
 

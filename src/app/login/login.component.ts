@@ -26,7 +26,8 @@ export class LoginComponent {
     private UsersService  : UsersService,
     private router        : Router,
     private servicioAler  : AlertasService,
-    private serLog        : LogSysService,
+
+
 ) {
 
     this.login = fb.group({
@@ -69,9 +70,8 @@ export class LoginComponent {
         this.UsersService.setToken(token);
         this.UsersService.setTokenCrf(crf);
         this.UsersService.setUsuario(usuario , rol , menu, img, empresa, imgEmp);
-
-        if (reinicio == 'S') {
-          this.router.navigate(['/changePassword']);
+        if (reinicio == 'S') {         
+            this.router.navigate(['cambiopass']); 
         } else {
           this.router.navigate(['/home']);
           this.log = false;
