@@ -1,37 +1,42 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faAddressCard, faArrowTurnDown, faFileExcel, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faArrowTurnDown, faArrowUp, faFileExcel, faNetworkWired, faPenToSquare, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertasService } from 'src/app/servicios/alertas.service';
-
 
 @Component({
-  selector: 'app-trab-acciones',
-  templateUrl: './trab-acciones.component.html',
-  styleUrls: ['./trab-acciones.component.scss']
+  selector: 'app-trab-subopciones',
+  templateUrl: './trab-subopciones.component.html',
+  styleUrls: ['./trab-subopciones.component.scss']
 })
-export class TrabAccionesComponent {
-  loading      : boolean              = true;
-  dtOptions    : DataTables.Settings  = {} ;
-  tblobj       : any                  = {};
-  token        : string               = '';
-  parametros   : any []               = [];
-  carga        : string               = "invisible";
-  faFileExcel                         = faFileExcel;
-  faAddressCard                       = faAddressCard;
-  faPenToSquare                       = faPenToSquare;
-  faTrash                             = faTrash;
-  opcion      : any                   = {};
-  faArrowTurnDown                     = faArrowTurnDown;
-  ins        : FormGroup;
-  accType    : string                 = '';
+export class TrabSubopcionesComponent {
+  dtOptions       : DataTables.Settings  = {} ;
+  loading         : boolean              = true;
+  tblobj          : any                  = {};
+  token           : string               = '';
+  parametros      : any []               = [];
+  carga           : string               = "invisible";
+  faFileExcel                            = faFileExcel;
+  faAddressCard                          = faAddressCard;
+  faPenToSquare                          = faPenToSquare;
+  faTrash                                = faTrash;
+  modulo          : any                  = {};
+  faArrowTurnDown                        = faArrowTurnDown;
+  ins             : FormGroup; 
+  optAsig         : any                  = [];
+  optnAsig        : any                  = [];  
+  faStar                                 = faStar;
+  faArrowUp                              = faArrowUp;
+  val             : boolean              = false;
+  faNetworkWired                         = faNetworkWired;
+
   
-  types: string[]                    = ["success", "danger", "warning"];
   constructor(
               private servicio     : UsersService,
               private rest         : RestService,
@@ -54,17 +59,23 @@ export class TrabAccionesComponent {
                ])]
                
               });
-
-
-
     }
 
   ngOnInit(): void {
 
     this.route.params.subscribe(params => {
-      const obj = params['opcion'];      
-      this.opcion = obj;
+      const obj = params['modulo'];      
+      this.modulo = JSON.parse(obj);
     });
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }];
+    this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
+      this.optnAsig = data;
+    });
+
+   /* this.rest.get('asigOpt', this.token,this.parametros).subscribe(data => {
+      this.optAsig = data;
+    });*/
+
     this.tblData();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -93,10 +104,9 @@ export class TrabAccionesComponent {
   public tblData(){
 
     this.serviLoad.sumar.emit(1);
-    this.tblobj = {};
-
-    this.parametros = [{key: 'optId' , value: this.opcion}]
-    this.rest.get('trabAcciones' , this.token, this.parametros).subscribe(data => {
+    this.tblobj     = {};
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }];
+    this.rest.get('trabsubopc' , this.token, this.parametros).subscribe(data => {
         this.tblobj = data;
     });
     setTimeout(()=> {
@@ -114,13 +124,13 @@ export class TrabAccionesComponent {
     let url      = 'delAcciones';
     this.carga   = 'invisible';
     this.loading = true;   
-    let  acciones= {optId:this.opcion, accId:accion.accId}
+    let  acciones= {optId:this.modulo, accId:accion.accId}
     this.serviLoad.sumar.emit(1);
     this.rest.post(url, this.token, acciones).subscribe(resp => {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-       this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
    
     return false;
@@ -130,11 +140,12 @@ export class TrabAccionesComponent {
     this.modal.open(modalIns);
   }
   
-  public guardar(accUrl:any , accDes:any , accMessage: any){
-    let url      = 'insAcciones';
-    this.carga   = 'invisible';
-    this.loading = true;
-    let  acciones= {optId:this.opcion, accUrl:accUrl,accDes:accDes, accType:this.accType , accMessage:accMessage }
+  public guardar(molsDes:any){
+    let url       = 'insSubOpc';
+    this.carga    = 'invisible';
+    this.loading  = true;
+    this.val      = true;
+    let  acciones = {modulo : this.modulo , molsDes:molsDes , opt:this.optAsig };
     this.serviLoad.sumar.emit(1);
     this.rest.post(url, this.token, acciones).subscribe(resp => {
       this.modal.dismissAll(); 
@@ -145,5 +156,16 @@ export class TrabAccionesComponent {
    
     return false;
   } 
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+  }
 
 }

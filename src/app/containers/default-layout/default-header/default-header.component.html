@@ -14,18 +14,20 @@
     </button>
     <c-header-nav  class="ms-3">     
         <div class="input-group mb-2">
+          
+          <input type="text"
+                [(ngModel)]="model"
+                [ngbTypeahead]="search"      
+                (focus)="focus$.next($any($event).target.value)"
+                (click)="click$.next($any($event).target.value)"
+                #instance="ngbTypeahead"
+                class="form-control form-select-sm"
+                placeholder="Buscar" 
+                (selectItem)="onSelect($event)" value="{{model}}"
+          />
           <div class="input-group-prepend">
             <div class="input-group-text"> <fa-icon [icon]="faMagnifyingGlass"></fa-icon> </div>
           </div>
-          <input type="text"
-        [(ngModel)]="model"
-        [ngbTypeahead]="search"      
-        (focus)="focus$.next($any($event).target.value)"
-        (click)="click$.next($any($event).target.value)"
-        #instance="ngbTypeahead"
-        class="form-control form-select-sm"
-        placeholder="Buscar" 
-        (selectItem)="onSelect($event)" value="{{model}}"/>
         </div>
     </c-header-nav> 
     <c-header-nav class="d-none d-lg-flex me-auto">     

@@ -14,6 +14,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
+  styleUrls: ['./default-header.component.scss'],
 })
 export class DefaultHeaderComponent extends HeaderComponent {
 
@@ -40,9 +41,9 @@ export class DefaultHeaderComponent extends HeaderComponent {
   statesx      : any[]                = [];
   model        : string               = '';
   
-   constructor(private classToggler      : ClassToggleService, 
+   constructor(private classToggler     : ClassToggleService, 
                private rest             : RestService ,
-               private servicioUser     :  UsersService,
+               private servicioUser     : UsersService,
                private servicioAler     : AlertasService,
                private router           : Router,
                private webSocketService : WebSocketService 

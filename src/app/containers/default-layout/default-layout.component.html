@@ -55,18 +55,14 @@
 <div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
   <div  id="loading">
     <div class="loading-overlay loading-content" *ngIf="isLoading" style="height: {{altura}}px ;">
-      <span class="m-1">Trabajando
-        <i class="spinner-grow spinner-grow-sm p-sm-1"></i>
-        <i class="spinner-grow spinner-grow-sm p-sm-1"></i>
-        <i class="spinner-grow spinner-grow-sm p-sm-1"></i>
-      </span>
+      <div class="loader"></div>
     </div>
   </div>
 
   <!--app-header-->
   <app-default-header class="mb-4 d-print-none header header-sticky" position="sticky" sidebarId="sidebar" />
   <!--app-body-->
-  <div class="body flex-grow-1 px-3">   
+  <div class="body flex-grow-1 px-3 container">   
     <app-scroll-to-top-button></app-scroll-to-top-button>
      <app-alert></app-alert>
      <app-modal-espera></app-modal-espera>   

@@ -12,6 +12,7 @@ import { InsUserComponent } from "./trab-user/ins-user/ins-user.component";
 import { UpUserComponent } from "./trab-user/up-user/up-user.component";
 import { AjustesComponent } from "./ajustes/ajustes.component";
 import { UsuarioNoautorizadoComponent } from "./usuario-noautorizado/usuario-noautorizado.component";
+import { TrabSubopcionesComponent } from "./trab-modulos/trab-subopciones/trab-subopciones.component";
 
 const routes: Routes = [
   {
@@ -90,6 +91,13 @@ const routes: Routes = [
         component:InsModuloOptComponent ,
         data: {
           title: 'Módulos - Opciones',
+        }
+      },
+      {
+        path: 'modulos/subopciones/:modulo',
+        component:TrabSubopcionesComponent ,
+        data: {
+          title: 'Módulos - Opciones - Sub Opciones',
         }
       },
       {

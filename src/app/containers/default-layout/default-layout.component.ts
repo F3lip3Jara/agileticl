@@ -55,13 +55,25 @@ export class DefaultLayoutComponent {
                     let opciones  = element.opciones;
               
                     opciones.forEach((opt : any) => {
+                     if(opt.optSub === 'S'){
+                      
                       let opcion : INavData = 
                       {
-                          name: opt.optDes,
-                          url:  opt.optLink,
-                          iconComponent: icono,
+                        name: opt.optDes,
+                        url:  opt.optLink,
+                        iconComponent: icono,
+                        children: opt.childrens
                       };
-                      this.navItems.push(opcion);                
+                      this.navItems.push(opcion);
+                    }else{
+                      let opcion : INavData = 
+                      {
+                        name: opt.optDes,
+                        url:  opt.optLink,
+                        iconComponent: icono,
+                      };
+                      this.navItems.push(opcion);
+                    }                
                     });
                   
                   });
@@ -70,14 +82,11 @@ export class DefaultLayoutComponent {
 
   ngOnInit(): void {
     this.servicioAlerta.loading.subscribe(data=>{   
-      this.isLoading = data;   
-      const elemento = document.getElementById('loading');
-      let xaltura    = 0;
+      this.isLoading  = data;   
+      const elemento  = document.getElementById('loading');
+      let xaltura     = 0;
       const xelemento = document.getElementsByClassName('wrapper')[0];
-      const alto = window.innerHeight;
-
-     // console.log(xelemento);
-     // console.log(alto);
+      const alto      = window.innerHeight;
       if (xelemento instanceof HTMLElement) {
         xaltura  = xelemento.offsetHeight; 
       }
@@ -94,11 +103,7 @@ export class DefaultLayoutComponent {
   
     // Calcula la altura máxima entre varias propiedades
     const bodyHeight = Math.max(
-      body.scrollHeight,
-     // body.offsetHeight,
-      //body.getBoundingClientRect().height,
-     // html.scrollHeight,
-     // html.offsetHeight
+      body.scrollHeight,    
     );
   
     return bodyHeight;

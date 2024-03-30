@@ -1,0 +1,116 @@
+<div class="card card-primary card-outline">
+    <div class="card-header">
+      <h5 class="card-title">Sub Módulos</h5>  
+    </div>
+    <div class="card-body">
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel</button>
+        <a  (click)="modalO(modalRolesIns)"  class="btn  btn-outline-primary btn-sm" ngbTooltip= "Nuevo">
+          <fa-icon [icon]="faAddressCard"></fa-icon>
+          Nuevo</a>  
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>  
+   <div>
+    <br>
+    <div   class="table-responsive"  *ngIf="tblobj?.length > 0" class="{{carga}}">
+      <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+        <thead>
+          <tr>
+            <th>ID</th>          
+            <th>Módulo</th>
+            <th>Descripción</th>            
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let obj of tblobj">
+            <th>{{obj.molsId}}</th>
+            <th>{{modulo.molDes}}</th>
+            <th>{{obj.molsDes}}</th>
+            <th>  
+              <a style= "margin : 1px ;"  class="btn btn-warning btn-xs" ngbTooltip="Componentes">
+                <fa-icon [icon]="faNetworkWired"></fa-icon>
+              </a>            
+              <a style= "margin : 1px ;"  (click) = "del(obj)" class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+        <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+            <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+            Volver
+          </a>
+    </div>
+    <!-- /.card-footer-->
+  </div>
+ 
+  <ng-template #modalRolesIns let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title">Modal ingreso Sub opciones</h5>
+    </div> 
+    <form >          
+    <div class="modal-body">                                         
+          <div class="form-group">
+            <label for="">Módulo</label>
+            <input type="text" class="form-control"  placeholder="" value="{{modulo.molDes}}" disabled>             
+          </div>
+          <div class="form-group">
+            <label for="">Descripción</label>
+            <input type="text" class="form-control"  placeholder="" value="" #molsDes
+            [ngClass]="(molsDes.value == '')? 'was-validated' : 'is-valid'" >         
+            <div *ngIf="molsDes.value == ''">
+              <span class="text-danger">Campo obligatorio!</span>
+              </div>
+          </div>
+          <div cdkDropListGroup>        
+            <hr>
+            <div class="col-md-12">
+              <h5>Opciones</h5>
+              <h6>Activo</h6>
+              <div
+              [cdkDropListData]="optAsig"
+              cdkDropList
+              class="example-list"
+              (cdkDropListDropped)="drop($event)">
+              <div class="btn btn-info m-1" *ngFor="let item of optAsig" cdkDrag>
+                  <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.optDes }}</span>
+              </div>
+            </div>
+            </div>
+            <div class="col-md-12 mt-2">
+              <h6>No activo</h6>
+              <div
+              cdkDropList
+              [cdkDropListData]="optnAsig"
+              class="example-list"
+              (cdkDropListDropped)="drop($event)">
+              <div class="btn btn-warning m-1" *ngFor="let item of optnAsig" cdkDrag>
+                <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.optDes }}</span>
+            </div>
+              </div>
+            </div>     
+          </div>
+      
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"  (click)="guardar(molsDes.value)"  [disabled]="loading" *ngIf="molsDes.value != '' && optAsig.length > 0">
+        <div *ngIf="val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf="!val">Guardar</div>
+      </button>
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </form>
+  </ng-template>
+ 

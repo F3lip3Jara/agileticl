@@ -129,9 +129,10 @@ export class TrabRolesComponent implements OnInit {
       this.rest.post(url ,this.token, rol).subscribe(resp => {
           this.tblData();
           this.loading = false;
+          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+     
       });
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-      return false;
+     return false;
   }
 
   public Excel(){

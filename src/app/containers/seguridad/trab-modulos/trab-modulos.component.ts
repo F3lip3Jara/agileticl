@@ -8,7 +8,7 @@ import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { faFileExcel , faAddressCard, faPenToSquare, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel , faAddressCard, faPenToSquare, faTrash, faSquarePlus} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 @Component({
@@ -33,6 +33,7 @@ export class TrabModulosComponent implements OnInit {
   faAddressCard                       = faAddressCard;
   faPenToSquare                       = faPenToSquare;
   faTrash                             = faTrash;
+  faSquarePlus                        = faSquarePlus;
 
   constructor(private fb            : UntypedFormBuilder,
               private servicio      : UsersService,
@@ -109,5 +110,10 @@ export class TrabModulosComponent implements OnInit {
          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      });
     
+  }
+
+  subopciones(modulo:any){
+    const objstring = JSON.stringify(modulo);
+    this.router.navigate(['home/seguridad/modulos/subopciones/' + objstring]);
   }
 }

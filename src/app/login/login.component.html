@@ -1,62 +1,31 @@
 <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-8">    
-                <h1>Agileti</h1>
-                <div class="card">
-                  <div class="card-header">
-                    Login
-                  </div>
-                  <div class="card-body">
-                    <form
-                     [formGroup]="login"
-                    (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)"
-                    
-                    >
-                    <h6 class="mb-0 text-sm">Usuario</h6>
-                    <div class="input-group mb-3">
-                      <div class="input-group-text">
-                        <fa-icon [icon]="faUser"></fa-icon>
-                      </div>
-                      <input type="text" class="form-control" id="email" placeholder="Ingresar usuario..." formControlName = 'email' oninput="this.value = this.value.toUpperCase()" >
-                    </div>                    
-                      <div *ngIf = "login.controls['email'].hasError('required')">          
-                      </div>        
-                      
-                      <h6 class="mb-0 text-sm">Password</h6>
-                      <div class="input-group mb-3">
-                        <div class="input-group-text">
-                          <fa-icon [icon]="faLock"></fa-icon>
-                          </div>
-
-                        <input type="password" class="form-control" placeholder="Password" id="password" formControlName ='password'>
-                      
-                      </div>
-                      <div *ngIf = "login.controls['password'].hasError('required')">
-                    </div>
-                      <div class="row">
-                        <!-- /.col -->
-                        <div class="col-9">
-                          <button type="submit" class="btn btn-primary btn-block"  *ngIf ="login.valid">
-                            <div *ngIf= "log">
-                              Ingresando..
-                              <span class="spinner-border spinner-border-sm mr-2"></span>
-                            </div>
-                            <div *ngIf= "!log">
-                              Ingresar
-                            </div>
-                          </button>
-                        </div>
-                        <!-- /.col -->
-                      </div>
-                  </form>
-                  </div>
-                  <div class="card-footer">
-                    AgileTiCL v4.0.0
-                  </div>
-                </div>
-                <app-alert></app-alert>
-         </div>
+      <form class="form"
+      [formGroup]="login"
+      (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)"
+      >
+       <img src="https://agileti.cl/wp-content/uploads/2023/12/cropped-logonew-e1702902489994-284x95.png"  style="width:150px"/>
+        <p class="title">Ingreso</p>
+        <input type="text" class="email" id="email" placeholder="Ingresar usuario..." formControlName = 'email' oninput="this.value = this.value.toUpperCase()" >
+        <div *ngIf = "login.controls['email'].hasError('required')">          
+        </div>    
+        <input type="password" class="email" placeholder="Password" id="password" formControlName ='password'>
+        <div *ngIf = "login.controls['password'].hasError('required')">
+        </div>
+        <div class="button_row">
+          <a class="button secondary_button" href="www.agiletic.cl">Volver</a>
+          <button class="button primary_button">
+            <div *ngIf= "log">
+              Ingresando..
+              <span class="spinner-border spinner-border-sm mr-2"></span>
+            </div>
+            <div *ngIf= "!log">
+              Ingresar
+            </div>
+          </button>
+        </div>
+      </form>
       </div>     
   </div>
 </div>
