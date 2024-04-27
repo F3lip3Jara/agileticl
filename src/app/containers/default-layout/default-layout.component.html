@@ -53,11 +53,12 @@
 
 <!--main-->
 <div class="wrapper d-flex flex-column min-vh-100 bg-light dark:bg-transparent">
-  <div  id="loading">
-    <div class="loading-overlay loading-content" *ngIf="isLoading" style="height: {{altura}}px ;">
+ 
+  <div id="loading" >   
+    <div class="loading-overlay loading-content" *ngIf="isLoading" [style.height.px]="altura">
       <div class="loader"></div>
     </div>
-  </div>
+</div>
 
   <!--app-header-->
   <app-default-header class="mb-4 d-print-none header header-sticky" position="sticky" sidebarId="sidebar" />

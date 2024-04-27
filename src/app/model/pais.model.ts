@@ -1,12 +1,12 @@
 export class Pais {
 
-  public  idPai     :number;
+  public  paiId     :number;
   public  paiDes    :string;
   public  paiCod    :string;
 
 
   constructor(xid :number , xpaiDes: string , xpaicod : string  ) {
-     this.idPai       = xid;
+     this.paiId       = xid;
      this.paiDes      = xpaiDes;
      this.paiCod      = xpaicod;
 
@@ -14,12 +14,12 @@ export class Pais {
 
 
   getId () {
-      return this.idPai;
+      return this.paiId;
   }
 
   setId (xid:number) : number {
-      this.idPai = xid;
-      return this.idPai;
+      this.paiId = xid;
+      return this.paiId;
   }
 
   getPaiDes () {

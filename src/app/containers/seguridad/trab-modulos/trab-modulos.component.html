@@ -15,7 +15,7 @@
   
    <div>
     <br>
-    <div    *ngIf="tblModulo?.length > 0" class="{{carga}}">
+    <div class="table-responsive" *ngIf="tblModulo?.length > 0" class="{{carga}}">
       <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
         <thead>
           <tr>

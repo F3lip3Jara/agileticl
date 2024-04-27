@@ -25,6 +25,7 @@ export class UpModuloOptComponent {
   faArrowTurnDown           = faArrowTurnDown;
   modulo          : any     = {};
   optAsig         : any     = [];
+  sub             :any      = []
   optnAsig        : any     = [];
   faStar                    = faStar;
   faArrowUp                 = faArrowUp;
@@ -66,8 +67,9 @@ export class UpModuloOptComponent {
       this.optnAsig = data;
     });
     
-    this.rest.get('asig', this.token,this.parametros).subscribe(data => {
-      this.optAsig = data;
+    this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
+      this.optAsig = data.opt;
+      this.sub     = data.sub;
     });
 
     this.rest.get('snAsigRol', this.token,this.parametros).subscribe(data => {

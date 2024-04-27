@@ -3,6 +3,10 @@
       <h5 class="card-title">Log de sistema</h5>      
     </div>
     <div class="card-body">
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()">
+        <fa-icon [icon]="faSyncAlt"></fa-icon>
+        Refrescar</button>
+        
        <div class="loading" *ngIf= "loading" >
         <img src = "assets/Circles-menu-3.gif">
        </div>
@@ -38,7 +42,7 @@
   </div>
     <!-- /.card-body -->
     <div class="card-footer">
-      Marple
+      
     </div>
     <!-- /.card-footer-->
   </div>

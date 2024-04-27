@@ -3,7 +3,7 @@ import { Ciudad } from "./ciudad.model";
 
 export class Comuna extends Ciudad{
 
-  public  idCom     :number;
+  public  comId     :number;
   public  comDes    :string;
   public  comCod    :string;
 
@@ -17,27 +17,27 @@ export class Comuna extends Ciudad{
               xidReg  : number,
               xpaiDes : string,
               xpaiCod : string,
-              xidCiu  : number,
+              xciuId  : number,
               xciuDes : string,
               xciuCod : string ) {
 
-     super(xidCiu , xciuDes , xciuCod , xidPai, xregCod ,xregDes ,xidReg  , xpaiDes, xpaiCod)
+     super(xciuId , xciuDes , xciuCod , xidPai, xregCod ,xregDes ,xidReg  , xpaiDes, xpaiCod)
 
 
-     this.idCom       = xid;
+     this.comId       = xid;
      this.comDes      = xcomDes;
      this.comCod      = xcomCod;
 
   }
 
 
-  getidCom () {
-      return this.idCom;
+  getcomId () {
+      return this.comId;
   }
 
-  setidCom (xid:number) : number {
-      this.idCom = xid;
-      return this.idCom;
+  setcomId (xid:number) : number {
+      this.comId = xid;
+      return this.comId;
   }
 
   getcomDes () {

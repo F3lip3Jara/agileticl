@@ -8,6 +8,7 @@ import { ExcelService } from 'src/app/servicios/excel.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { DataTableDirective } from 'angular-datatables';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trab-log',
@@ -26,7 +27,7 @@ export class TrabLogComponent implements OnInit {
   token        : string               = '';
   parametros   : any []               = [];
   carga        : string               = "invisible";
-
+  faSyncAlt                           = faSyncAlt;
 
   constructor(private servicio      : UsersService,
               private rest          : RestService,
@@ -71,5 +72,10 @@ export class TrabLogComponent implements OnInit {
         this.carga = 'visible';
         this.loading = false;
      },1500 );
+   }
+
+   refrescar(){
+    this.carga = "invisible";
+    this.tblData();
    }
 }

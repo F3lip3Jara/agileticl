@@ -34,8 +34,8 @@ export class TrabComunaComponent implements OnInit {
   regiones     : any;
   paises       : any;
   comuna       : Comuna;
-  insComuna    : FormGroup;
-  updComuna    : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
@@ -57,14 +57,14 @@ export class TrabComunaComponent implements OnInit {
 
       this.token     = this.servicio.getToken();
 
-      this.insComuna = fb.group({
-        idPai : ['' , Validators.compose([
+      this.ins = fb.group({
+         paiId : ['' , Validators.compose([
           Validators.required,
          ])],
-         idReg : ['' , Validators.compose([
+         regId : ['' , Validators.compose([
           Validators.required,
          ])],
-         idCiu : ['' , Validators.compose([
+         ciuId : ['' , Validators.compose([
           Validators.required,
          ])],
 
@@ -76,7 +76,7 @@ export class TrabComunaComponent implements OnInit {
          ])],
       });
 
-      this.updComuna = fb.group({
+      this.up = fb.group({
           upcomDes : ['' , Validators.compose([
           Validators.required,
          ])]
@@ -115,22 +115,22 @@ export class TrabComunaComponent implements OnInit {
         this.paises = data;
         });
 
-        this.insComuna.controls['idPai'].valueChanges.subscribe(field => {
+        this.ins.controls['paiId'].valueChanges.subscribe(field => {
           this.regiones = {};
-          this.parametros = [{key :'idPai' ,value: field}];
+          this.parametros = [{key :'paiId' ,value: field}];
           this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
             this.regiones = data;
             });
         });
 
-        this.insComuna.controls['idReg'].valueChanges.subscribe(field => {
+        this.ins.controls['regId'].valueChanges.subscribe(field => {
           this.ciudades   = {};
-          this.parametros = [{key :'idReg' ,value: field} , {key:'idPai' , value: this.insComuna.controls['idPai'].value}];
+          this.parametros = [{key :'regId' ,value: field} , {key:'paiId' , value: this.ins.controls['paiId'].value}];
           this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
             this.ciudades = data;
             });
         });
-        this.insComuna.controls['comCod'].valueChanges.pipe(
+        this.ins.controls['comCod'].valueChanges.pipe(
           filter(text => text.length >=2),
           debounceTime(200),
           distinctUntilChanged()).subscribe(field => {
@@ -159,15 +159,15 @@ export class TrabComunaComponent implements OnInit {
  }
 
  public modelUp(content :any , xcomuna : Comuna ){
-  this.comuna.setId(xcomuna.idPai);
+  this.comuna.setId(xcomuna.paiId);
   this.comuna.setPaiDes(xcomuna.paiDes);
   this.comuna.setPaicod(xcomuna.paiCod);
   this.comuna.setregDes(xcomuna.regDes);
-  this.comuna.setIdReg(xcomuna.idReg);
-  this.comuna.setidCom(xcomuna.idCiu);
-  this.comuna.setidCom(xcomuna.idCom);
+  this.comuna.setregId(xcomuna.regId);
+  this.comuna.setciuId(xcomuna.ciuId);
+  this.comuna.setcomId(xcomuna.comId);
   this.comuna.setcomCod(xcomuna.comCod);
-  this.updComuna.controls['upcomDes'].setValue(xcomuna.comDes);
+  this.up.controls['upcomDes'].setValue(xcomuna.comDes);
   this.modal.open(content);
 }
 
@@ -206,17 +206,17 @@ public delComuna (comuna : any) : boolean{
    return false;
 }
 
-public action(xidPai : any , xidReg : any ,xidCiud : any , xcomCod : any , xcomDes : any , tipo : string ) : boolean{
+public action(xpaiId : any , xregId : any ,xciuIdd : any , xcomCod : any , xcomDes : any , tipo : string ) : boolean{
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
-  let xcomuna  = new Comuna(this.comuna.idCom , xcomDes , xcomCod , xidPai , '','', xidReg , '','',xidCiud ,'', '');
+  let xcomuna  = new Comuna(this.comuna.comId , xcomDes , xcomCod , xpaiId , '','', xregId , '','',xciuIdd ,'', '');
   this.val     = true;
 
   if(tipo =='up'){
-     url = 'updComuna';
+     url = 'up';
   }else{
-    url = 'insComuna';
+    url = 'ins';
   }
   this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, xcomuna).subscribe(resp => {
@@ -232,8 +232,8 @@ public action(xidPai : any , xidReg : any ,xidCiud : any , xcomCod : any , xcomD
             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
               dtInstance.destroy().draw();
             });
-           this.insComuna.controls['comDes'].setValue('');
-           this.insComuna.controls['comCod'].setValue('');
+           this.ins.controls['comDes'].setValue('');
+           this.ins.controls['comCod'].setValue('');
             this.carga    = 'visible';
             this.loading  = false;
             this.val      = false;

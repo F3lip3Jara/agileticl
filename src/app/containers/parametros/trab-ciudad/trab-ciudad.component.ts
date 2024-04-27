@@ -8,8 +8,6 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
-import { map } from 'jquery';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -34,8 +32,8 @@ export class TrabCiudadComponent implements OnInit {
   paises       : any;
   comunas      : any;
   ciudad       : Ciudad;
-  insCiudad    : FormGroup;
-  updCiudad    : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
@@ -55,14 +53,13 @@ export class TrabCiudadComponent implements OnInit {
 
       this.token     = this.servicio.getToken();
 
-      this.insCiudad = fb.group({
-         idPai : ['' , Validators.compose([
+      this.ins = fb.group({
+         paiId : ['' , Validators.compose([
           Validators.required,
          ])],
-         idReg : ['' , Validators.compose([
+         regId : ['' , Validators.compose([
           Validators.required,
          ])],
-
          ciuCod : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -72,7 +69,7 @@ export class TrabCiudadComponent implements OnInit {
 
       });
 
-      this.updCiudad = fb.group({
+      this.up = fb.group({
           upciuDes : ['' , Validators.compose([
           Validators.required,
          ])]
@@ -111,15 +108,15 @@ export class TrabCiudadComponent implements OnInit {
         this.paises = data;
         });
 
-        this.insCiudad.controls['idPai'].valueChanges.subscribe(field => {
+        this.ins.controls['paiId'].valueChanges.subscribe(field => {
           this.regiones = {};
-          this.parametros = [{key :'idPai' ,value: field}];
+          this.parametros = [{key :'paiId' ,value: field}];
           this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
             this.regiones = data;
             });
         });
 
-        this.insCiudad.controls['ciuCod'].valueChanges.pipe(
+        this.ins.controls['ciuCod'].valueChanges.pipe(
           filter(text => text.length > 1),
           debounceTime(200),
           distinctUntilChanged()).subscribe(field => {
@@ -144,57 +141,36 @@ export class TrabCiudadComponent implements OnInit {
  }
 
  public modelUp(content :any , xciudad : Ciudad ){
-  this.ciudad.setId(xciudad.idPai);
+  this.ciudad.setId(xciudad.paiId);
   this.ciudad.setPaiDes(xciudad.paiDes);
   this.ciudad.setPaicod(xciudad.paiCod);
   this.ciudad.setregDes(xciudad.regDes);
-  this.ciudad.setIdReg(xciudad.idReg);
+  this.ciudad.setregId(xciudad.regId);
   this.ciudad.setciuCod(xciudad.ciuCod);
-  this.ciudad.setidCiu(xciudad.idCiu);
-  this.updCiudad.controls['upciuDes'].setValue(xciudad.ciuDes);
+  this.ciudad.setciuId(xciudad.ciuId);
+  this.up.controls['upciuDes'].setValue(xciudad.ciuDes);
   this.modal.open(content);
 }
 
-public delComuna (ciudad : any) : boolean{
+public delCiudad(ciudad : any) : boolean{
   let url      = 'delCiudad';
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, ciudad ).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-          this.serviLoad.sumar.emit(1);
-           this.modal.dismissAll();
-           setTimeout(()=>{
-            this.tblCiudad = {};
-             this.rest.get('tblCiudad' , this.token, this.parametros).subscribe(data => {
-                 this.tblCiudad = data;
-             });
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
+      this.tblData();
+      this.servicioaler.disparador.emit( this.servicioaler.getAlert());
+      this.loading = false;
    });
-
-   setTimeout(()=>{
-    this.servicioaler.disparador.emit( this.servicioaler.getAlert());
-    },1500);
 
    return false;
 }
 
-public action(xidPai : any , xidReg : any ,  xciuCod : any , xciuDes : any , tipo : string ) : boolean{
+public action(xpaiId : any , xregId : any ,  xciuCod : any , xciuDes : any , tipo : string ) : boolean{
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
-  let xciudad  = new Ciudad(this.ciudad.idCiu , xciuDes , xciuCod, xidPai , '','',xidReg , '' , '' );
+  let xciudad  = new Ciudad(this.ciudad.ciuId , xciuDes , xciuCod, xpaiId , '','',xregId , '' , '' );
   this.val     = true;
 
   if(tipo =='up'){
@@ -203,56 +179,26 @@ public action(xidPai : any , xidReg : any ,  xciuCod : any , xciuDes : any , tip
     url = 'insCiudad';
   }
   this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, xciudad).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-          this.modal.dismissAll();
-          this.serviLoad.sumar.emit(1);
-          setTimeout(()=>{
-            this.tblCiudad = {};
-            this.rest.get('trabCiudad' , this.token, this.parametros).subscribe(data => {
-                this.tblCiudad = data;
-            });
-
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-
-           this.insCiudad.controls['ciuDes'].setValue('');
-           this.insCiudad.controls['ciuCod'].setValue('');
-
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-          },1500);
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
-  });
-
-  setTimeout(()=>{
+  this.rest.post(url, this.token, xciudad).subscribe(resp => {
     this.servicioaler.disparador.emit( this.servicioaler.getAlert());
-  },1500);
+    this.tblData();
+    this.val = false;
+    this.modal.dismissAll();
+    this.ins.reset();
+  });
 
   return false;
 }
-
 
 public Excel(){
   this.excel.exportAsExcelFile(this.tblCiudad, 'ciudad');
    return false;
 }
-
-
 public validaCiudad(ciuCod : string){
   this.parametros = [{key :'ciuCod' ,value: ciuCod.trim()}];
   this.rest.get('valCodCiudad' , this.token , this.parametros).subscribe((cant : any)=>{
       this.dato =  cant;
       if(this.dato != 0){
-
         this.validCod = true;
       }else{
         this.validCod = false;

@@ -2,27 +2,27 @@ import { Pais } from "./pais.model";
 
 export class Region extends Pais{
 
-  public  idReg     :number;
+  public  regId     :number;
   public  regDes    :string;
   public  regCod    :string;
 
 
   constructor(xid :number , xregDes: string , xregCod : string  , xidPai :number , xpaiDes: string , xpaicod : string) {
      super(xidPai , xpaiDes, xpaicod);
-     this.idReg       = xid;
+     this.regId       = xid;
      this.regDes      = xregDes;
      this.regCod      = xregCod;
 
   }
 
 
-  getIdReg () {
-      return this.idReg;
+  getregId () {
+      return this.regId;
   }
 
-  setIdReg (xid:number) : number {
-      this.idReg = xid;
-      return this.idReg;
+  setregId (xid:number) : number {
+      this.regId = xid;
+      return this.regId;
   }
 
   getregDes () {

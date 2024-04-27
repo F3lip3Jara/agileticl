@@ -52,8 +52,10 @@ export class InsModuloOptComponent {
       this.optnAsig = data;
     });
     
-    this.rest.get('asig', this.token,this.parametros).subscribe(data => {
-      this.optAsig = data;
+    this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
+     // this.optAsig = data;
+     this.optAsig = data.opt;
+     
     });
 
     this.rest.get('snAsigRol', this.token,this.parametros).subscribe(data => {

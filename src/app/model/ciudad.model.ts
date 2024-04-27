@@ -4,7 +4,7 @@ import { Region } from "./region.model";
 
 export class Ciudad extends Region{
 
-  public  idCiu     :number;
+  public  ciuId     :number;
   public  ciuDes    :string;
   public  ciuCod    :string;
 
@@ -21,20 +21,20 @@ export class Ciudad extends Region{
              ) {
 
      super(xidReg, xregDes , xregCod , xidPai , xpaiDes , xpaiCod );
-     this.idCiu       = xid;
+     this.ciuId       = xid;
      this.ciuDes      = xciuDes;
      this.ciuCod      = xciuCod;
 
   }
 
 
-  getidCiu () {
-      return this.idCiu;
+  getciuId () {
+      return this.ciuId;
   }
 
-  setidCiu (xid:number) : number {
-      this.idCiu = xid;
-      return this.idCiu;
+  setciuId (xid:number) : number {
+      this.ciuId = xid;
+      return this.ciuId;
   }
 
   getciuDes () {

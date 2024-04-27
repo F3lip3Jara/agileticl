@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Región</h5>    
   </div>
@@ -9,11 +9,9 @@
       <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo">
         <fa-icon [icon]="faAddressCard"></fa-icon>
         Nuevo</a>
-
     <div class="loading" *ngIf= "loading" >
       <img src = "assets/Circles-menu-3.gif">
      </div>
-
  <div>
   <br>
   <div  class="table-responsive"  *ngIf="tblRegion?.length > 0" class="{{carga}}">
@@ -30,7 +28,7 @@
       </thead>
       <tbody>
         <tr *ngFor = "let region of tblRegion">
-          <th>{{region.idReg}}</th>
+          <th>{{region.regId}}</th>
           <th>{{region.paiCod}}</th>
           <th>{{region.paiDes}}</th>
           <th>{{region.regCod}}</th>
@@ -51,7 +49,7 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
+    
   </div>
   <!-- /.card-footer-->
 </div>
@@ -62,9 +60,9 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
-  <form [formGroup] = "upRegion"
+  <form [formGroup] = "up"
   (ngSubmit)  = "action( upidPai.value ,
-                        upRegion.controls['upregDes'].value ,
+                        up.controls['upregDes'].value ,
                         upregCod.value,
                          'up' )" >
   <div class="modal-body">
@@ -72,12 +70,12 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{region.idReg}}"   disabled  #upidReg>
+          <input type="text" class="form-control" id="" placeholder="" value="{{region.regId}}"   disabled  #upregId>
         </div>
         <div class="form-group">
           <label for="">Cód. País</label>
           <input type="text" class="form-control" name = "paiCod" id="paiCod" placeholder="" value="{{region.paiCod}}" disabled >
-          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{region.idPai}}" disabled  #upidPai>
+          <input type="hidden" class="form-control" name = "idPai" id="idPai" placeholder="" value="{{region.paiId}}" disabled  #upidPai>
         </div>
         <div class="form-group">
           <label for="">País</label>
@@ -90,7 +88,10 @@
 
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{region.regDes}}" formControlName = 'upregDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "regDes" id="" placeholder="" value="{{region.regDes}}" formControlName = 'upregDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(up.controls['upregDes'].hasError('required'))
+          ? 'was-validated' : 'is-valid'" 
+          >
         </div>
       </div>
       <!-- /.card-body -->
@@ -99,7 +100,7 @@
     <!-- form start -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upRegion.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -121,10 +122,10 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "insRegion"
-         (ngSubmit)  = "action(insRegion.controls['idPai'].value ,
-                               insRegion.controls['regDes'].value ,
-                               insRegion.controls['regCod'].value ,
+  <form  [formGroup] = "ins"
+         (ngSubmit)  = "action(ins.controls['paiId'].value ,
+                               ins.controls['regDes'].value ,
+                               ins.controls['regCod'].value ,
                                'ins' )"
                          >
   <div class="modal-body">
@@ -140,39 +141,48 @@
             </div>
           </div>
           <div class=" input-group-sm" *ngIf="paises.length > 0">
-            <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idPai'>
-              <option  *ngFor = "let pais of paises"  value="{{pais.idPai}}">{{pais.paiDes}}</option>
-            </select>
+            <ng-select  [items]="paises"
+                        bindLabel="paiDes"
+                        bindValue="paiId"
+                        formControlName="paiId"
+                        [ngClass]="(ins.controls['paiId'].hasError('required'))
+                        ? 'was-validated' : 'is-valid'" >
+            </ng-select >
           </div>
-          <div *ngIf = "insRegion.controls['idPai'].hasError('required')">
+          <div *ngIf = "ins.controls['paiId'].hasError('required')">
             <span class="text-danger">Campo obligatorio!</span>
           </div>
         </div>
         <div class="form-group">
           <label for="regCod">Cód. Región</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="regCod" placeholder="Ingresar cód. ISO..." formControlName = 'regCod'  oninput="this.value = this.value.toUpperCase()" >
-        </div>
-      </div>
-      <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
-
-        <div *ngIf = "insRegion.controls['regCod'].hasError('required')">
+          <input type="text" class="form-control" id="regCod" placeholder="Ingresar cód. ISO..." formControlName = 'regCod'  oninput="this.value = this.value.toUpperCase()" 
+          [ngClass]="(ins.controls['regCod'].hasError('required') ||  validCod  )
+          ? 'was-validated' : 'is-valid'" 
+          >
+        </div>     
+        <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+        <div *ngIf = "ins.controls['regCod'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
+      </div>
         <div class="form-group">
           <label for="regDes">Descripción</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="regDes" placeholder="Ingresar descripción..." formControlName = 'regDes' oninput="this.value = this.value.toUpperCase()" >
+          <input type="text" class="form-control" id="regDes" placeholder="Ingresar descripción..." formControlName = 'regDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['regDes'].hasError('required') ||  validCod  )
+          ? 'was-validated' : 'is-valid'" 
+          >
         </div>
       </div>
-        <div *ngIf = "insRegion.controls['regDes'].hasError('required')">
+        <div *ngIf = "ins.controls['regDes'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       <!-- /.card-body -->
       </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insRegion.valid && validCod == false" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid && validCod == false" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

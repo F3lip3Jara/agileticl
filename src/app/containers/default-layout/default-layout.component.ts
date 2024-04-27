@@ -23,7 +23,7 @@ export class DefaultLayoutComponent {
   rol              :string      = '';
   logo             :string      = '';
   isLoading        :boolean     = false;
-  altura           :number      = 100;
+  altura           :number      = 0;
 
   constructor(  private rest        : RestService ,
                 private servicioUser: UsersService,
@@ -81,32 +81,24 @@ export class DefaultLayoutComponent {
   }
 
   ngOnInit(): void {
-    this.servicioAlerta.loading.subscribe(data=>{   
-      this.isLoading  = data;   
-      const elemento  = document.getElementById('loading');
+    this.servicioAlerta.loading.subscribe(data=>{         
       let xaltura     = 0;
-      const xelemento = document.getElementsByClassName('wrapper')[0];
-      const alto      = window.innerHeight;
+      this.altura     = 10;
+      
+      const xelemento = document.getElementsByTagName('body')[0];
       if (xelemento instanceof HTMLElement) {
         xaltura  = xelemento.offsetHeight; 
       }
+      this.isLoading  = data; 
+
       if(this.isLoading ){        
-        this.altura  = xaltura
+        this.altura  = this.altura + xaltura;
       }
+    
   })
    
   }
 
-  public getHeight(): number {
-    const body = document.body;
-    const html = document.documentElement;
-  
-    // Calcula la altura máxima entre varias propiedades
-    const bodyHeight = Math.max(
-      body.scrollHeight,    
-    );
-  
-    return bodyHeight;
-  }
+ 
 
 }

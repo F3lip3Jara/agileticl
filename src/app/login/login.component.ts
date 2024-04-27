@@ -46,41 +46,31 @@ export class LoginComponent {
 
   }
   
-  guardar(email: string, password: string): boolean {
-    this.log    = true;
-    const userx = new Usuario(1, '', password, '', email);
+  guardar(email: string, password: string): void {
+    const user = new Usuario(1, '', password, '', email);
     this.UsersService.eliminarToken();
-
-    this.UsersService.login(userx).subscribe(data => {
-      if(!data.id) {
-        this.servicioAler.disparador.emit(this.servicioAler.getAlert());
-        this.log = false;        
-      }else{
-
-        let reinicio: string = data.reinicio;
-        let token   : string = data.token;
-        let crf     : string = data.crf;
-        let menu    : string = data.menu;
-        let rol     : string = data.rol;
-        let usuario : string = data.name;
-        let img     : string = data.img;
-        let empresa : string = data.empresa;
-        let imgEmp  : string = data.imgEmp;
-
-        this.UsersService.setToken(token);
-        this.UsersService.setTokenCrf(crf);
-        this.UsersService.setUsuario(usuario , rol , menu, img, empresa, imgEmp);
-        if (reinicio == 'S') {         
-            this.router.navigate(['cambiopass']); 
+    this.log = true;
+    this.UsersService.login(user).subscribe({
+      next: (data) => {
+        if (!data.id) {
+          this.servicioAler.disparador.emit(this.servicioAler.getAlert());
         } else {
-          this.router.navigate(['/home']);
-          this.log = false;
+          const { reinicio, token, crf, menu, rol, name, img, empresa, imgEmp } = data;  
+          this.UsersService.setToken(token);
+          this.UsersService.setTokenCrf(crf);
+          this.UsersService.setUsuario(name, rol, menu, img, empresa, imgEmp);  
+          if (reinicio === 'S') {
+            this.router.navigate(['cambiopass']);
+          } else {
+            this.router.navigate(['/home']);
+          }
         }
+      },
+      error: (err) => {
+        // Manejar el error, si es necesario
       }
     });
-      return false;
   }
-
 
 
 

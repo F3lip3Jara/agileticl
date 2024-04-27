@@ -31,6 +31,9 @@
           <div class="btn btn-info m-1" *ngFor="let item of optAsig" cdkDrag>
               <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.optDes }}</span>
           </div>
+          <div class="btn btn-dark m-1" *ngFor="let item of sub" cdkDrag [cdkDragDisabled]="true">
+            <span style="color:#fff;"><fa-icon [icon]="faStar"></fa-icon> {{ item.molsDes }}</span>
+        </div>
         </div>
         </div>
         <div class="col-md-12 mt-2">
@@ -40,9 +43,9 @@
           [cdkDropListData]="optnAsig"
           class="example-list"
           (cdkDropListDropped)="drop($event)">
-          <div class="btn btn-warning m-1" *ngFor="let item of optnAsig" cdkDrag>
-            <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.optDes }}</span>
-        </div>
+            <div class="btn btn-warning m-1" *ngFor="let item of optnAsig" cdkDrag>
+              <span style="color:#fff;"><fa-icon [icon]="faArrowUp"></fa-icon> {{ item.optDes }}</span>
+            </div>
           </div>
         </div>     
       </div>

@@ -32,8 +32,8 @@ export class TrabRegionComponent implements OnInit {
   carga        : string               = "invisible";
   region       : Region;
   paises       : any                  ={};
-  insRegion    : FormGroup;
-  upRegion     : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
@@ -54,8 +54,8 @@ export class TrabRegionComponent implements OnInit {
       this.token    = this.servicio.getToken();
       this.region   = new Region(0,'','', 0, '', '');
 
-      this.insRegion = fb.group({
-        idPai : ['' , Validators.compose([
+      this.ins = fb.group({
+        paiId : ['' , Validators.compose([
           Validators.required,
          ])],
          regCod : ['' , Validators.compose([
@@ -66,7 +66,7 @@ export class TrabRegionComponent implements OnInit {
          ])],
       });
 
-      this.upRegion = fb.group({
+      this.up = fb.group({
          upregDes : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -100,7 +100,7 @@ export class TrabRegionComponent implements OnInit {
         this.paises = data;
         });
 
-      this.insRegion.controls['regCod'].valueChanges.pipe(
+      this.ins.controls['regCod'].valueChanges.pipe(
         filter(text => text.length > 1),
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
@@ -127,13 +127,13 @@ export class TrabRegionComponent implements OnInit {
  }
 
  public modelUp(content :any , xregion : Region ){
-  this.region.setId(xregion.idPai);
+  this.region.setId(xregion.paiId);
   this.region.setPaiDes(xregion.paiDes);
   this.region.setPaicod(xregion.paiCod);
   this.region.setregDes(xregion.regDes);
   this.region.setregCod(xregion.regCod);
-  this.region.setIdReg(xregion.idReg);
-  this.upRegion.controls['upregDes'].setValue(xregion.regDes);
+  this.region.setregId(xregion.regId);
+  this.up.controls['upregDes'].setValue(xregion.regDes);
   this.modal.open(content);
 }
 
@@ -142,32 +142,11 @@ public delRegion (region : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-   this.rest.post(url ,this.token, region ).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-          this.serviLoad.sumar.emit(1);
-           this.modal.dismissAll();
-           setTimeout(()=>{
-             this.tblRegion = {};
-             this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
-                 this.tblRegion = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
-   });
-   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+  this.rest.post(url ,this.token, region ).subscribe(resp => {
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    this.tblData();
+  });
+   
    return false;
 }
 
@@ -175,7 +154,7 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
-  let paisx    = new Region(this.region.idReg , xregDes , xregCod , xidPai , this.region.paiDes, this.region.paiCod);
+  let paisx    = new Region(this.region.regId , xregDes , xregCod , xidPai , this.region.paiDes, this.region.paiCod);
   this.val     = true;
 
   if(tipo =='up'){
@@ -183,34 +162,15 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
   }else{
     url = 'insRegion';
   }
-  this.serviLoad.sumar.emit(1);
+ this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, paisx).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        this.serviLoad.sumar.emit(1);
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblRegion = {};
-            this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
-                this.tblRegion = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-            this.insRegion.controls['regDes'].setValue('');
-            this.insRegion.controls['regCod'].setValue('');
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-          },1500);
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
-  });
-  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    this.modal.dismissAll();
+    this.ins.reset();
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    this.tblData();
+    this.loading = false;
+   });
+ 
   return false;
 }
 

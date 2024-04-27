@@ -28,6 +28,7 @@ import {InsProveedoresComponent} from './trab-proveedores/ins-proveedores/ins-pr
 import {UpProveedorComponent} from './trab-proveedores/up-proveedor/up-proveedor.component';
 import {UpDesProveeedorComponent} from './trab-proveedores/up-proveedor/up-des-proveeedor/up-des-proveeedor.component'
 import {ParametrosRoutingModule} from './parametros-routing.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import {ParametrosRoutingModule} from './parametros-routing.module';
     FontAwesomeModule,
     ModalModule,
     NgbModule,
-    NgbDatepicker
+    NgbDatepicker,
+    NgSelectModule
   ]
 })
 export class ParametrosModule { }

@@ -72,37 +72,6 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   ngOnInit(): void {
 
-    
- /* 
-  this.rest.get('getUsuario' , this.token, this.parametros).subscribe(respuesta  => {
-     let usuariox = respuesta;    
-
-     Object.values(respuesta).forEach(element=>{
-        this.usuario  = element.name;
-        this.rol      = element.rolDes;
-        this.imgName  = element.imgName;
-
-      });
-
-      if(this.usuario == ''){
-           this.router.navigate(['/login']);
-           this.servicioAler.setAlert('','');
-           this.servicioUser.eliminarToken();
-        }
-
-      if(this.imgName == null){
-    
-      }
-
-
-    });*/
-
-
-    /*this.rest.get('notificaciones' , this.token, this.parametros).subscribe((data:any)=>{      
-      this.datos    = data.notificaciones;
-      this.contador = data.contador;   
-      
-    });*/
     this.rest.get('indicadores' , this.token, this.parametros).subscribe((data:any)=>{      
       this.indicadores = data;
       if(data.length > 0){
@@ -111,60 +80,32 @@ export class DefaultHeaderComponent extends HeaderComponent {
     });
     
     this.webSocketService.startListening();
+
+//this.websockets();
   }
 
 
   websockets(){
-   // window['Pusher'] = Pusher;
+   //window['Pusher'] = Pusher;
  
-    /*const echo = new Echo ({
+    const echo = new Echo ({
       broadcaster: 'pusher',
       cluster: 'mt1',
-      key: 'ASD1323',
+      key: 'ASDbO1OD8RIa8C37Ox',
       wsHost: '127.0.0.1',
       wsPort: 6001,
       forceTLS: false,
-      disableStats: true,
+      disableStats: false,
       enabledTransports: ['ws']
 
     });
 
     echo.connector.options.debug = true;  
-    setInterval(()=>{
-
-   /* echo.channel('channel-message').listen('1', (resp: any) => {
-      const data = JSON.parse(resp.data);
-      console.log('mensaje2');
-  });
-  echo.channel('channel-message').subscribed((resp : any)=> {
-    console.log(resp);
-    
-  });
-  
-
-  },2000);
-
-  
-
-  
-
-// Escuchar mensajes
-const socket: WebSocketSubject<any> = webSocket('ws://127.0.0.1:6001/app/ASD1323?protocol=7&client=js&version=8.3.0&flash=false');
-setInterval(()=>{
-
-
-socket.subscribe(
-  ()=>{
-    console.log('mensaje');
-    
-  }
-
-);},2000);
-*/
 
 
 
   
+
   }
 
 

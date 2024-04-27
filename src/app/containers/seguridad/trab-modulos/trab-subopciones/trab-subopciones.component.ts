@@ -35,7 +35,8 @@ export class TrabSubopcionesComponent {
   faArrowUp                              = faArrowUp;
   val             : boolean              = false;
   faNetworkWired                         = faNetworkWired;
-
+  submodulo       : any                  = {};
+  molsId                                 = 0;
   
   constructor(
               private servicio     : UsersService,
@@ -67,15 +68,7 @@ export class TrabSubopcionesComponent {
       const obj = params['modulo'];      
       this.modulo = JSON.parse(obj);
     });
-    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }];
-    this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
-      this.optnAsig = data;
-    });
-
-   /* this.rest.get('asigOpt', this.token,this.parametros).subscribe(data => {
-      this.optAsig = data;
-    });*/
-
+   
     this.tblData();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -104,8 +97,8 @@ export class TrabSubopcionesComponent {
   public tblData(){
 
     this.serviLoad.sumar.emit(1);
-    this.tblobj     = {};
-    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }];
+    this.tblobj     = {}; 
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) } ];
     this.rest.get('trabsubopc' , this.token, this.parametros).subscribe(data => {
         this.tblobj = data;
     });
@@ -121,7 +114,7 @@ export class TrabSubopcionesComponent {
   }
 
   public del(accion:any){
-    let url      = 'delAcciones';
+   /* let url      = 'delAcciones';
     this.carga   = 'invisible';
     this.loading = true;   
     let  acciones= {optId:this.modulo, accId:accion.accId}
@@ -133,11 +126,36 @@ export class TrabSubopcionesComponent {
       this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
    
-    return false;
+    return false;*/
   }
 
   public modalO(modalIns:any){
+    this.molsId     = 0;
+    this.optnAsig   = [];
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:this.molsId}];
+    this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
+      this.optnAsig = data;
+    });
     this.modal.open(modalIns);
+  }
+
+  public modalU(modalUp:any , obj:any){
+    this.submodulo  = obj;
+    this.optnAsig   = [];
+    this.optAsig    = [];
+    this.molsId     = this.submodulo.molsId;
+
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:this.molsId}];
+    this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
+      this.optnAsig = data;
+    });
+    this.rest.get('asigOpt', this.token,this.parametros).subscribe(data => {
+      this.optAsig = data;
+    });
+
+    
+    this.modal.open(modalUp);
+    
   }
   
   public guardar(molsDes:any){
