@@ -9,7 +9,6 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -177,32 +176,10 @@ public delComuna (comuna : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, comuna ).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-           this.modal.dismissAll();
-           this.serviLoad.sumar.emit(1);
-           setTimeout(()=>{
-            this.tblComuna = {};
-             this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
-                 this.tblComuna = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
+    this.servicioaler.disparador.emit();
+    this.tblData();
+    this.modal.dismissAll();
    });
-
-   this.servicioaler.disparador.emit();
    return false;
 }
 
@@ -214,45 +191,23 @@ public action(xpaiId : any , xregId : any ,xciuIdd : any , xcomCod : any , xcomD
   this.val     = true;
 
   if(tipo =='up'){
-     url = 'up';
+     url = 'updComuna';
   }else{
-    url = 'ins';
+    url = 'insComuna';
   }
   this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, xcomuna).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        this.serviLoad.sumar.emit(1);
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblComuna = {};
-            this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
-                this.tblComuna = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-           this.ins.controls['comDes'].setValue('');
-           this.ins.controls['comCod'].setValue('');
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-          },1500);
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
-  });
-
-  this.servicioaler.disparador.emit();
+      this.val      = false;     
+      this.tblData();
+      this.ins.reset();
+       this.servicioaler.disparador.emit();
+  }); 
   return false;
 }
 
 
 public Excel(){
-  this.excel.exportAsExcelFile(this.tblComuna, 'region');
+  this.excel.exportAsExcelFile(this.tblComuna, 'comuna');
    return false;
 }
 

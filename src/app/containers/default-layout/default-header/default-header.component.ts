@@ -71,44 +71,14 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
 
   ngOnInit(): void {
-
     this.rest.get('indicadores' , this.token, this.parametros).subscribe((data:any)=>{      
       this.indicadores = data;
       if(data.length > 0){
         this.val = true;
       } 
-    });
-    
+    });    
     this.webSocketService.startListening();
-
-//this.websockets();
   }
-
-
-  websockets(){
-   //window['Pusher'] = Pusher;
- 
-    const echo = new Echo ({
-      broadcaster: 'pusher',
-      cluster: 'mt1',
-      key: 'ASDbO1OD8RIa8C37Ox',
-      wsHost: '127.0.0.1',
-      wsPort: 6001,
-      forceTLS: false,
-      disableStats: false,
-      enabledTransports: ['ws']
-
-    });
-
-    echo.connector.options.debug = true;  
-
-
-
-  
-
-  }
-
-
 
   salir(){
     this.router.navigate(['/login']);
@@ -134,7 +104,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
 
   
 search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
-  const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
+  const debouncedText$         = text$.pipe(debounceTime(200), distinctUntilChanged());
   const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
   const inputFocus$ = this.focus$;
   return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
@@ -167,7 +137,6 @@ this.statesx.forEach(element => {
 
 ajustes(){
   let parm : any[] =[];
-
   this.rest.get('getUsuario', this.token , parm).subscribe((data:any) => {
     data.forEach((element:any) => {
       const dato = JSON.stringify(element); 
@@ -175,7 +144,6 @@ ajustes(){
       
       });
   });
-
 }
 
 }

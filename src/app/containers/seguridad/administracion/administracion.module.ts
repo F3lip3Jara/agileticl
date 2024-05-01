@@ -18,6 +18,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.component';
 import { AvatarModule } from '@coreui/angular';
 
+
 @NgModule({
   declarations: [
     TrabEmpresaComponent,

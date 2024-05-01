@@ -11,6 +11,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
+
 @Component({
   selector: 'app-ins-user',
   templateUrl: './ins-user.component.html',
@@ -63,7 +64,8 @@ export class InsUserComponent implements OnInit {
       });
 
     this.token = this.servicio.getToken();
-    }
+    
+  }
 
     
     ngOnInit(): void {

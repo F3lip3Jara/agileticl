@@ -2,14 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {UsersService} from '../servicios/users.service';
 import {AlertasService} from '../servicios/alertas.service';
-import {LogSysService} from '../servicios/log-sys.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../model/usuario.model';
-import { LogSys } from './../model/logSys.model';
-
 import { faLock , faUser } from '@fortawesome/free-solid-svg-icons';
-
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

@@ -35,7 +35,7 @@ export class TrabProveedoresComponent implements OnInit {
   archivos        : any []               = [];
   rol             : any;
   gerencia        : any;
-  insProv         : UntypedFormGroup;
+  ins         : UntypedFormGroup;
   valGuar         : boolean              = false;
   tblProveedor    : any                  = {};
   regiones        : any;
@@ -72,9 +72,7 @@ export class TrabProveedoresComponent implements OnInit {
     this.comunas  = {};
     this.ciudades = {};
 
-    this.insProv = fg.group({
-
-
+    this.ins = fg.group({
      prvDir : ['' , Validators.compose([
        Validators.required,
      ])],
@@ -131,13 +129,13 @@ export class TrabProveedoresComponent implements OnInit {
         this.paises = data;
         });
 
-        this.insProv.controls['idPai'].valueChanges.subscribe(field => {
+        this.ins.controls['idPai'].valueChanges.subscribe(field => {
           this.regiones = {};
           this.comunas = {};
           this.ciudades = {};
-          this.insProv.controls['idReg'].setValue('');
-          this.insProv.controls['idCom'].setValue('');
-          this.insProv.controls['idCiu'].setValue('');
+          this.ins.controls['idReg'].setValue('');
+          this.ins.controls['idCom'].setValue('');
+          this.ins.controls['idCiu'].setValue('');
           this.serviLoad.sumar.emit(1);
           this.parametros = [{key :'idPai' ,value: field}];
           this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
@@ -145,13 +143,13 @@ export class TrabProveedoresComponent implements OnInit {
             });
         });
 
-        this.insProv.controls['idReg'].valueChanges.subscribe(field => {
+        this.ins.controls['idReg'].valueChanges.subscribe(field => {
           if(field > 0){
             this.comunas = {};
             this.ciudades= {};
-            this.insProv.controls['idCom'].setValue('');
-            this.insProv.controls['idCiu'].setValue('');
-            this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+            this.ins.controls['idCom'].setValue('');
+            this.ins.controls['idCiu'].setValue('');
+            this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.ins.controls['idPai'].value}];
             this.serviLoad.sumar.emit(1);
             this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
               this.ciudades = data;
@@ -159,11 +157,11 @@ export class TrabProveedoresComponent implements OnInit {
           }
         });
 
-        this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
+        this.ins.controls['idCiu'].valueChanges.subscribe(field => {
           if(field > 0){
             this.comunas = {};
-            this.insProv.controls['idCom'].setValue('');
-            this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+            this.ins.controls['idCom'].setValue('');
+            this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.ins.controls['idReg'].value } , {key : 'idPai' , value:  this.ins.controls['idPai'].value} ];
             this.serviLoad.sumar.emit(1);
             this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
               this.comunas = data;
@@ -218,8 +216,8 @@ export class TrabProveedoresComponent implements OnInit {
           this.serLog.insLog(log);  
           this.modal.dismissAll();
           setTimeout(()=>{
-            this.insProv.controls['prvDir'].setValue('');
-            this.insProv.controls['prvNum'].setValue('');
+            this.ins.controls['prvDir'].setValue('');
+            this.ins.controls['prvNum'].setValue('');
             this.val      = false;
           },1500);
       }else {

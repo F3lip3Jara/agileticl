@@ -1,6 +1,7 @@
 <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
   <div class="container">
     <div class="row justify-content-center">
+      <app-alert></app-alert>
       <form class="form"
       [formGroup]="login"
       (ngSubmit)  = "guardar(login.controls['email'].value , login.controls['password'].value)"

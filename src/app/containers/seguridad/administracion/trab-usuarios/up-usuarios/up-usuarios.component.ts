@@ -3,13 +3,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
+
 
 @Component({
   selector: 'app-up-usuarios',
@@ -116,15 +117,13 @@ export class UpUsuariosComponent {
  this.dia        = this.fecha.getUTCDate();
  this.mes        = this.fecha.getUTCMonth()+1;
  this.ano        = this.fecha.getUTCFullYear();
- this.dateModel  = this.datepipe.transform(this.fecha, 'yyyy-MM-dd')?.toString();
+ this.dateModel = new NgbDate( this.ano, this.mes, this.dia)
+
+  
 
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.fecha);
 
-  console.log(this.dateModel);
-  
-  
   this.up.controls['password'].valueChanges.pipe(
     filter(text => text.length >=1 ),
     debounceTime(200),

@@ -40,6 +40,9 @@ export class ModalEsperaComponent implements OnInit {
       if (!this.modalActive) {
         
         this.modalActive = true;
+        const audio = new Audio('assets/water-droplet-bubble-pop.mp3');
+        audio.play();
+        
         this.interval = setInterval(() => {
           if (this.timeLeft > 0) {
             this.timeLeft--;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { INavData } from '@coreui/angular';
@@ -25,9 +25,23 @@ export class DefaultLayoutComponent {
   isLoading        :boolean     = false;
   altura           :number      = 0;
 
-  constructor(  private rest        : RestService ,
-                private servicioUser: UsersService,
-                private servicioAlerta : AlertasService) {
+  @HostListener('click', ['$event'])
+  onClick(event: MouseEvent) {
+    const target = event.target as HTMLElement; // Convertir a HTMLElement para acceder a las propiedades específicas del elemento
+    // Verificar si el objetivo del clic es un botón
+    if (target.tagName === 'BUTTON') {
+      const audio = new Audio('assets/button.mp3');
+      audio.play();
+    }
+    // Verificar si el objetivo del clic es un enlace (a)
+    if (target.tagName === 'A') {
+      const audio = new Audio('assets/button.mp3');
+      audio.play();
+    }
+  }
+   constructor(  private rest        : RestService ,
+                 private servicioUser: UsersService,
+                 private servicioAlerta : AlertasService) {
 
                   this.token    = servicioUser.getToken();                
                   this.menu     = this.servicioUser.getUser().menu;
@@ -77,7 +91,6 @@ export class DefaultLayoutComponent {
                     });
                   
                   });
-
   }
 
   ngOnInit(): void {

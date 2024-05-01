@@ -7,10 +7,10 @@ export class Proveedor {
   public prvGiro  : string;
   public prvDir   : string;
   public prvNum   : string;
-  public idPai    : number;
-  public idReg    : number;
-  public idCom    : number;
-  public idCiu    : number;
+  public paiId    : number;
+  public regId    : number;
+  public comId    : number;
+  public ciuId    : number;
   public prvMail  : string;
   public prvTel   : string;
   public prvCli   : any;
@@ -25,10 +25,10 @@ export class Proveedor {
      prvGiro  : string,
      prvDir   : string,
      prvNum   : string,
-     idPai    : number,
-     idReg    : number,
-     idCom    : number,
-     idCiu    : number,
+     paiId    : number,
+     regId    : number,
+     comId    : number,
+     ciuId    : number,
      prvMail  : string,
      prvTel   : string,
      prvCli   : any,
@@ -43,10 +43,10 @@ export class Proveedor {
     this.prvGiro = prvGiro;
     this.prvDir  = prvDir;
     this.prvNum  = prvNum;
-    this.idPai   = idPai;
-    this.idReg   = idReg;
-    this.idCom   = idCom;
-    this.idCiu   = idCiu;
+    this.paiId   = paiId;
+    this.regId   = regId;
+    this.comId   = comId;
+    this.ciuId   = ciuId;
     this.prvMail = prvMail;
     this.prvTel  = prvTel;
     this.prvCli  = prvCli;
@@ -112,36 +112,36 @@ export class Proveedor {
     this.prvNum = prvNum;
   }
 
-  public getIdPai() {
-    return this.idPai;
+  public getpaiId() {
+    return this.paiId;
   }
 
-  public  setIdPai(idPai : number) {
-    this.idPai = idPai;
+  public  setpaiId(paiId : number) {
+    this.paiId = paiId;
   }
 
-  public getIdReg() {
-    return this.idReg;
+  public getregId() {
+    return this.regId;
   }
 
-  public  setIdReg(idReg : number) {
-    this.idReg = idReg;
+  public  setregId(regId : number) {
+    this.regId = regId;
   }
 
-  public getIdCom() {
-    return this.idCom;
+  public getcomId() {
+    return this.comId;
   }
 
-  public  setIdCom(idCom : number) {
-    this.idCom = idCom;
+  public  setcomId(comId : number) {
+    this.comId = comId;
   }
 
-  public getIdCiu() {
-    return this.idCiu;
+  public getciuId() {
+    return this.ciuId;
   }
 
-  public  setIdCiu(idCiu  : number) {
-    this.idCiu = idCiu;
+  public  setciuId(ciuId  : number) {
+    this.ciuId = ciuId;
   }
 
   public getPrvMail() {

@@ -18,7 +18,7 @@ import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./ins-proveedores.component.css']
 })
 export class InsProveedoresComponent implements OnInit {
-  insProv      : FormGroup;
+  ins      : FormGroup;
   regiones     : any;
   comunas      : any;
   paises       : any;
@@ -42,7 +42,7 @@ export class InsProveedoresComponent implements OnInit {
               private router              : Router
   ) {
 
-  this.insProv = fg.group({
+  this.ins = fg.group({
      prvRut : [ '',Validators.compose([
       Validators.required,
       Validators.pattern('^[0-9]+-[0-9kK]{1}')
@@ -64,16 +64,16 @@ export class InsProveedoresComponent implements OnInit {
       Validators.required,
 
     ])],
-    idPai : ['' , Validators.compose([
+    paiId : ['' , Validators.compose([
       Validators.required,
     ])],
-    idReg : ['' , Validators.compose([
+    regId : ['' , Validators.compose([
       Validators.required,
     ])],
-    idCom : ['' , Validators.compose([
+    comId : ['' , Validators.compose([
       Validators.required,
      ])],
-    idCiu : ['' , Validators.compose([
+    ciuId : ['' , Validators.compose([
       Validators.required,
      ])],
      prvCli : ['' , Validators.compose([
@@ -108,50 +108,47 @@ export class InsProveedoresComponent implements OnInit {
       this.paises = data;
       });
 
-      this.insProv.controls['idPai'].valueChanges.subscribe(field => {
+      this.ins.controls['paiId'].valueChanges.subscribe(field => {
         this.regiones = {};
         this.comunas = {};
         this.ciudades = {};
-        this.insProv.controls['idReg'].setValue('');
-        this.insProv.controls['idCom'].setValue('');
-        this.insProv.controls['idCiu'].setValue('');
+        this.ins.controls['regId'].setValue('');
+        this.ins.controls['comId'].setValue('');
+        this.ins.controls['ciuId'].setValue('');
         this.serviLoad.sumar.emit(1);
-        this.parametros = [{key :'idPai' ,value: field}];
+        this.parametros = [{key :'paiId' ,value: field}];
         this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
           this.regiones = data;
           });
       });
 
-      this.insProv.controls['idReg'].valueChanges.subscribe(field => {
+      this.ins.controls['regId'].valueChanges.subscribe(field => {
         if(field > 0){
-
           this.ciudades= {};
           this.comunas = {};
-          this.insProv.controls['idCom'].setValue('');
-          this.insProv.controls['idCiu'].setValue('');
+          this.ins.controls['comId'].setValue('');
+          this.ins.controls['ciuId'].setValue('');
           this.serviLoad.sumar.emit(1);
-          this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
+          this.parametros = [{key :'regId' ,value: field} , {key : 'paiId' , value:  this.ins.controls['paiId'].value}];
           this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
           this.ciudades = data;
-
         });
         }
       });
 
-      this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
+      this.ins.controls['ciuId'].valueChanges.subscribe(field => {
         if(field > 0){
           this.comunas = {};
-          this.insProv.controls['idCom'].setValue('');
+          this.ins.controls['comId'].setValue('');
           this.serviLoad.sumar.emit(1);
-          this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
+          this.parametros = [{key :'ciuId' ,value: field} , {key :'regId' , value : this.ins.controls['regId'].value } , {key : 'paiId' , value:  this.ins.controls['paiId'].value} ];
           this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
             this.comunas = data;
             });
         }
-
       });
 
-      this.insProv.controls['prvRut'].valueChanges.pipe(
+      this.ins.controls['prvRut'].valueChanges.pipe(
         filter(text => text.length > 7),
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
@@ -160,12 +157,10 @@ export class InsProveedoresComponent implements OnInit {
             data.forEach((elementx : any)  => {
                 if(elementx.error == 1  ){
                   this.valRut = false;
-                  this.mensaje= '';
-                  this.servicioaler.setAlert('','');
+                  this.mensaje= '';                 
                 }else {
                    this.valRut = true;
-                   this.mensaje= elementx.mensaje;
-                   this.servicioaler.setAlert('','');
+                   this.mensaje= elementx.mensaje;                   
                 }
             });
           });
@@ -178,10 +173,10 @@ export class InsProveedoresComponent implements OnInit {
                 prvGiro   : string ,
                 prvDir    : string ,
                 prvNum    : string ,
-                idPai     : number ,
-                idReg     : number ,
-                idCom     : number ,
-                idCiu     : number ,
+                paiId     : number ,
+                regId     : number ,
+                comId     : number ,
+                ciuId     : number ,
                 prvMail   : string ,
                 prvTel    : string ,
                 prvCli    : any    ,
@@ -199,11 +194,11 @@ export class InsProveedoresComponent implements OnInit {
     }else{
         prvPrv = 'N';
     }
-    let proveedor : Proveedor  = new Proveedor(0,prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, idPai, idReg, idCom , idCiu , prvMail , prvTel , prvCli , prvPrv , true);
+    let proveedor : Proveedor  = new Proveedor(0,prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, paiId, regId, comId , ciuId , prvMail , prvTel , prvCli , prvPrv , true);
     this.val                   = true;
     this.serviLoad.sumar.emit(1);
 
-    this.rest.post('insProveedor', this.token, proveedor).subscribe(resp => {
+    this.rest.post('inseedor', this.token, proveedor).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){           
             let   des              = 'Proveedor ingresado '+ prvRut;

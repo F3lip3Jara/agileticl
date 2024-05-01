@@ -42,10 +42,23 @@ export class AlertComponent {
   ngOnInit() {
     this.servicio.disparador.subscribe(data=>{   
       //  this.alerta  = data;
+   
+      
       setTimeout(()=> {
         this.show    = true; 
+        this.mensaje = '';        
         this.visible = !this.visible;  
         this.mensaje = this.alerta.getMessage();    
+        if(this.alerta.getType() == 'success'){
+          const audio = new Audio('assets/notificacion.mp3');
+          audio.play();
+        }
+
+        if(this.alerta.getType() == 'danger'){
+          const audio = new Audio('assets/error.mp3');
+          audio.play();
+        }
+
      },1500 );
       
     

@@ -61,7 +61,6 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
   </div>
   <!-- /.card-footer-->
 </div>
@@ -74,14 +73,14 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "insProv"
+  <form  [formGroup] = "ins"
          (ngSubmit)  = "insDir( idPrv.value,
-                                insProv.controls['prvDir'].value,
-                                insProv.controls['prvNum'].value,
-                                insProv.controls['idPai'].value,
-                                insProv.controls['idReg'].value,
-                                insProv.controls['idCom'].value,
-                                insProv.controls['idCiu'].value
+                                ins.controls['prvDir'].value,
+                                ins.controls['prvNum'].value,
+                                ins.controls['paiId'].value,
+                                ins.controls['regId'].value,
+                                ins.controls['comId'].value,
+                                ins.controls['ciuId'].value
                          )">
   <div class="modal-body">
       <div class="card-body">
@@ -109,7 +108,7 @@
               <input type="text" class="form-control" id="prvDir" placeholder="Ingresar dirección..." formControlName = 'prvDir'  >
             </div>
 
-            <div *ngIf = "insProv.controls['prvDir'].hasError('required')">
+            <div *ngIf = "ins.controls['prvDir'].hasError('required')">
               <span class="text-danger">Campo obligatorio!</span>
             </div>
           </div>
@@ -121,7 +120,7 @@
               <input type="text" class="form-control" id="prvNum" placeholder="Ingresar número..." formControlName = 'prvNum'  >
              </div>
             </div>
-            <div *ngIf = "insProv.controls['prvNum'].hasError('required')">
+            <div *ngIf = "ins.controls['prvNum'].hasError('required')">
               <span class="text-danger">Campo obligatorio!</span>
             </div>
           </div>
@@ -129,12 +128,12 @@
       <div class="form-group">
         <label for="nombre">País</label>
         <div class=" input-group-sm" *ngIf="paises.length > 0">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idPai'>
+          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'paiId'>
             <option   value="">Seleccione</option>
-            <option  *ngFor = "let pais of paises"  value="{{pais.idPai}}">{{pais.paiDes}}</option>
+            <option  *ngFor = "let pais of paises"  value="{{pais.paiId}}">{{pais.paiDes}}</option>
           </select>
         </div>
-        <div *ngIf = "insProv.controls['idPai'].hasError('required')">
+        <div *ngIf = "ins.controls['paiId'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
@@ -150,13 +149,13 @@
             <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div class=" input-group-sm" *ngIf="regiones.length  > 0 && paises.length > 0 && insProv.controls['idPai'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idReg'>
+        <div class=" input-group-sm" *ngIf="regiones.length  > 0 && paises.length > 0 && ins.controls['paiId'].value != '' ">
+          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'regId'>
             <option   value="">Seleccione</option>
-            <option  *ngFor = "let region of regiones"  value="{{region.idReg}}">{{region.regDes}}</option>
+            <option  *ngFor = "let region of regiones"  value="{{region.regId}}">{{region.regDes}}</option>
           </select>
         </div>
-        <div *ngIf = "insProv.controls['idReg'].hasError('required')">
+        <div *ngIf = "ins.controls['regId'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
@@ -172,13 +171,13 @@
             <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div class=" input-group-sm" *ngIf="regiones.length > 0 && ciudades.length > 0 && insProv.controls['idReg'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCiu'>
+        <div class=" input-group-sm" *ngIf="regiones.length > 0 && ciudades.length > 0 && ins.controls['regId'].value != '' ">
+          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'ciuId'>
             <option   value="">Seleccione</option>
-            <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.idCiu}}">{{ciudad.ciuDes}}</option>
+            <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.ciuId}}">{{ciudad.ciuDes}}</option>
           </select>
         </div>
-        <div *ngIf = "insProv.controls['idCiu'].hasError('required')">
+        <div *ngIf = "ins.controls['ciuId'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
@@ -194,13 +193,13 @@
             <span class="sr-only">Loading...</span>
           </div>
         </div>
-        <div class=" input-group-sm" *ngIf="ciudades.length > 0 && comunas.length > 0  && insProv.controls['idCiu'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idCom'>
+        <div class=" input-group-sm" *ngIf="ciudades.length > 0 && comunas.length > 0  && ins.controls['ciuId'].value != '' ">
+          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'comId'>
             <option   value="">Seleccione</option>
-            <option  *ngFor = "let comuna of comunas"  value="{{comuna.idCom}}">{{comuna.comDes}}</option>
+            <option  *ngFor = "let comuna of comunas"  value="{{comuna.comId}}">{{comuna.comDes}}</option>
           </select>
         </div>
-        <div *ngIf = "insProv.controls['idCom'].hasError('required')">
+        <div *ngIf = "ins.controls['comId'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
@@ -210,7 +209,7 @@
       </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"   *ngIf ="insProv.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"   *ngIf ="ins.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
