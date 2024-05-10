@@ -1,6 +1,6 @@
-<div class="card">
+<div class="card card-primary card-outline">
     <div class="card-header">
-      <h5 class="card-title">Etapas - Maquina</h5>     
+      <h5 class="card-title">Maquina</h5>     
     </div>
     <div class="card-body">
         <button type = 'button' class="btn  btn-outline-primary btn-sm" ngbTooltip="Excel" (click)="Excel()">
@@ -15,7 +15,7 @@
         <img src = "assets/Circles-menu-3.gif">
        </div>
 
-       <div    *ngIf="tblMaquinas?.length > 0" class="{{carga}}">
+       <div  class="table-responsive"    *ngIf="tblMaquinas?.length > 0" class="{{carga}}">
         <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
           <thead>
             <tr>
@@ -28,7 +28,7 @@
           </thead>
           <tbody>
             <tr *ngFor = "let maquina of tblMaquinas">
-              <th>{{maquina.idMaq}}</th>
+              <th>{{maquina.maqId}}</th>
               <th>{{maquina.etaDes}}</th>
               <th>{{maquina.maqCod}}</th>
               <th>{{maquina.maqDes}}</th>
@@ -50,7 +50,7 @@
   </div>
     <!-- /.card-body -->
     <div class="card-footer">
-      Marple
+      
     </div>
     <!-- /.card-footer-->
   </div>
@@ -61,13 +61,20 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>  <!-- /.card-header -->
-    <form >
+    <form [formGroup] = "up"
+    (ngSubmit)  = "action( '' ,
+                           '',
+                           up.controls['maqDes'].value ,
+                           'up',
+                           up.controls['maqCod'].value,
+                           ''
+                          )">
 
     <div class="modal-body">
         <div class="card-body">
           <div class="form-group">
             <label for="">Código Etapa</label>
-            <input type="text" class="form-control" id="" placeholder="" value="{{maquina.getIdEta()}}"   disabled>
+            <input type="text" class="form-control" id="" placeholder="" value="{{maquina.getetaId()}}"   disabled>
           </div>
           <div class="form-group">
             <label for="">Descripción Etapa</label>
@@ -75,11 +82,19 @@
           </div>
           <div class="form-group">
             <label for="">Código</label>
-            <input type="text" class="form-control" name = "maqCod" id="maqCod" value="{{maquina.maqCod}}" placeholder=""   #maqCod oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" name = "maqCod" id="maqCod" value="{{maquina.maqCod}}" placeholder=""  formControlName="maqCod" oninput="this.value = this.value.toUpperCase()"
+            [ngClass]="(up.controls['maqCod'].hasError('required') ) ? 'was-validated' : 'is-valid'"> 
+            <div *ngIf = "up.controls['maqCod'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
           </div>
           <div class="form-group">
             <label for="">Descripción Maquina</label>
-            <input type="text" class="form-control" name = "maqDes" id="maqDes" value="{{maquina.maqDes}}" placeholder=""  #maqDes oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" name = "maqDes" id="maqDes" value="{{maquina.maqDes}}" placeholder=""    formControlName="maqDes" oninput="this.value = this.value.toUpperCase()"
+            [ngClass]="(up.controls['maqDes'].hasError('required') ) ? 'was-validated' : 'is-valid'"> 
+            <div *ngIf = "up.controls['maqDes'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
           </div>
 
         </div>
@@ -87,9 +102,15 @@
       <!-- form start -->
     </div>
     <div class="modal-footer">
-      <div *ngIf="maqDes.value && maqCod.value">
-      <button type="button" class="btn btn-primary" (click) ="actionMaq(maquina.idEta , maquina.idMaq , maqDes.value ,  'up' , maqCod.value , '' )" [disabled]="loading">Guardar</button>
-      </div>
+      <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+      </button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
     </div>
   </form>
@@ -103,11 +124,18 @@
         <span aria-hidden="true">&times;</span>
       </button>
     </div>  <!-- /.card-header -->
-    <form >
+    <form [formGroup] = "ins"
+    (ngSubmit)  = "action( ins.controls['etaId'].value ,
+                           '',
+                           ins.controls['maqDes'].value ,
+                           'ins',
+                           ins.controls['maqCod'].value,
+                           ''
+                          )">
     <div class="modal-body">
         <div class="card-body">
           <div class="form-group">        
-            <label>Etapa</label>
+            <label>Etapa</label>  
             <div  *ngIf=" !etapas.length ">
               <div class="spinner-border spinner-border-sm" role="status">
                 <span class="sr-only">Loading...</span>
@@ -115,22 +143,30 @@
               <div class="spinner-grow spinner-grow-sm" role="status">
                 <span class="sr-only">Loading...</span>
               </div>
-            </div>
-            
-              <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" #idEta [ngClass]="etapas.length > 0 ? 'd-block' :'d-none'">
-                <option  value="">Seleccione</option>             
-                  <option   *ngFor = "let etapa of etapas"  value="{{etapa.idEta}}">{{etapa.etaDes}}</option>                        
+            </div> 
+            <div *ngIf="etapas.length > 0">             
+              <select class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName="etaId" [ngClass]="etapas.length > 0 ? 'd-block' :'d-none'"
+                [ngClass]="(ins.controls['etaId'].value =='')? 'was-validated' : 'is-valid'">
+                <option  value="">Seleccione</option> 
+                <option   *ngFor = "let etapa of etapas"  value="{{etapa.etaId}}">{{etapa.etaDes}}</option>                        
               </select>
+            </div>     
             </div>
-            
-          
           <div class="form-group">
             <label for="">Código</label>
-            <input type="text" class="form-control" name = "maqCod" id="maqCod" value="" placeholder="" value=""  #maqCod oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" name = "maqCod" id="maqCod" value="" placeholder="" value=""  formControlName="maqCod" oninput="this.value = this.value.toUpperCase()"
+            [ngClass]="(ins.controls['maqCod'].hasError('required') ) ? 'was-validated' : 'is-valid'"> 
+            <div *ngIf = "ins.controls['maqCod'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
           </div>
           <div class="form-group">
             <label for="">Descripción Maquina</label>
-            <input type="text" class="form-control" name = "maqDes" id="maqDes" placeholder="" value=""  #maqDes oninput="this.value = this.value.toUpperCase()">
+            <input type="text" class="form-control" name = "maqDes" id="maqDes" placeholder="" value=""  formControlName="maqDes" oninput="this.value = this.value.toUpperCase()"
+            [ngClass]="(ins.controls['maqDes'].hasError('required') ) ? 'was-validated' : 'is-valid'"> 
+            <div *ngIf = "ins.controls['maqDes'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
           </div>
 
         </div>
@@ -138,9 +174,15 @@
       <!-- form start -->
     </div>
     <div class="modal-footer">
-      <div *ngIf="maqDes.value && idEta.value && maqCod.value">
-      <button type="button" class="btn btn-primary" (click) ="actionMaq(idEta.value, 0 , maqDes.value , 'ins' , maqCod.value , '')" [disabled]="loading">Guardar</button>
-    </div>
+      <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid" [disabled]="val">
+        <div *ngIf= "val">
+          Guardando..
+          <span class="spinner-border spinner-border-sm mr-2"></span>
+        </div>
+        <div *ngIf= "!val">
+          Guardar
+        </div>
+      </button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
     </div>
   </form>

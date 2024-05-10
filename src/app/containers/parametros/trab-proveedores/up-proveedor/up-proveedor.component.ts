@@ -1,4 +1,4 @@
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {  FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LinksService } from 'src/app/servicios/links.service';
 import { Proveedor } from './../../../../model/proveedor.model';
 import { Component, OnInit } from '@angular/core';
@@ -6,9 +6,10 @@ import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingService } from 'src/app/servicios/loading.service';
 
 @Component({
   selector: 'app-up-proveedor',
@@ -20,7 +21,7 @@ export class UpProveedorComponent implements OnInit {
 
   proveedor        : any;
   datPrv           : any;
-  insProv          : UntypedFormGroup;
+  up               : FormGroup;
   regiones         : any;
   comunas          : any;
   paises           : any;
@@ -30,99 +31,71 @@ export class UpProveedorComponent implements OnInit {
   parametros       : any []               = [];
   val              : boolean              = false;
   mensaje          : string               = '';
-  escliente        : boolean;
-  esproveedor      : boolean;
-  prvAct           : boolean
-  idPai                                  = 0;
-  idReg                                  = 0;
-  idCom                                  = 0;
-  idCiu                                  = 0;
-  faArrowTurnDown                        =faArrowTurnDown;
+  escliente        : boolean              = false;
+  esproveedor      : boolean              = false;
+  prvAct           : boolean              = false;
+  paiId                                   = 0;
+  regId                                   = 0;
+  comId                                   = 0;
+  ciuId                                   = 0;
+  faArrowTurnDown                         =faArrowTurnDown;
 
   constructor(private serProveedor : ProveedoresService,
               private rest         : RestService,
               private servicioaler : AlertasService,
               private servicio     : UsersService,
               private servicioLink : LinksService,
-              private fg           : UntypedFormBuilder,
-              private serLog       : LogSysService
+              private fg           : FormBuilder,
+              private serLog       : LogSysService,
+              private route        : ActivatedRoute,
+              private serviLoad    : LoadingService,
+              private router       : Router
     ) {
 
-      this.token      = this.servicio.getToken();
-      this.proveedor  = serProveedor.getProveedor();
-      this.datPrv     = serProveedor.getDatPrv();
+      this.token      = this.servicio.getToken();      
+      
+      this.up = fg.group({
+                  prvAct : [ '' , Validators.compose([
+                  ])],
+                  prvNom : ['' , Validators.compose([
+                        Validators.required,
+                  ])],
+                  prvNom2 : ['', Validators.compose([
+                        Validators.required,
+                  ])],
+                  prvGiro : ['' , Validators.compose([
+                    Validators.required,
 
-      this.datPrv.forEach((element : any) => {
-         this.idPai = element.idPai;
-         this.idReg = element.idReg;
-         this.idCiu = element.idCiu;
-         this.idCom = element.idCom;
-     
-      });
+                  ])],
+                  prvDir : ['', Validators.compose([
+                    Validators.required,
+                  ])],
+                  prvDirNum : ['', Validators.compose([
+                    Validators.required,
 
-
-      if(this.proveedor.es_cliente == 'S'){
-          this.escliente = true;
-      }else{
-          this.escliente = false;
-      }
-
-      if(this.proveedor.activado == 'S'){
-        this.prvAct = true;
-        }else{
-            this.prvAct = false;
-      }
-
-      if(this.proveedor.es_proveedor == 'S'){
-        this.esproveedor = true;
-      }else{
-        this.esproveedor = false;
-      }
-
-      this.insProv = fg.group({
-        prvAct : [ this.prvAct  , Validators.compose([
-
-         ])],
-        prvNom : [this.proveedor.nombre , Validators.compose([
-             Validators.required,
-            ])],
-       prvNom2 : [this.proveedor.nombre_fantasia , Validators.compose([
-            Validators.required,
-       ])],
-       prvGiro : [this.proveedor.giro , Validators.compose([
-         Validators.required,
-
-       ])],
-       prvDir : [this.proveedor.direccion , Validators.compose([
-         Validators.required,
-       ])],
-       prvDirNum : [this.proveedor.numero , Validators.compose([
-         Validators.required,
-
-       ])],
-       idPai : [this.idPai, Validators.compose([
-         Validators.required,
-       ])],
-       idReg : [this.idReg , Validators.compose([
-         Validators.required,
-       ])],
-
-       idCiu : [this.idCiu, Validators.compose([
-         Validators.required,
-        ])],
-        idCom : [this.idCom, Validators.compose([
-          Validators.required,
-         ])],
-        prvCli : [this.escliente, Validators.compose([
-        ])],
-        prvPrv: [this.esproveedor , Validators.compose([
-        ])],
-        prvMail: [this.proveedor.mail , Validators.compose([
-         Validators.email,
-       ])],
-       prvTel: [this.proveedor.telefono , Validators.compose([
-         Validators.required,
-       ])],
+                  ])],
+                  paiId : ['', Validators.compose([
+                    Validators.required,
+                  ])],
+                  regId : ['', Validators.compose([
+                    Validators.required,
+                  ])],
+                  ciuId : ['', Validators.compose([
+                    Validators.required,
+                  ])],
+                  comId : ['', Validators.compose([
+                      Validators.required,
+                  ])],
+                  prvCli : ['', Validators.compose([
+                  ])],
+                  prvPrv: ['' , Validators.compose([
+                  ])],
+                  prvMail: ['' , Validators.compose([
+                    Validators.email,
+                  ])],
+                  prvTel: ['' , Validators.compose([
+                    Validators.required,
+                  ])],
        });
 
        this.paises   = {};
@@ -132,75 +105,111 @@ export class UpProveedorComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-      this.paises = data;
-      });
+    this.serviLoad.sumar.emit(1);
+ 
+    
 
-      this.parametros = [{key :'idPai' ,value: this.idPai}];
-        this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
-          this.regiones = data;
-      });
+    this.route.params.subscribe(params => {
+      const dato   = params['proveedor'];
+      this.proveedor = JSON.parse(dato);
 
-      this.parametros = [{key :'idReg' ,value: this.idReg} , {key: 'idPai' , value:this.idPai}];
-      this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
+      this.paiId = this.proveedor.paiId;
+      this.regId = this.proveedor.regId;
+      this.ciuId = this.proveedor.ciuId;
+      this.comId = this.proveedor.comId; 
+      
+      if(this.proveedor.es_cliente == 'S'){
+        this.escliente = true;
+    }else{
+        this.escliente = false;
+    }
+
+    if(this.proveedor.activado == 'S'){
+      this.prvAct = true;
+      }else{
+          this.prvAct = false;
+    }
+
+    if(this.proveedor.es_proveedor == 'S'){
+      this.esproveedor = true;
+    }else{
+      this.esproveedor = false;
+    }
+
+      this.up.controls['prvAct'].setValue(this.prvAct);
+      this.up.controls['prvCli'].setValue(this.escliente);
+      this.up.controls['prvPrv'].setValue(this.esproveedor);
+      this.up.controls['prvNom'].setValue(this.proveedor.nombre);
+      this.up.controls['prvNom2'].setValue(this.proveedor.nombre_fantasia);
+      this.up.controls['prvGiro'].setValue(this.proveedor.giro);
+      this.up.controls['prvDir'].setValue(this.proveedor.direccion);
+      this.up.controls['prvDirNum'].setValue(this.proveedor.numero);     
+      this.up.controls['prvTel'].setValue(this.proveedor.telefono);
+      this.up.controls['prvMail'].setValue(this.proveedor.mail);
+    
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
+        this.paises = data;
+        this.up.controls['paiId'].setValue(this.proveedor.pais_id);
+        this.up.controls['regId'].setValue(this.proveedor.region_id);
+        this.up.controls['ciuId'].setValue(this.proveedor.ciudad_id);
+        this.up.controls['comId'].setValue(this.proveedor.comuna_id);
+      });
+    });
+
+   
+  
+  
+
+    this.up.controls['paiId'].valueChanges.subscribe(field => {
+      this.regiones = {};
+      this.comunas  = {};
+      this.ciudades = {};
+      this.up.controls['regId'].setValue('');
+      this.up.controls['comId'].setValue('');
+      this.up.controls['ciuId'].setValue('');
+      this.serviLoad.sumar.emit(1);
+      this.parametros = [{key :'paiId' ,value: field}];
+      this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
+        this.regiones = data;
+        });
+    });
+
+    this.up.controls['regId'].valueChanges.subscribe(field => {
+      if(field > 0){
+        this.ciudades= {};
+        this.comunas = {};
+        this.up.controls['comId'].setValue('');
+        this.up.controls['ciuId'].setValue('');
+        this.serviLoad.sumar.emit(1);
+        this.parametros = [{key :'regId' ,value: field} , {key : 'paiId' , value:  this.up.controls['paiId'].value}];
+        this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
         this.ciudades = data;
       });
+      }
+    });
 
-      this.parametros = [{key :'idCiu' ,value: this.idCiu} ,{key :'idReg' , value : this.idReg } , {key : 'idPai' , value:  this.idPai} ];
-      this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
-        this.comunas = data;
-      });
-
-
-      this.insProv.controls['idPai'].valueChanges.subscribe(field => {
-        this.regiones = {};
+    this.up.controls['ciuId'].valueChanges.subscribe(field => {
+      if(field > 0){
         this.comunas = {};
-        this.ciudades = {};
-        this.insProv.controls['idReg'].setValue('');
-        this.insProv.controls['idCiu'].setValue('');
-        this.insProv.controls['idCom'].setValue('');
-        this.parametros = [{key :'idPai' ,value: field}];
-        this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
-          this.regiones = data;
+        this.up.controls['comId'].setValue('');
+        this.serviLoad.sumar.emit(1);
+        this.parametros = [{key :'ciuId' ,value: field} , {key :'regId' , value : this.up.controls['regId'].value } , {key : 'paiId' , value:  this.up.controls['paiId'].value} ];
+        this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
+          this.comunas = data;
           });
-      });
-
-      this.insProv.controls['idReg'].valueChanges.subscribe(field => {
-        if(field > 0){
-          this.comunas = {};
-          this.ciudades= {};
-          this.insProv.controls['idCiu'].setValue('');
-          this.insProv.controls['idCom'].setValue('');
-          this.parametros = [{key :'idReg' ,value: field} , {key : 'idPai' , value:  this.insProv.controls['idPai'].value}];
-          this.rest.get('regCiu' , this.token, this.parametros).subscribe(data => {
-            this.ciudades = data;
-            });
-        }
-      });
-
-     this.insProv.controls['idCiu'].valueChanges.subscribe(field => {
-        if(field > 0){
-          this.comunas = {};
-          this.insProv.controls['idCom'].setValue('');
-          this.parametros = [{key :'idCiu' ,value: field} , {key :'idReg' , value : this.insProv.controls['idReg'].value } , {key : 'idPai' , value:  this.insProv.controls['idPai'].value} ];
-          this.rest.get('ciuCom' , this.token, this.parametros).subscribe(data => {
-            this.comunas = data;
-            });
-        }
-      });
+      }
+    });
   }
-
- 
 
   public guardar(    prvNom    : string ,
                      prvNom2   : string ,
                      prvGiro   : string ,
                      prvDir    : string ,
                      prvNum    : string ,
-                     idPai     : number ,
-                     idReg     : number ,
-                     idCom     : number ,
-                     idCiu     : number ,
+                     paiId     : number ,
+                     regId     : number ,
+                     comId     : number ,
+                     ciuId     : number ,
                      prvMail   : string ,
                      prvTel    : string ,
                      prvCli    : any    ,
@@ -227,37 +236,14 @@ export class UpProveedorComponent implements OnInit {
         prvPrv = 'N';
     }
 
-    
- 
-
-    let proveedorx : Proveedor  = new Proveedor(this.proveedor.id,this.proveedor.prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, idPai, idReg, idCom , idCiu , prvMail , prvTel , prvCli , prvPrv , prvAct);
+    let proveedorx : Proveedor  = new Proveedor(this.proveedor.id,this.proveedor.prvRut, prvNom , prvNom2 , prvGiro , prvDir, prvNum, paiId, regId, comId , ciuId , prvMail , prvTel , prvCli , prvPrv , prvAct);
     this.val                    = true;
-
+    this.serviLoad.sumar.emit(1);
     this.rest.post('updProveedor', this.token, proveedorx).subscribe(resp => {  
-      resp.forEach((elementx : any)  => {       
-        if(elementx.error == '0' ){
-          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-          let  des = 'Proveedor actualizado id: ' + this.proveedor.id;
-          let  log  : LogSys    = new LogSys(2, '' , 21, 'ACTUALIZAR PROVEEDOR/CLIENTE'  , des);
-          this.serLog.insLog(log);   
-          
-          if(xprvAct == false){
-            let  des = 'Proveedor deshabilitado id: ' + this.proveedor.id;
-            let  log  : LogSys    = new LogSys(2, '' , 22, 'DESHABILITAR PROVEEDOR/CLIENTE'  , des);
-            this.serLog.insLog(log);  
-          }
-          setTimeout(()=>{
-            this.servicioaler.setAlert('','');
-          },1500);
-          this.val=false;
-        }else{
-          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-          setTimeout(()=>{
-            this.servicioaler.setAlert('','');
-          },1500);
-          this.val=false;
-        }
-      });
+      this.val                   = false;
+      this.up.reset();
+      this.servicioaler.disparador.emit();   
+      this.router.navigate(['home/parametros/proveedor']);
     });
 
 

@@ -95,7 +95,6 @@ export class UpUserComponent{
             }
          }
       } );
-     
     });
     
     this.rest.get('trabRoles', this.token , this.parms).subscribe(data => {

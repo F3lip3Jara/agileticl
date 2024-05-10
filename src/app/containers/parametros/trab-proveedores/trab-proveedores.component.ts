@@ -43,7 +43,7 @@ export class TrabProveedoresComponent implements OnInit {
   paises          : any;
   ciudades        : any;
   val             : boolean                = false;
-  proveedor       : Proveedor;
+  proveedor       : any;
   faPenToSquare                            = faPenToSquare;  
   faTrash                                  = faTrash;
   faFileExcel                              = faFileExcel;
@@ -95,7 +95,7 @@ export class TrabProveedoresComponent implements OnInit {
 
      });
 
-     this.proveedor = new Proveedor(0,'','','','','','',0,0,0,0,'','',true, true , true);
+    
 
    }
    
@@ -186,32 +186,29 @@ export class TrabProveedoresComponent implements OnInit {
      },1500 );
    }
 
-    public prvNuevo(){
+   public prvNuevo(){
       this.router.navigate(['home/parametros/proveedor/ingreso']);
    }
 
-
    public Excel(){
-   this.excel.exportAsExcelFile(this.tblProveedor, 'proveedores');
-   return false;
+    this.excel.exportAsExcelFile(this.tblProveedor, 'proveedores');
+    return false;
   }
 
   public modalIns(content : any  , proveedor : any){
-    this.proveedor.setidPrv(proveedor.id);
-    this.proveedor.setPrvRut(proveedor.rut);
-    this.proveedor.setPrvNom(proveedor.nombre);
+    this.proveedor = proveedor;
     this.modal.open(content, { size: 'xl' });
  }
 
- public insDir(idPrv : any , prvDir : any , prvNum : any , idPai : any , idReg : any , idCom : any , idCiu: any){
+ public insDir(prvId : any , prvDir : any , prvNum : any , idPai : any , idReg : any , idCom : any , idCiu: any){
 
-  let proveedorx : Proveedor = new Proveedor(idPrv, '' , '' , '','',prvDir, prvNum , idPai , idReg , idCom , idCiu , '' , '' ,'','', true);
+  let proveedorx : Proveedor = new Proveedor(prvId, '' , '' , '','',prvDir, prvNum , idPai , idReg , idCom , idCiu , '' , '' ,'','', true);
   this.serviLoad.sumar.emit(1);
   this.rest.post('insPrvDes', this.token , proveedorx).subscribe(
     resp => {
       resp.forEach((elementx : any)  => {
       if(elementx.error == '0'){
-          let   des              = 'Ingreso de dirección proveedor id: '+ idPrv;
+          let   des              = 'Ingreso de dirección proveedor id: '+ prvId;
           let   log  : LogSys    = new LogSys(2, '' , 23, '	INGRESO DIR PROVEEDOR/CLIENTE'  , des);
           this.serLog.insLog(log);  
           this.modal.dismissAll();
@@ -230,17 +227,10 @@ export class TrabProveedoresComponent implements OnInit {
 
  modelUp(proveedorx : any){
       const proveedor = proveedorx;
-      this.serProveedor.setProveedor(proveedor);
-      this.parametros = [{key :'idPrv' ,value: proveedorx.id}];
-      this.serviLoad.sumar.emit(1);
-      this.rest.get('datPrv' , this.token, this.parametros).subscribe(data => {
-        this.serProveedor.setDatPrv(data);
-        setTimeout(()=>{
-          this.router.navigate(['home/parametros/proveedor/actualizar']);
-        },200);
-      });
+      const objstring = JSON.stringify(proveedor);
+      this.router.navigate(['home/parametros/proveedor/actualizar/' + objstring]);
 
-    }
+  }
 
 
 

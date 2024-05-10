@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ModalModule } from '@coreui/angular';
+import {  ModalModule } from '@coreui/angular';
 import { NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrabGerenciaComponent } from './trab-gerencia/trab-gerencia.component';
 import {TrabCalendarioJulComponent} from './trab-calendario-jul/trab-calendario-jul.component';
@@ -29,6 +29,7 @@ import {UpProveedorComponent} from './trab-proveedores/up-proveedor/up-proveedor
 import {UpDesProveeedorComponent} from './trab-proveedores/up-proveedor/up-des-proveeedor/up-des-proveeedor.component'
 import {ParametrosRoutingModule} from './parametros-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { TrabEtapasComponent } from './trab-etapas/trab-etapas.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
                 TrabProveedoresComponent,
                 InsProveedoresComponent,
                 UpProveedorComponent,
-                UpDesProveeedorComponent
+                UpDesProveeedorComponent,
+                TrabEtapasComponent
                 
               ],
   imports: [
@@ -66,7 +68,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ModalModule,
     NgbModule,
     NgbDatepicker,
-    NgSelectModule
+    NgSelectModule,
+   
   ]
 })
 export class ParametrosModule { }

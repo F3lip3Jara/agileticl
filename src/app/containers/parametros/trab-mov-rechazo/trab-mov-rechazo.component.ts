@@ -33,8 +33,8 @@ export class TrabMovRechazoComponent implements OnInit {
   validCod     : boolean              = false;
   dato         : number               = 0;
   motivo       : Motivo;
-  insMot       : FormGroup;
-  upMot        : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   etapa        : string               = '';
   etapas       : any                  = {};
@@ -56,8 +56,8 @@ export class TrabMovRechazoComponent implements OnInit {
       this.token    = this.servicio.getToken();
       this.motivo   = new Motivo(0,'',0);
 
-      this.insMot = fb.group({
-        idEta : ['' , Validators.compose([
+      this.ins = fb.group({
+        etaId : ['' , Validators.compose([
           Validators.required,
          ])],
         motDes : ['' , Validators.compose([
@@ -65,7 +65,7 @@ export class TrabMovRechazoComponent implements OnInit {
          ])]
       });
 
-      this.upMot = fb.group({
+      this.up = fb.group({
         motDes : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -120,9 +120,9 @@ export class TrabMovRechazoComponent implements OnInit {
   }
 
  public modelUp(content :any , motivo: any ){
-  this.motivo.setId(motivo.idMot);
+  this.motivo.setId(motivo.motId);
   this.etapa = motivo.etaDes;
-  this.upMot.controls['motDes'].setValue(motivo.motDes);
+  this.up.controls['motDes'].setValue(motivo.motDes);
   this.modal.open(content);
 }
 
@@ -132,89 +132,37 @@ public del( motivo : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, motivo).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-          let des        = 'Grupo eliminado ' + motivo.motDes ;
-          let log        = new LogSys(2, '' , 44 , 'ELIMINAR MOTIVO' , des);
-          this.serLog.insLog(log);
-          this.serviLoad.sumar.emit(1);
-           this.modal.dismissAll();
-           setTimeout(()=>{
-             this.tblMotivo = {};
-             this.rest.get('trabMotivo' , this.token, this.parametros).subscribe(data => {
-                 this.tblMotivo = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
+    this.loading = false;
+    this.tblData();
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    });
-   this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+  
    return false;
 }
 
-public action(motDes : any  , idEta : any , tipo :string ) : boolean{
+public action(motDes : any  , etaId : any , tipo :string ) : boolean{
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
   this.val     = true;
-  let motivo   = new Motivo(this.motivo.idMot, motDes,idEta );
-  let des      = '';
-  let lgName   = '';
-  let idEtaDes = 0;
+  let motivo   = new Motivo(this.motivo.motId, motDes,etaId );
+ 
 
   if(tipo =='up'){
      url      = 'updMotivo';
-     des      = 'Actualizar motivo ' + motDes;
-     lgName   = 'ACTUALIZAR MOTIVO';
-     idEtaDes = 43;
   }else{
     url      = 'insMotivo';
-    des      = 'Ingreso de motivo ' + motDes;
-    lgName   = 'INGRESO MOTIVO';
-    idEtaDes = 42;
   }
   this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, motivo).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-        this.serLog.insLog(log);        
-        this.serviLoad.sumar.emit(1);
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblMotivo = {};
-            this.rest.get('trabMotivo' , this.token, this.parametros).subscribe(data => {
-                this.tblMotivo = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-            this.limpiar();
-          },1500);
-
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
+  this.rest.post(url, this.token, motivo).subscribe(resp => {
+    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+    this.val = false;
+    this.ins.reset();
+    this.up.reset();
+    this.modal.dismissAll();
+    this.tblData();
   });
-  this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+ 
   return false;
 }
 
@@ -225,8 +173,4 @@ public Excel(){
 }
 
 
- public limpiar(){
-  this.insMot.controls['motDes'].setValue('');
-
- }
 }

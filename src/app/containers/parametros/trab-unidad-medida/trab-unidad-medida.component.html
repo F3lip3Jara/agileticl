@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Unidad de Medida</h5>
   </div>
@@ -6,7 +6,7 @@
       <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel">
         <fa-icon [icon]="faFileExcel"></fa-icon>
         Excel</button>
-      <a (click) = "modalIns(modalInsUn)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo">
+      <a (click) = "modalIns(modalins)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo">
         <fa-icon [icon]="faAddressCard"></fa-icon>
         Nuevo</a>
     <div class="loading" *ngIf= "loading" >
@@ -26,11 +26,11 @@
       </thead>
       <tbody>
         <tr *ngFor = "let unidad of tblUnidad">
-          <th>{{unidad.idUn}}</th>
+          <th>{{unidad.unId}}</th>
           <th>{{unidad.unCod}}</th>
           <th>{{unidad.unDes}}</th>
           <th>
-            <a style= "margin : 1px ;" (click) = "modelUp(modalUpUn , unidad)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+            <a style= "margin : 1px ;" (click) = "modelUp(modalup , unidad)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
               <fa-icon [icon]="faPenToSquare"></fa-icon>
             </a>
             <a style= "margin : 1px ;" (click) = "del(unidad)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
@@ -46,36 +46,37 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
+    
   </div>
   <!-- /.card-footer-->
 </div>
-<ng-template #modalUpUn let-modal>
+<ng-template #modalup let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Modal actualiza Unidad de Medida</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
-  <form  [formGroup] = "upUn"
-  (ngSubmit)  = "action( upUn.controls['unDes'].value ,
-                         upUnCod.value ,
+  <form  [formGroup] = "up"
+  (ngSubmit)  = "action( up.controls['unDes'].value ,
+                         upCod.value ,
                          'up' )">
   <div class="modal-body">
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{unMed.idUn}}" disabled>
+          <input type="text" class="form-control" id="" placeholder="" value="{{unMed.unId}}" disabled>
         </div>
         <div class="form-group">
           <label for="">Cód. Un. Medida</label>
-          <input type="text" class="form-control" name = "monDes" id="monCod" placeholder="" value="{{unMed.unCod}}"  #upUnCod disabled>
+          <input type="text" class="form-control" name = "monDes" id="monCod" placeholder="" value="{{unMed.unCod}}"  #upCod disabled>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "monDes" id="monDes" placeholder="" value="{{ unMed.unDes}}" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "monDes" id="monDes" placeholder="" value="{{ unMed.unDes}}" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(up.controls['unDes'].hasError('required')) ? 'was-validated' : 'is-valid'">
         </div>
-        <div *ngIf = "upUn.controls['unDes'].hasError('required')">
+        <div *ngIf = "up.controls['unDes'].hasError('required')">
          <span class="text-danger">Campo obligatorio!</span>
        </div>
       </div>
@@ -83,7 +84,7 @@
     <!-- form start -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upUn.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -99,40 +100,41 @@
 </ng-template>
 
 
-<ng-template #modalInsUn let-modal>
+<ng-template #modalins let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Modal ingreso Unidad de Medida</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "insUn"
-  (ngSubmit)  = "action( insUn.controls['unDes'].value ,
-                         insUn.controls['unCod'].value ,
+  <form  [formGroup] = "ins"
+  (ngSubmit)  = "action( ins.controls['unDes'].value ,
+                         ins.controls['unCod'].value ,
                         'ins' )">
   <div class="modal-body">
-
       <div class="card-body">
         <div class="form-group">
           <label for="">Cód. Un. Medida</label>
-          <input type="text" class="form-control" name = "unCod" id="unCod" placeholder="" value="" formControlName = 'unCod'  oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "unCod" id="unCod" placeholder="" value="" formControlName = 'unCod'  oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['unCod'].hasError('required') ||  validCod  ) ? 'was-validated' : 'is-valid'">                      
         </div>
          <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
-         <div *ngIf = "insUn.controls['unCod'].hasError('required')">
+         <div *ngIf = "ins.controls['unCod'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "unDes" id="unDes" placeholder="" value="" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "unDes" id="unDes" placeholder="" value="" formControlName = 'unDes'  oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['unDes'].hasError('required')) ? 'was-validated' : 'is-valid'">
         </div>
-        <div *ngIf = "insUn.controls['unDes'].hasError('required')">
+        <div *ngIf = "ins.controls['unDes'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
       <!-- /.card-body -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insUn.valid && validCod == false" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid && validCod == false" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

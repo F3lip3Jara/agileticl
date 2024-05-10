@@ -1,6 +1,4 @@
 import { LoadingService } from '../../../servicios/loading.service';
-import { LinksService } from 'src/app/servicios/links.service';
-import { EtapasdetService } from '../../../servicios/etapasdet.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
@@ -39,9 +37,7 @@ export class TrabEtapasComponent implements OnInit {
               private rest         : RestService,
               private modal        : NgbModal,
               private excel        : ExcelService,
-              private servicioaler : AlertasService,
-              private etapasser    : EtapasdetService,
-              private servicioLink : LinksService,
+              private servicioaler : AlertasService,         
               private serviLoad    : LoadingService,
               private router       : Router) {
 
@@ -90,7 +86,7 @@ export class TrabEtapasComponent implements OnInit {
   }
 
   public modelUp(content :any , etapasx: Etapas){
-    this.etapas.setIdEta(etapasx.idEta);
+    this.etapas.setetaId(etapasx.etaId);
     this.etapas.setEtaDes(etapasx.etaDes);
     this.etapas.setEtProd(etapasx.etaProd);
     this.modal.open(content);
@@ -107,37 +103,15 @@ export class TrabEtapasComponent implements OnInit {
     this.loading = true;
     this.serviLoad.sumar.emit(1);
      this.rest.post(url ,this.token, etapas).subscribe(resp => {
-         resp.forEach((elementx : any)  => {
-           if(elementx.error == '0'){
-            this.serviLoad.sumar.emit(1);
-             this.modal.dismissAll();
-             setTimeout(()=>{
-               this.servicioaler.setAlert('','');
-               this.tblEtapas = {};
-               this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
-                   this.tblEtapas = data;
-               });
-
-               this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-                 dtInstance.destroy().draw();
-               });
-               this.carga    = 'visible';
-               this.loading  = false;
-             },1500);
-
-           }else{
-             this.carga    = 'visible';
-             this.loading  = false;
-           }
-         });
+      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+      this.tblData();
      });
-     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      return false;
   }
 
   public actionEtapa(etapas : any , etaProd: any, tipo :string ){
     let url      = '';
-    let etapasx  = new Etapas(this.etapas.idEta , etapas , etaProd );
+    let etapasx  = new Etapas(this.etapas.etaId , etapas , etaProd );
     this.carga   = 'invisible';
     this.loading = true;
 
@@ -148,33 +122,15 @@ export class TrabEtapasComponent implements OnInit {
     }
     this.serviLoad.sumar.emit(2);
     this.rest.post(url, this.token, etapasx).subscribe((resp:any) => {
-      resp.forEach((elementx : any)  => {
-        if(elementx.error == '0'){
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblEtapas = {};
-            this.rest.get('trabEtapas' , this.token, this.parametros).subscribe(data => {
-                this.tblEtapas = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-            this.carga    = 'visible';
-            this.loading  = false;
-          },1500);
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-      }
-        });
+      this.modal.dismissAll(); 
+      this.loading = false;      
+      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+      this.tblData();
+    
     });
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+  
     return false;
   }
 
-  public desEtapa( etapasx : any) {
-    this.etapasser.setEtapa(etapasx);
-    this.router.navigate(['home/seguridad/etapas/etapas_des']);
-  }
 
 }

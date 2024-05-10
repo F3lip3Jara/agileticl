@@ -1,12 +1,12 @@
 export class Etapas {
 
-  public idEta: number;
+  public etaId: number;
   public etaDes: string;
   public etaProd: string;
 
  constructor(  id : number ,  etaDes : string , etaProd: string ){
 
-   this.idEta = id;
+   this.etaId = id;
    this.etaDes = etaDes;
    this.etaProd = etaProd;
 
@@ -28,11 +28,11 @@ getEtaProd():string{
     return this.etaProd;
 }
 
- getIdEta():number{
-  return this.idEta;
+ getetaId():number{
+  return this.etaId;
   }
 
-  setIdEta(idEta : number){
-   this.idEta = idEta;
+  setetaId(etaId : number){
+   this.etaId = etaId;
   }
 }

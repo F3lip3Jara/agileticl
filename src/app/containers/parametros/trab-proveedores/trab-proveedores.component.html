@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-outline card-primary">
   <div class="card-header">
     <h5 class="card-title">Proveedor / Cliente</h5>    
   </div>
@@ -42,11 +42,9 @@
           <th *ngIf="xproveedor.es_proveedor == 'S', else noactx">SI</th>
           <ng-template #noactx> <th >NO</th></ng-template>
           <th>
-            <a *ngIf="xproveedor.es_cliente =='S', else noena" (click) = "modalIns(modalPrvIns, xproveedor)" class="btn btn-warning btn-xs" ngbTooltip="Dirección">
-              <fa-icon [icon]="faTruck"></fa-icon></a>
-            <ng-template #noena><a *ngIf="xproveedor.es_cliente =='S'" (click) = "modalIns(modalPrvIns, xproveedor)" class="btn btn-warning btn-xs"  disabled>
-              <fa-icon [icon]="faTruck"></fa-icon></a>            
-            </ng-template>
+          <!--  <a (click)="modalIns(modalPrvIns, xproveedor)" class="btn btn-warning btn-xs" ngbTooltip="Dirección">
+              <fa-icon [icon]="faTruck"></fa-icon>
+            </a>  -->         
             <a (click)="modelUp(xproveedor)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
               <fa-icon [icon]="faPenToSquare"></fa-icon>
             </a>
@@ -68,158 +66,15 @@
 
 <ng-template #modalPrvIns let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">Modal ingreso dirección de despacho</h5>
+    <h5 class="modal-title">Modal ingreso direcciones de despacho</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "ins"
-         (ngSubmit)  = "insDir( idPrv.value,
-                                ins.controls['prvDir'].value,
-                                ins.controls['prvNum'].value,
-                                ins.controls['paiId'].value,
-                                ins.controls['regId'].value,
-                                ins.controls['comId'].value,
-                                ins.controls['ciuId'].value
-                         )">
-  <div class="modal-body">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="prvRut">Rut</label>
-              <div class="input-group input-group-sm">
-                <input type="text" class="form-control" name = "prvRut" id="prvRut" placeholder="" value="{{proveedor.prvRut}}" disabled >
-                <input type="hidden" class="form-control" name = "idPrv" id="idPrv" placeholder="" value="{{proveedor.idPrv}}" disabled  #idPrv>
-            </div>
-            </div>
-            <div class="form-group">
-              <label for="prvNom">Nombre</label>
-              <div class="input-group input-group-sm">
-                <input type="text" class="form-control" name = "prvNom" id="prvNom" placeholder="" value="{{proveedor.prvNom}}" disabled >
-            </div>
-            </div>
+  <div class="modal-body row">
+    <h3>Dirección principal</h3>
+    <div class="col-md-6"><input type="text" class="input-group-sm" disabled value="{{proveedor.direccion}}" ></div>
+    
 
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="prvDir">Dirección</label>
-              <div class="input-group input-group-sm">
-              <input type="text" class="form-control" id="prvDir" placeholder="Ingresar dirección..." formControlName = 'prvDir'  >
-            </div>
-
-            <div *ngIf = "ins.controls['prvDir'].hasError('required')">
-              <span class="text-danger">Campo obligatorio!</span>
-            </div>
-          </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="prvDir">Número</label>
-              <div class="input-group input-group-sm">
-              <input type="text" class="form-control" id="prvNum" placeholder="Ingresar número..." formControlName = 'prvNum'  >
-             </div>
-            </div>
-            <div *ngIf = "ins.controls['prvNum'].hasError('required')">
-              <span class="text-danger">Campo obligatorio!</span>
-            </div>
-          </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="nombre">País</label>
-        <div class=" input-group-sm" *ngIf="paises.length > 0">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'paiId'>
-            <option   value="">Seleccione</option>
-            <option  *ngFor = "let pais of paises"  value="{{pais.paiId}}">{{pais.paiDes}}</option>
-          </select>
-        </div>
-        <div *ngIf = "ins.controls['paiId'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="nombre">Región</label>
-        <div  *ngIf=" !regiones.length ">
-          <div class="spinner-border spinner-border-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-        <div class=" input-group-sm" *ngIf="regiones.length  > 0 && paises.length > 0 && ins.controls['paiId'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'regId'>
-            <option   value="">Seleccione</option>
-            <option  *ngFor = "let region of regiones"  value="{{region.regId}}">{{region.regDes}}</option>
-          </select>
-        </div>
-        <div *ngIf = "ins.controls['regId'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="nombre">Ciudad</label>
-        <div  *ngIf=" !ciudades.length">
-          <div class="spinner-border spinner-border-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-        <div class=" input-group-sm" *ngIf="regiones.length > 0 && ciudades.length > 0 && ins.controls['regId'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'ciuId'>
-            <option   value="">Seleccione</option>
-            <option  *ngFor = "let ciudad of ciudades"  value="{{ciudad.ciuId}}">{{ciudad.ciuDes}}</option>
-          </select>
-        </div>
-        <div *ngIf = "ins.controls['ciuId'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="form-group">
-        <label for="nombre">Comuna</label>
-        <div  *ngIf=" !comunas.length ">
-          <div class="spinner-border spinner-border-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-        </div>
-        <div class=" input-group-sm" *ngIf="ciudades.length > 0 && comunas.length > 0  && ins.controls['ciuId'].value != '' ">
-          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'comId'>
-            <option   value="">Seleccione</option>
-            <option  *ngFor = "let comuna of comunas"  value="{{comuna.comId}}">{{comuna.comDes}}</option>
-          </select>
-        </div>
-        <div *ngIf = "ins.controls['comId'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
-      </div>
-    </div>
   </div>
-      <!-- /.card-body -->
-      </div>
-  </div>
-  <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"   *ngIf ="ins.valid" [disabled]="val">
-      <div *ngIf= "val">
-        Guardando..
-        <span class="spinner-border spinner-border-sm mr-2"></span>
-      </div>
-      <div *ngIf= "!val">
-        Guardar
-      </div>
-
-    </button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
-  </div>
-</form>
 </ng-template>

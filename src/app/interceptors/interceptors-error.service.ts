@@ -19,12 +19,10 @@ export interface MensajesSystem{
 export class InterceptorsErrorService implements HttpInterceptor  {
 
 
-private servidor: string = 'https://app.back.agileti.cl/';
-//private servidor: string = 'http://127.0.0.1:8000/';
+//private servidor: string = 'https://app.back.agileti.cl/';
+private servidor: string = 'http://127.0.0.1:8000/';
 
-
-
-  constructor(private servicio : AlertasService , private serLoad : LoadingService ,    private router : Router) { }
+constructor(private servicio : AlertasService , private serLoad : LoadingService ,    private router : Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const cloneReq = req.clone({ url: this.servidor + req.url });  

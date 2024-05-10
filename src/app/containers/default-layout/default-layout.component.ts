@@ -55,7 +55,7 @@ export class DefaultLayoutComponent {
                   }
                
                   this.menu.forEach((element:any) => {
-                    let icono             ={};
+                    let icono             = {};
                     let module : INavData = 
                     {
                       title: true,
@@ -69,8 +69,8 @@ export class DefaultLayoutComponent {
                     let opciones  = element.opciones;
               
                     opciones.forEach((opt : any) => {
-                     if(opt.optSub === 'S'){
-                      
+
+                     if(opt.optSub === 'S'){                      
                       let opcion : INavData = 
                       {
                         name: opt.optDes,

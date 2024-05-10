@@ -19,6 +19,7 @@ import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.com
 import { AvatarModule } from '@coreui/angular';
 
 
+
 @NgModule({
   declarations: [
     TrabEmpresaComponent,
@@ -41,7 +42,7 @@ import { AvatarModule } from '@coreui/angular';
     NgbModule,
     NgSelectModule,
     ImageCropperModule,
-    AvatarModule
+    AvatarModule,
     
   ],
 })

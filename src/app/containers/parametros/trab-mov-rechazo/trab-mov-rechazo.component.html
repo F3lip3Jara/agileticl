@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Motivo de Rechazo</h5>
   </div>
@@ -27,7 +27,7 @@
       </thead>
       <tbody>
         <tr *ngFor = "let motivo of tblMotivo">
-          <th>{{motivo.idMot}}</th>
+          <th>{{motivo.motId}}</th>
           <th>{{motivo.etaDes}}</th>
           <th>{{motivo.motDes}}</th>        
           <th>
@@ -57,14 +57,14 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
-  <form  [formGroup] = "upMot"
-  (ngSubmit)  = "action( upMot.controls['motDes'].value ,0,
+  <form  [formGroup] = "up"
+  (ngSubmit)  = "action( up.controls['motDes'].value ,0,
                          'up' )">
   <div class="modal-body">
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{motivo.idMot}}" disabled>
+          <input type="text" class="form-control" id="" placeholder="" value="{{motivo.motId}}" disabled>
         </div>
         <div class="form-group">
           <label for="">Etapa</label>
@@ -73,9 +73,10 @@
 
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "monDes" id="motDes" placeholder="" value="{{ motivo.motDes}}" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "monDes" id="motDes" placeholder="" value="{{ motivo.motDes}}" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(up.controls['motDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
         </div>
-        <div *ngIf = "upMot.controls['motDes'].hasError('required')">
+        <div *ngIf = "up.controls['motDes'].hasError('required')">
          <span class="text-danger">Campo obligatorio!</span>
        </div>
       </div>
@@ -83,7 +84,7 @@
     <!-- form start -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upMot.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -106,9 +107,9 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "insMot"
-  (ngSubmit)  = "action( insMot.controls['motDes'].value,
-                        insMot.controls['idEta'].value ,                        
+  <form  [formGroup] = "ins"
+  (ngSubmit)  = "action( ins.controls['motDes'].value,
+                         ins.controls['etaId'].value ,                        
                         'ins' )">
   <div class="modal-body">
       <div class="card-body">
@@ -121,26 +122,28 @@
             <div class="spinner-grow spinner-grow-sm" role="status">
               <span class="sr-only">Loading...</span>
             </div>
-          </div>          
-             <select class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  [ngClass]="etapas.length > 0 ? 'd-block' :'d-none'"  formControlName= "idEta">
-              <option  value="">Seleccione</option>             
-                <option   *ngFor = "let etapa of etapas"  value="{{etapa.idEta}}">{{etapa.etaDes}}</option>                        
-            </select>
-          </div>
-
-
+          </div>  
+          <div *ngIf="etapas.length > 0">
+            <select class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  [ngClass]="etapas.length > 0 ? 'd-block' :'d-none'"  formControlName= "etaId"
+              [ngClass]="(ins.controls['etaId'].value == '')? 'was-validated' : 'is-valid'" >
+                <option  value="">Seleccione</option>             
+                <option   *ngFor = "let etapa of etapas"  value="{{etapa.etaId}}">{{etapa.etaDes}}</option>                        
+             </select>
+          </div>  
+        </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "motDes" id="motDes" placeholder="" value="" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "motDes" id="motDes" placeholder="" value="" formControlName = 'motDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['motDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
         </div>
-        <div *ngIf = "insMot.controls['motDes'].hasError('required')">
+        <div *ngIf = "ins.controls['motDes'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
       <!-- /.card-body -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insMot.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

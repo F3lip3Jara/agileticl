@@ -2,15 +2,15 @@ import { Etapas } from 'src/app/model/etapas.model';
 
 export class Maquinas extends Etapas {
 
-  public idMaq: number;
+  public maqId: number;
   public maqDes: string;
   public maqCod: string;
   public maqTip: string;
 
 
- constructor( id :number , etaDes : string , etaProd : string , idMaq: number , maqDes:string , maqCod : string, maqTip : string ){
+ constructor( id :number , etaDes : string , etaProd : string , maqId: number , maqDes:string , maqCod : string, maqTip : string ){
     super(id, etaDes , etaProd);
-    this.idMaq = idMaq;
+    this.maqId = maqId;
     this.maqDes = maqDes;
     this.maqCod = maqCod;
     this.maqTip = maqTip;
@@ -24,12 +24,12 @@ export class Maquinas extends Etapas {
       return this.maqDes;
  }
 
- getIdMaq():number{
-  return this.idMaq;
+ getmaqId():number{
+  return this.maqId;
   }
 
-  setidMaq(idMaq : number){
-   this.idMaq = idMaq;
+  setmaqId(maqId : number){
+   this.maqId = maqId;
   }
 
 

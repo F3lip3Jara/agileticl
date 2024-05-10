@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Sub Grupo</h5>
   </div>
@@ -29,7 +29,7 @@
       </thead>
       <tbody>
         <tr *ngFor = "let sgrupo of tblSubGrupo">
-          <th>{{sgrupo.idGrp}}</th>
+          <th>{{sgrupo.grpId}}</th>
           <th>{{sgrupo.grpCod}}</th>
           <th>{{sgrupo.grpDes}}</th>
           <th>{{sgrupo.grpsCod}}</th>
@@ -50,7 +50,7 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
+   
   </div>
   <!-- /.card-footer-->
 </div>
@@ -61,9 +61,9 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
-  <form [formGroup] = "upSubGrupo"
-  (ngSubmit)  = "action( upidGrp.value ,
-                        upSubGrupo.controls['upgrpsDes'].value ,
+  <form [formGroup] = "up"
+  (ngSubmit)  = "action( upgrpId.value ,
+                        up.controls['upgrpsDes'].value ,
                         upgrpsCod.value,
                          'up' )" >
   <div class="modal-body">
@@ -71,12 +71,12 @@
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{subGrupo.idSubGrp}}"   disabled  #upidSubGrp>
+          <input type="text" class="form-control" id="" placeholder="" value="{{subGrupo.grpsId}}"   disabled  #upgrpsId>
         </div>
         <div class="form-group">
           <label for="">Cód. Grupo</label>
           <input type="text" class="form-control" name = "grpCod" id="grpCod" placeholder="" value="{{subGrupo.grpCod}}" disabled >
-          <input type="hidden" class="form-control" name = "idGrp" id="idGrp" placeholder="" value="{{subGrupo.idGrp}}" disabled  #upidGrp>
+          <input type="hidden" class="form-control" name = "grpId" id="grpId" placeholder="" value="{{subGrupo.grpId}}" disabled  #upgrpId>
         </div>
         <div class="form-group">
           <label for="">Grupo</label>
@@ -89,16 +89,15 @@
 
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{subGrupo.grpsDes}}" formControlName = 'upgrpsDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "regDes" id="paiDes" placeholder="" value="{{subGrupo.grpsDes}}" formControlName = 'upgrpsDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(up.controls['upgrpsDes'].hasError('required')) ? 'was-validated' : 'is-valid'"> 
         </div>
       </div>
       <!-- /.card-body -->
-
-
     <!-- form start -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upSubGrupo.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -115,55 +114,66 @@
 
 <ng-template #modalPaisIns let-modal>
   <div class="modal-header">
-    <h5 class="modal-title">Modal Sub Grupo</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
-      <span aria-hidden="true">&times;</span>
-    </button>
+    <h5 class="modal-title">Modal Sub Grupo</h5>   
   </div>
-  <form  [formGroup] = "insSubGrupo"
-         (ngSubmit)  = "action(insSubGrupo.controls['idGrp'].value ,
-                               insSubGrupo.controls['grpsDes'].value ,
-                               insSubGrupo.controls['grpsCod'].value ,
+  <form  [formGroup] = "ins"
+         (ngSubmit)  = "action(ins.controls['grpId'].value ,
+                               ins.controls['grpsDes'].value ,
+                               ins.controls['grpsCod'].value ,
                                'ins' )"
                          >
   <div class="modal-body">
       <div class="card-body">
-        <div class="form-group">
-          <label for="nombre">Grupo</label>
-          <div class=" input-group-sm">
-            <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idGrp'>
-              <option  *ngFor = "let grupo of grupos"  value="{{grupo.idGrp}}">{{grupo.grpDes}}</option>
-            </select>
+          <div class="col-md-6 form-group">
+            <label for="nombre">Grupo</label>
+            <div  *ngIf=" !grupos.length ">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div class=" input-group-sm" *ngIf="grupos.length  > 0">
+              <ng-select  [items]="grupos"
+                bindLabel="grpDes"
+                bindValue="grpId"
+                formControlName="grpId"
+                [ngClass]="(ins.controls['grpId'].hasError('required'))
+                ? 'was-validated' : 'is-valid'" >
+                </ng-select >
+            </div>
+            <div *ngIf = "ins.controls['grpId'].hasError('required')">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
           </div>
-          <div *ngIf = "insSubGrupo.controls['idGrp'].hasError('required')">
-            <span class="text-danger">Campo obligatorio!</span>
-          </div>
-        </div>
         <div class="form-group">
           <label for="regCod">Cód. Sub Grupo</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="grpsCod" placeholder="" formControlName = 'grpsCod'  oninput="this.value = this.value.toUpperCase()"  >
-        </div>
-      </div>
-      <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
-
-        <div *ngIf = "insSubGrupo.controls['grpsCod'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
+           <input type="text" class="form-control" id="grpsCod" placeholder="" formControlName = 'grpsCod'  oninput="this.value = this.value.toUpperCase()"
+           [ngClass]="(ins.controls['grpsCod'].hasError('required') ||  validCod  ) ? 'was-validated' : 'is-valid'">                      
+          </div>
+          <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
+          <div *ngIf = "ins.controls['grpsCod'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
+        </div>       
         <div class="form-group">
           <label for="regDes">Descripción</label>
           <div class="input-group input-group-sm">
-          <input type="text" class="form-control" id="grpsDes" placeholder="Ingresar descripción..." formControlName = 'grpsDes'  oninput="this.value = this.value.toUpperCase()" >
-        </div>
+            <input type="text" class="form-control" id="grpsDes" placeholder="Ingresar descripción..." formControlName = 'grpsDes'  oninput="this.value = this.value.toUpperCase()" 
+            [ngClass]="(ins.controls['grpsDes'].hasError('required')) ? 'was-validated' : 'is-valid'"> 
+          </div>
+          <div *ngIf = "ins.controls['grpsDes'].hasError('required')">
+            <span class="text-danger">Campo obligatorio!</span>
+          </div>
       </div>
-        <div *ngIf = "insSubGrupo.controls['grpsDes'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
+       
       <!-- /.card-body -->
       </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insSubGrupo.valid && validCod == false" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid && validCod == false" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

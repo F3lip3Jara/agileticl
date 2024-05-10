@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";;
 import {TrabUserComponent} from './trab-user/trab-user.component'
-import {TrabEtapasComponent} from './trab-etapas/trab-etapas.component'
+import {TrabEtapasComponent} from '../parametros/trab-etapas/trab-etapas.component'
 import { TrabLogComponent } from "./trab-log/trab-log.component";
 import { TrabModulosComponent } from "./trab-modulos/trab-modulos.component";
 import { TrabNotificacionesComponent } from "./trab-notificaciones/trab-notificaciones.component";

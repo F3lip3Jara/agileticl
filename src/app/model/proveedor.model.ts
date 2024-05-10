@@ -1,6 +1,6 @@
 export class Proveedor {
 
-  public idPrv    : number;
+  public prvId    : number;
   public prvRut   : string;
   public prvNom   : string;
   public prvNom2  : string;
@@ -18,7 +18,7 @@ export class Proveedor {
   public prvAct   : any;
 
   constructor(
-     idPrv     : number,
+     prvId     : number,
      prvRut   : string,
      prvNom   : string,
      prvNom2  : string,
@@ -51,16 +51,16 @@ export class Proveedor {
     this.prvTel  = prvTel;
     this.prvCli  = prvCli;
     this.prvPrv  = prvPrv;
-    this.idPrv   = idPrv;
+    this.prvId   = prvId;
     this.prvAct  = prvAct;
   }
 
-  public getidPrv() {
-    return this.idPrv;
+  public getprvId() {
+    return this.prvId;
   }
 
-  public  setidPrv(idPrv : number) {
-    this.idPrv = idPrv;
+  public  setprvId(prvId : number) {
+    this.prvId = prvId;
   }
 
 

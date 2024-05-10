@@ -21,6 +21,7 @@ import { TrabMovRechazoComponent } from "./trab-mov-rechazo/trab-mov-rechazo.com
 import { TrabProveedoresComponent } from "./trab-proveedores/trab-proveedores.component";
 import {InsProveedoresComponent} from './trab-proveedores/ins-proveedores/ins-proveedores.component';
 import {UpProveedorComponent} from './trab-proveedores/up-proveedor/up-proveedor.component'
+import { TrabEtapasComponent } from "./trab-etapas/trab-etapas.component";
 
 const routes: Routes = [
   {
@@ -171,12 +172,20 @@ const routes: Routes = [
         }
       },
       {
-        path: 'proveedor/actualizar',
+        path: 'proveedor/actualizar/:proveedor',
         component: UpProveedorComponent,
         data: {
           title: 'Proveedores / Actualizar',
         }
-      }
+      },
+      {
+        path: 'etapas',
+        component: TrabEtapasComponent,
+        data: {
+          title: 'Etapas',
+        }
+      },
+    
       
     ],
   },

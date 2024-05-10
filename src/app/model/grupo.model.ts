@@ -1,12 +1,12 @@
 export class Grupo {
 
-  public  idGrp     :number;
+  public  grpId     :number;
   public  grpDes    :string;
   public  grpCod    :string;
 
 
   constructor(xid :number , xgrpDes: string , xgrpCod : string  ) {
-     this.idGrp       = xid;
+     this.grpId       = xid;
      this.grpDes      = xgrpDes;
      this.grpCod      = xgrpCod;
 
@@ -14,12 +14,12 @@ export class Grupo {
 
 
   getId () {
-      return this.idGrp;
+      return this.grpId;
   }
 
   setId (xid:number) : number {
-      this.idGrp = xid;
-      return this.idGrp;
+      this.grpId = xid;
+      return this.grpId;
   }
 
   getgrpDes () {

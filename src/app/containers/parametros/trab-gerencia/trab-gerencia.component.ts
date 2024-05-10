@@ -114,11 +114,11 @@ public action(gerDesx : any , tipo :string ) : boolean{
     url      = 'insGerencia';
    }
 
- this.serviLoad.sumar.emit(2);
- this.rest.post(url, this.token, gerenciax).subscribe(resp => {
-     this.tblData();
+ this.serviLoad.sumar.emit(1);
+ this.rest.post(url, this.token, gerenciax).subscribe(resp => {    
      this.servicioaler.disparador.emit();
      this.modal.dismissAll();
+     this.tblData();
   });
   return false;
 }

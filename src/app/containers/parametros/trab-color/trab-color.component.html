@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Color</h5>    
   </div>
@@ -30,11 +30,11 @@
       </thead>
       <tbody>
         <tr *ngFor = "let color of tblColor">
-          <th>{{color.idCol}}</th>
+          <th>{{color.colId}}</th>
           <th>{{color.colCod}}</th>
           <th>{{color.colDes}}</th>
           <th>
-            <a style= "margin : 1px ;" (click) = "modelUp(modalUpCol , color)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
+            <a style= "margin : 1px ;" (click) = "modelUp(modalup , color)" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
               <fa-icon [icon]="faPenToSquare"></fa-icon>
                 </a>
             <a style= "margin : 1px ;" (click) = "del(color)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
@@ -50,36 +50,37 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
+    
   </div>
   <!-- /.card-footer-->
 </div>
-<ng-template #modalUpCol let-modal>
+<ng-template #modalup let-modal>
   <div class="modal-header">
     <h5 class="modal-title">Modal actualiza Color</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>  <!-- /.card-header -->
-  <form  [formGroup] = "upCol"
-  (ngSubmit)  = "action( upCol.controls['colDes'].value ,
-                         upColCod.value ,
+  <form  [formGroup] = "up"
+  (ngSubmit)  = "action( up.controls['colDes'].value ,
+                         upCod.value ,
                          'up' )">
   <div class="modal-body">
       <div class="card-body">
         <div class="form-group">
           <label for="">Código</label>
-          <input type="text" class="form-control" id="" placeholder="" value="{{color.idCol}}" disabled>
+          <input type="text" class="form-control" id="" placeholder="" value="{{color.colId}}" disabled>
         </div>
         <div class="form-group">
           <label for="">Cód. Color</label>
-          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="{{color.colCod}}"  #upColCod disabled>
+          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="{{color.colCod}}"  #upCod disabled>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="{{ color.colDes}}" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="{{ color.colDes}}" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(up.controls['colDes'].hasError('required')  ) ? 'was-validated' : 'is-valid'">      
         </div>
-        <div *ngIf = "upCol.controls['colDes'].hasError('required')">
+        <div *ngIf = "up.controls['colDes'].hasError('required')">
          <span class="text-danger">Campo obligatorio!</span>
        </div>
       </div>
@@ -87,7 +88,7 @@
     <!-- form start -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="upCol.valid" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="up.valid" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -110,33 +111,35 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form  [formGroup] = "insCol"
-         (ngSubmit)  = "action( insCol.controls['colDes'].value ,
-                         insCol.controls['colCod'].value ,
+  <form  [formGroup] = "ins"
+         (ngSubmit)  = "action( ins.controls['colDes'].value ,
+                         ins.controls['colCod'].value ,
                         'ins' )">
   <div class="modal-body">
 
       <div class="card-body">
         <div class="form-group">
           <label for="">Cód. Color</label>
-          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="" formControlName = 'colCod' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "colCod" id="colCod" placeholder="" value="" formControlName = 'colCod' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['colCod'].hasError('required') ||  validCod  ) ? 'was-validated' : 'is-valid'">                      
         </div>
          <div *ngIf = "validCod">  <span class="text-danger">Código invalido!</span></div>
-         <div *ngIf = "insCol.controls['colCod'].hasError('required')">
+         <div *ngIf = "ins.controls['colCod'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
         <div class="form-group">
           <label for="">Descripción</label>
-          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()">
+          <input type="text" class="form-control" name = "colDes" id="colDes" placeholder="" value="" formControlName = 'colDes' oninput="this.value = this.value.toUpperCase()"
+          [ngClass]="(ins.controls['colDes'].hasError('required')  ) ? 'was-validated' : 'is-valid'">      
         </div>
-        <div *ngIf = "insCol.controls['colDes'].hasError('required')">
+        <div *ngIf = "ins.controls['colDes'].hasError('required')">
           <span class="text-danger">Campo obligatorio!</span>
         </div>
       </div>
       <!-- /.card-body -->
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="insCol.valid && validCod == false" [disabled]="val">
+    <button type="submit" class="btn btn-primary btn-block"  *ngIf ="ins.valid && validCod == false" [disabled]="val">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

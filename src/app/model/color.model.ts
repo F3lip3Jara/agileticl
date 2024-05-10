@@ -1,12 +1,12 @@
 export class Color {
 
-  public  idCol     :number;
+  public  colId     :number;
   public  colDes    :string;
   public  colCod    :string;
 
 
   constructor(xid :number , xcolDes: string , xcolCod : string  ) {
-     this.idCol       = xid;
+     this.colId       = xid;
      this.colDes      = xcolDes;
      this.colCod      = xcolCod;
 
@@ -14,12 +14,12 @@ export class Color {
 
 
   getId () {
-      return this.idCol;
+      return this.colId;
   }
 
   setId (xid:number) : number {
-      this.idCol = xid;
-      return this.idCol;
+      this.colId = xid;
+      return this.colId;
   }
 
   getcolDes () {

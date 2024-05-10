@@ -49,7 +49,8 @@ import {
   TabsModule,
   ToastModule,
   UtilitiesModule,
-  InputGroupComponent
+  InputGroupComponent,
+  FormCheckComponent
 
   
 } from '@coreui/angular';
@@ -115,7 +116,9 @@ const APP_CONTAINERS = [
     NgbTypeaheadModule,
     NgSelectModule,
     ImageCropperModule,
-    InputGroupComponent
+    InputGroupComponent,
+    FormCheckComponent
+  
     
   ],
   providers: [

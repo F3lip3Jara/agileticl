@@ -1,5 +1,5 @@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SubGrupo } from './../../../model/subGrupo.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
@@ -7,11 +7,9 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -32,9 +30,9 @@ export class TrabSubGrupoComponent implements OnInit {
   parametros   : any []               = [];
   carga        : string               = "invisible";
   subGrupo     : SubGrupo;
-  grupos        : any;
-  insSubGrupo  : UntypedFormGroup;
-  upSubGrupo   : UntypedFormGroup;
+  grupos       : any                  = {};
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   dato         : number               = 0;
   validCod     : boolean              = false;
@@ -44,7 +42,7 @@ export class TrabSubGrupoComponent implements OnInit {
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
 
-  constructor(private fb          : UntypedFormBuilder,
+  constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
@@ -56,8 +54,8 @@ export class TrabSubGrupoComponent implements OnInit {
       this.token    = this.servicio.getToken();
       this.subGrupo   = new SubGrupo(0,'','', 0, '', '');
 
-      this.insSubGrupo = fb.group({
-        idGrp : ['' , Validators.compose([
+      this.ins = fb.group({
+        grpId : ['' , Validators.compose([
           Validators.required,
          ])],
          grpsCod : ['' , Validators.compose([
@@ -68,7 +66,7 @@ export class TrabSubGrupoComponent implements OnInit {
          ])],
       });
 
-      this.upSubGrupo = fb.group({
+      this.up = fb.group({
         upgrpsDes : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -103,8 +101,8 @@ export class TrabSubGrupoComponent implements OnInit {
         this.grupos = data;
         });
 
-      this.insSubGrupo.controls['grpsCod'].valueChanges.pipe(
-        filter(text => text.length > 1),
+      this.ins.controls['grpsCod'].valueChanges.pipe(
+        filter(text => text.length >= 1),
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
           this.validaSubGrupo(field);
@@ -115,6 +113,7 @@ export class TrabSubGrupoComponent implements OnInit {
 
   public tblData(){
     this.tblSubGrupo = {};
+    this.serviLoad.sumar.emit(1);
     this.rest.get('trabSubGrupo' , this.token, this.parametros).subscribe(data => {
         this.tblSubGrupo = data;
     });
@@ -129,13 +128,13 @@ export class TrabSubGrupoComponent implements OnInit {
  }
 
  public modelUp(content :any , xsubGrupo : SubGrupo ){
-  this.subGrupo.setId(xsubGrupo.idGrp);
+  this.subGrupo.setId(xsubGrupo.grpId);
   this.subGrupo.setgrpDes(xsubGrupo.grpDes);
   this.subGrupo.setgrpCod(xsubGrupo.grpCod);
   this.subGrupo.setgrpsDes(xsubGrupo.grpsDes);
   this.subGrupo.setgrpsCod(xsubGrupo.grpsCod);
-  this.subGrupo.setidSubGrp(xsubGrupo.idSubGrp);
-  this.upSubGrupo.controls['upgrpsDes'].setValue(xsubGrupo.grpsDes);
+  this.subGrupo.setgrpsId(xsubGrupo.grpsId);
+  this.up.controls['upgrpsDes'].setValue(xsubGrupo.grpsDes);
   this.modal.open(content);
 }
 
@@ -144,110 +143,43 @@ public del (subGrupo : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-
    this.rest.post(url ,this.token, subGrupo ).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-           this.modal.dismissAll();
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-           let des        = 'Sub Grupo eliminado ' + subGrupo.grpsCod ;
-           let log        = new LogSys(2, '' , 33 , 'ELIMINAR SUB-GRUPO' , des);
-           this.serLog.insLog(log);
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-             this.tblSubGrupo = {};
-             this.rest.get('trabSubGrupo' , this.token, this.parametros).subscribe(data => {
-                 this.tblSubGrupo = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-           },1500);
-         }
-       });
+    this.servicioaler.disparador.emit();
+    this.tblData();
+    this.loading = false;
    });
    return false;
 }
 
-public action(xidGrp : any , xgrpsDes: any , xgrpsCod : any ,  tipo :string ) : boolean{
+public action(xgrpId : any , xgrpsDes: any , xgrpsCod : any ,  tipo :string ) : boolean{
   let url      = '';
   this.carga   = 'invisible';
   this.loading = true;
-  let paisx    = new SubGrupo(this.subGrupo.idSubGrp , xgrpsDes , xgrpsCod , xidGrp , this.subGrupo.grpDes, this.subGrupo.grpCod);
+  let paisx    = new SubGrupo(this.subGrupo.grpsId , xgrpsDes , xgrpsCod , xgrpId , this.subGrupo.grpDes, this.subGrupo.grpCod);
   this.val     = true;
-  let des      = '';
-  let lgName   = '';
-  let idEtaDes = 0;
-
 
   if(tipo =='up'){
-     url      = 'updSubGrupo';
-     des      = 'Actualizar Sub grupo ' + xgrpsCod;
-     lgName   = 'ACTUALIZAR SUB-GRUPO';
-     idEtaDes = 32;
+     url      = 'updSubGrupo';  
   }else{
     url       = 'insSubGrupo';
-    des       = 'Ingreso de Sub grupo ' + xgrpsCod;
-    lgName    = 'INGRESO SUB-GRUPO';
-    idEtaDes  = 31;
   }
 
  this.rest.post(url, this.token, paisx).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-          this.modal.dismissAll();
-          this.serviLoad.sumar.emit(1);
-          let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-          this.serLog.insLog(log);       
-
-          setTimeout(()=>{
-            this.servicioaler.setAlert('','');
-            this.tblSubGrupo = {};
-
-            this.rest.get('trabSubGrupo' , this.token, this.parametros).subscribe(data => {
-                this.tblSubGrupo = data;
-            });
-
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-
-            this.insSubGrupo.controls['grpsCod'].setValue('');
-            this.insSubGrupo.controls['grpsDes'].setValue('');
-
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-          },1500);
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
+  this.servicioaler.disparador.emit();
+  this.up.reset();
+  this.ins.reset();
+  this.modal.dismissAll();      
+  this.val      = false;
+  this.tblData();
   });
 
-  let alerta : Alert = this.servicioaler.getAlert();
-  this.servicioaler.disparador.emit(alerta);
+ 
   return false;
 }
 
 
 public Excel(){
-  this.excel.exportAsExcelFile(this.tblSubGrupo, 'region');
+  this.excel.exportAsExcelFile(this.tblSubGrupo, 'sub-grupo');
    return false;
 }
 

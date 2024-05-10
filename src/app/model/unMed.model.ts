@@ -1,12 +1,12 @@
 export class unMed {
 
-  public  idUn     :number;
+  public  unId     :number;
   public  unDes    :string;
   public  unCod    :string;
 
 
   constructor(xid :number , xunDes: string , xunCod : string  ) {
-     this.idUn       = xid;
+     this.unId       = xid;
      this.unDes      = xunDes;
      this.unCod      = xunCod;
 
@@ -14,12 +14,12 @@ export class unMed {
 
 
   getId () {
-      return this.idUn;
+      return this.unId;
   }
 
   setId (xid:number) : number {
-      this.idUn = xid;
-      return this.idUn;
+      this.unId = xid;
+      return this.unId;
   }
 
   getunDes () {

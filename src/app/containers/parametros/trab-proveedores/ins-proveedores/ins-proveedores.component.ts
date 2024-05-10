@@ -167,7 +167,7 @@ export class InsProveedoresComponent implements OnInit {
       });
   }
 
- public guarPrv(prvRut    : string ,
+ public guardar(prvRut    : string ,
                 prvNom    : string ,
                 prvNom2   : string ,
                 prvGiro   : string ,
@@ -198,19 +198,12 @@ export class InsProveedoresComponent implements OnInit {
     this.val                   = true;
     this.serviLoad.sumar.emit(1);
 
-    this.rest.post('inseedor', this.token, proveedor).subscribe(resp => {
-     resp.forEach((elementx : any)  => {
-          if(elementx.error == '0' ){           
-            let   des              = 'Proveedor ingresado '+ prvRut;
-            let   log  : LogSys    = new LogSys(2, '' , 20, 'INGRESO PROVEEDOR/CLIENTE'  , des);
-            this.serLog.insLog(log);
-            this.router.navigate(['home/parametros/proveedor']);         
-          }else{           
-            this.val=false;
-          }
-      });
+    this.rest.post('insProveedor', this.token, proveedor).subscribe(resp => {
+      this.val                   = false;
+      this.ins.reset();
+      this.servicioaler.disparador.emit();   
+      this.router.navigate(['home/parametros/proveedor']);
     });
-    this.servicioaler.disparador.emit();
   }
 
 }

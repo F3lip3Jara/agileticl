@@ -8,10 +8,8 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { faFileExcel , faAddressCard, faPenToSquare, faTrash , faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -34,8 +32,8 @@ export class TrabMonedasComponent implements OnInit {
   moneda       : Moneda;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insMon       : FormGroup;
-  upMon        : FormGroup;
+  ins       : FormGroup;
+  up        : FormGroup;
   val          : boolean              = false;
   faPenToSquare                       = faPenToSquare;  
   faTrash                             = faTrash;
@@ -56,7 +54,7 @@ export class TrabMonedasComponent implements OnInit {
       this.moneda = new Moneda(0, '' , '');
 
 
-      this.insMon = fb.group({
+      this.ins = fb.group({
         monCod : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -66,7 +64,7 @@ export class TrabMonedasComponent implements OnInit {
 
       });
 
-      this.upMon = fb.group({
+      this.up = fb.group({
 
          monDes : ['' , Validators.compose([
           Validators.required,
@@ -99,7 +97,7 @@ export class TrabMonedasComponent implements OnInit {
       }}
 
     this.tblData();
-    this.insMon.controls['monCod'].valueChanges.pipe(
+    this.ins.controls['monCod'].valueChanges.pipe(
       filter(text => text.length > 1),
       debounceTime(200),
       distinctUntilChanged()).subscribe(field => {
@@ -128,7 +126,7 @@ export class TrabMonedasComponent implements OnInit {
   this.moneda.setId(xmoneda.monId);
   this.moneda.setmonDes(xmoneda.monDes);
   this.moneda.setmonCod(xmoneda.monCod);
-  this.upMon.controls['monDes'].setValue(xmoneda.monDes);
+  this.up.controls['monDes'].setValue(xmoneda.monDes);
   this.modal.open(content);
 }
 
@@ -165,11 +163,10 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
  this.rest.post(url, this.token, monedax).subscribe(resp => {
     this.servicioaler.disparador.emit();     
     this.modal.dismissAll();
-    this.carga    = 'visible';
-    this.loading  = false;
     this.val      = false;
     this.tblData();    
-    this.limpiar();
+    this.up.reset();
+    this.ins.reset();
   });
  
   return false;
@@ -194,8 +191,5 @@ public validaMon(monCod : string){
  }
 
 
- public limpiar(){
-  this.insMon.controls['monDes'].setValue('');
-  this.insMon.controls['monCod'].setValue('');
- }
+
 }

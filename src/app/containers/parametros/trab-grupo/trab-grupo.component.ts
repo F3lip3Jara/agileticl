@@ -9,8 +9,6 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -34,8 +32,8 @@ export class TrabGrupoComponent implements OnInit {
   grupo        : Grupo;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insGrp       : FormGroup;
-  upGrp        : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   faPenToSquare                       = faPenToSquare;  
   faTrash                             = faTrash;
@@ -50,13 +48,13 @@ export class TrabGrupoComponent implements OnInit {
               private servicioaler: AlertasService,
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
-              private serLog      : LogSysService) {
+             ) {
 
       this.token    = this.servicio.getToken();
       this.grupo    = new Grupo(0, '' , '');
 
 
-      this.insGrp = fb.group({
+      this.ins = fb.group({
         grpCod : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -66,7 +64,7 @@ export class TrabGrupoComponent implements OnInit {
 
       });
 
-      this.upGrp = fb.group({
+      this.up = fb.group({
 
          grpDes : ['' , Validators.compose([
           Validators.required,
@@ -101,7 +99,7 @@ export class TrabGrupoComponent implements OnInit {
       this.tblData();
 
 
-    this.insGrp.controls['grpCod'].valueChanges.pipe(
+    this.ins.controls['grpCod'].valueChanges.pipe(
       filter(text => text.length > 1),
       debounceTime(200),
       distinctUntilChanged()).subscribe(field => {
@@ -129,10 +127,10 @@ export class TrabGrupoComponent implements OnInit {
  }
 
  public modelUp(content :any , xgrupo: Grupo ){
-  this.grupo.setId(xgrupo.idGrp);
+  this.grupo.setId(xgrupo.grpId);
   this.grupo.setgrpDes(xgrupo.grpDes);
   this.grupo.setgrpCod(xgrupo.grpCod);
-  this.upGrp.controls['grpDes'].setValue(xgrupo.grpDes);
+  this.up.controls['grpDes'].setValue(xgrupo.grpDes);
   this.modal.open(content);
 }
 
@@ -142,37 +140,11 @@ public del( grupo : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, grupo).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-          let des        = 'Grupo eliminado ' + grupo.grpCod ;
-          let log        = new LogSys(2, '' , 30 , 'ELIMINAR GRUPO' , des);
-          this.serLog.insLog(log);
-          this.serviLoad.sumar.emit(1);
-           this.modal.dismissAll();
-           this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-           setTimeout(()=>{
-             this.servicioaler.setAlert('','');
-             this.tblGrupo = {};
-             this.rest.get('trabGrupo' , this.token, this.parametros).subscribe(data => {
-                 this.tblGrupo = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;
-         }
-       });
+    this.servicioaler.disparador.emit();
+    this.tblData();
+    this.loading = false;
    });
-   this.servicioaler.disparador.emit();
+   
    return false;
 }
 
@@ -181,56 +153,24 @@ public action(xgrpDes : any , xgrpCod : any , tipo :string ) : boolean{
   this.carga    = 'invisible';
   this.loading  = true;
   this.val      = true;
-  let grupox    = new Grupo(this.grupo.idGrp , xgrpDes , xgrpCod);
-  let des       = '';
-  let lgName    = '';
-  let idEtaDes  = 0;
-
-
+  let grupox    = new Grupo(this.grupo.grpId , xgrpDes , xgrpCod);
+  
   if(tipo =='up'){
      url      = 'updGrupo';
-     des      = 'Actualiza grupo ' + xgrpCod;
-     lgName   = 'ACTUALIZAR GRUPO';
-     idEtaDes = 29;
   }else{
     url       = 'insGrupo';
-    des       = 'Ingresa grupo ' + xgrpCod;
-    lgName    = 'INGRESO GRUPO';
-    idEtaDes  = 28;
   }
   this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, grupox).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-        this.serLog.insLog(log);
 
-        this.serviLoad.sumar.emit(1);
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblGrupo = {};
-            this.rest.get('trabGrupo' , this.token, this.parametros).subscribe(data => {
-                this.tblGrupo = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-            this.limpiar();
-          },1500);
-
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
+  this.rest.post(url, this.token, grupox).subscribe(resp => {
+      this.servicioaler.disparador.emit();
+      this.up.reset();
+      this.ins.reset();
+      this.modal.dismissAll();      
+      this.val      = false;
+      this.tblData();
   });
 
-  this.servicioaler.disparador.emit();
   return false;
 }
 
@@ -252,12 +192,4 @@ public valGrpCod(grpCod : string){
   });
  }
 
-
- public limpiar(){
-
-  this.insGrp.controls['grpDes'].setValue('');
-  this.insGrp.controls['grpCod'].setValue('');
-
-
- }
 }

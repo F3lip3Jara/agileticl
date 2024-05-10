@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AlertasService } from 'src/app/servicios/alertas.service';
@@ -18,7 +19,6 @@ import { UsersService } from 'src/app/servicios/users.service';
   styleUrls: ['./up-usuarios.component.scss']
 })
 export class UpUsuariosComponent {
-
   usuario :any               = {};
   up              : FormGroup;
   token            : string  = '';
@@ -118,11 +118,15 @@ export class UpUsuariosComponent {
  this.mes        = this.fecha.getUTCMonth()+1;
  this.ano        = this.fecha.getUTCFullYear();
  this.dateModel = new NgbDate( this.ano, this.mes, this.dia)
-
   
-
+  
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
+  this.up.controls['empFecNac'].setValue(this.dateModel);
+ 
+
+  const inputElement = document.getElementById('empFecNac') as HTMLInputElement;
+  inputElement.value = this.fecha.toISOString();
 
   this.up.controls['password'].valueChanges.pipe(
     filter(text => text.length >=1 ),

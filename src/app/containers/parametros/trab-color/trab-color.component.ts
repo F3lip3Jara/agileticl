@@ -8,10 +8,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
@@ -35,8 +32,8 @@ export class TrabColorComponent implements OnInit {
   color        : Color;
   validCod     : boolean              = false;
   dato         : number               = 0;
-  insCol       : FormGroup;
-  upCol        : FormGroup;
+  ins          : FormGroup;
+  up           : FormGroup;
   val          : boolean              = false;
   faPenToSquare                       = faPenToSquare;  
   faTrash                             = faTrash;
@@ -50,13 +47,12 @@ export class TrabColorComponent implements OnInit {
               private modal       : NgbModal,
               private servicioaler: AlertasService,
               private excel       : ExcelService,
-              private serviLoad   : LoadingService,
-              private serLog      : LogSysService) {
+              private serviLoad   : LoadingService) {
 
       this.token     = this.servicio.getToken();
       this.color     = new Color(0, '' , '');
 
-      this.insCol    = fb.group({
+      this.ins    = fb.group({
         colCod : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -65,7 +61,7 @@ export class TrabColorComponent implements OnInit {
          ])],
       });
 
-      this.upCol = fb.group({
+      this.up = fb.group({
          colDes : ['' , Validators.compose([
           Validators.required,
          ])],
@@ -96,7 +92,7 @@ export class TrabColorComponent implements OnInit {
       }}
       this.tblData();
 
-    this.insCol.controls['colCod'].valueChanges.pipe(
+    this.ins.controls['colCod'].valueChanges.pipe(
       filter(text => text.length > 2),
       debounceTime(200),
       distinctUntilChanged()).subscribe(field => {
@@ -118,16 +114,14 @@ export class TrabColorComponent implements OnInit {
    }
 
    public modalIns(content : any ){
-
     this.modal.open(content);
-
  }
 
  public modelUp(content :any , xcolor: Color ){
-  this.color.setId(xcolor.idCol);
+  this.color.setId(xcolor.colId);
   this.color.setcolDes(xcolor.colDes);
   this.color.setcolCod(xcolor.colCod);
-  this.upCol.controls['colDes'].setValue(xcolor.colDes);
+  this.up.controls['colDes'].setValue(xcolor.colDes);
   this.modal.open(content);
 }
 
@@ -137,34 +131,11 @@ public del( color : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, color).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-         if(elementx.error == '0'){
-           this.modal.dismissAll();
-           this.serviLoad.sumar.emit(1);
-           let des        = 'Color eliminado ' + color.colCod ;
-           let log        = new LogSys(2, '' , 27 , 'ELIMINAR COLOR' , des);
-           this.serLog.insLog(log);
-           setTimeout(()=>{
-             this.tblColor = {};
-             this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
-                 this.tblColor = data;
-             });
-
-             this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-               dtInstance.destroy().draw();
-             });
-
-             this.carga    = 'visible';
-             this.loading  = false;
-           },1500);
-
-         }else{
-           this.carga    = 'visible';
-           this.loading  = false;  }
-       });
+    this.servicioaler.disparador.emit();
+    this.tblData();
    });
 
-   this.servicioaler.disparador.emit();
+   
    return false;
 }
 
@@ -173,56 +144,24 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.val     = true;
-  let colorx   = new Color(this.color.idCol , xcolDes , xcolCod);
-  let des      = '';
-  let lgName   = '';
-  let idEtaDes = 0;
-
+  let colorx   = new Color(this.color.colId , xcolDes , xcolCod);
 
   if(tipo =='up'){
      url      = 'updColor';
-     des      = 'Actualizar color ' + xcolCod;
-     lgName   = 'ACTUALIZAR COLOR';
-     idEtaDes = 26;
   }else{
     url      = 'insColor';
-    des      = 'Ingreso color ' + xcolCod;
-    lgName   = 'INGRESO COLOR';
-    idEtaDes = 25;
   }
   this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, colorx).subscribe(resp => {
-      resp.forEach((elementx : any)  => {
-      if(elementx.error == '0'){
-        this.serviLoad.sumar.emit(1);
-        let log        = new LogSys(2, '' , idEtaDes , lgName , des);
-        this.serLog.insLog(log);        
-          this.modal.dismissAll();
-          setTimeout(()=>{
-            this.tblColor = {};
-            this.rest.get('trabColor' , this.token, this.parametros).subscribe(data => {
-                this.tblColor = data;
-            });
-            this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-              dtInstance.destroy().draw();
-            });
-
-            this.carga    = 'visible';
-            this.loading  = false;
-            this.val      = false;
-            this.limpiar();
-          },1500);
-         
-
-      }else {
-        this.carga    = 'visible';
-        this.loading  = false;
-        this.val      = false;
-      }
-    });
+  this.rest.post(url, this.token, colorx).subscribe(resp => {
+      this.servicioaler.disparador.emit();
+      this.up.reset();
+      this.ins.reset();
+      this.modal.dismissAll();      
+      this.val      = false;
+      this.tblData();
   });
 
-  this.servicioaler.disparador.emit();
+ 
   return false;
 }
 
@@ -244,13 +183,5 @@ public valColCod(colCod : string){
   });
  }
 
-
- public limpiar(){
-
-  this.insCol.controls['colDes'].setValue('');
-  this.insCol.controls['colCod'].setValue('');
-
-
- }
 
 }

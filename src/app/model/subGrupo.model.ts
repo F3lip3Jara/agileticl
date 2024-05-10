@@ -3,27 +3,27 @@ import { Grupo } from './grupo.model';
 
 export class SubGrupo extends Grupo{
 
-  public  idSubGrp   :number;
+  public  grpsId   :number;
   public  grpsDes    :string;
   public  grpsCod    :string;
 
 
   constructor(xid :number , xgrpsDes: string , xgrpsCod : string  , xidGrp :number , xgrpDes: string , xgrpCod : string) {
      super(xidGrp , xgrpDes, xgrpCod);
-     this.idSubGrp       = xid;
+     this.grpsId       = xid;
      this.grpsDes      = xgrpsDes;
      this.grpsCod      = xgrpsCod;
 
   }
 
 
-  getidSubGrp () {
-      return this.idSubGrp;
+  getgrpsId () {
+      return this.grpsId;
   }
 
-  setidSubGrp (xid:number) : number {
-      this.idSubGrp = xid;
-      return this.idSubGrp;
+  setgrpsId (xid:number) : number {
+      this.grpsId = xid;
+      return this.grpsId;
   }
 
   getgrpsDes () {
