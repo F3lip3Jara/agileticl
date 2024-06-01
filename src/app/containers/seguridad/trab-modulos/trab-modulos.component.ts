@@ -3,7 +3,6 @@ import { UntypedFormBuilder } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Roles } from 'src/app/model/rol.model';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -40,7 +39,6 @@ export class TrabModulosComponent implements OnInit {
               private rest          : RestService,
               private modal         : NgbModal,
               private excel         : ExcelService,
-              private servicioaler  : AlertasService,
               private serviLoad     : LoadingService,
               private router        : Router
     ) {
@@ -107,7 +105,6 @@ export class TrabModulosComponent implements OnInit {
      this.rest.post(url ,this.token, modulo).subscribe(resp => {
          this.tblData();
          this.loading = false;
-         this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      });
     
   }

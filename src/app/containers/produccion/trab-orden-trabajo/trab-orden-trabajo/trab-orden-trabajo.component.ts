@@ -127,7 +127,7 @@ export class TrabOrdenTrabajoComponent implements OnInit {
          });
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+    
       setTimeout(()=> {
         this.servicioAlert.setAlert('', '');
      },2000 );
@@ -180,10 +180,10 @@ export class TrabOrdenTrabajoComponent implements OnInit {
   }{
     if(orden.estado == 'APROBADA'){
       this.servicioAlert.setAlert('La orden ya fue autorizada', 'danger');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+     
     }else{
       this.servicioAlert.setAlert('La orden ya fue rechazada', 'danger');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+     
     }
   }
   }
@@ -205,7 +205,7 @@ export class TrabOrdenTrabajoComponent implements OnInit {
         }
      });
     });
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+   
   
   } 
 
@@ -233,10 +233,10 @@ export class TrabOrdenTrabajoComponent implements OnInit {
      
         if(this.orden.estado == 'APROBADA'){
           this.servicioAlert.setAlert('La orden ya fue autorizada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+         
         }else{
           this.servicioAlert.setAlert('La orden ya fue rechazada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+     
         }
       }
     
@@ -262,7 +262,7 @@ export class TrabOrdenTrabajoComponent implements OnInit {
         }
      });
     });
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+   
   }
 
 }

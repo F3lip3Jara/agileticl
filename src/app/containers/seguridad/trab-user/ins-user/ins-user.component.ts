@@ -1,5 +1,4 @@
 import { LoadingService } from './../../../../servicios/loading.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Empleado } from './../../../../model/empleado.model';
 import { Component, OnInit } from '@angular/core';
 import {   Validators, FormGroup, FormBuilder } from '@angular/forms';
@@ -37,7 +36,6 @@ export class InsUserComponent implements OnInit {
   constructor(fgInsUser            : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router
      ) {
@@ -103,12 +101,11 @@ export class InsUserComponent implements OnInit {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-    myReader.readAsDataURL(this.croppedImage);
-    myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-    }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
   
   imageLoaded(): void {
@@ -162,7 +159,6 @@ export class InsUserComponent implements OnInit {
     this.val           = true;
     let empleado : any = new Empleado(nombre,apellido,this.avatar,0,fecha,rol,gerId,empName)
     this.rest.post('insUser', this.token , empleado).subscribe(data => {
-      this.alertas.disparador.emit();   
       this.router.navigate(['home/seguridad/usuarios']);
       this.val = false;       
     });

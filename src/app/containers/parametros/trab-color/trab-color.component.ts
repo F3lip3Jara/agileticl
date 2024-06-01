@@ -6,7 +6,6 @@ import { DataTableDirective } from 'angular-datatables';
 import { Color } from 'src/app/model/color.model';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -44,8 +43,7 @@ export class TrabColorComponent implements OnInit {
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private modal       : NgbModal,
-              private servicioaler: AlertasService,
+              private modal       : NgbModal,             
               private excel       : ExcelService,
               private serviLoad   : LoadingService) {
 
@@ -130,8 +128,7 @@ public del( color : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-   this.rest.post(url ,this.token, color).subscribe(resp => {
-    this.servicioaler.disparador.emit();
+   this.rest.post(url ,this.token, color).subscribe(resp => { 
     this.tblData();
    });
 
@@ -152,8 +149,7 @@ public action(xcolDes : any , xcolCod : any , tipo :string ) : boolean{
     url      = 'insColor';
   }
   this.serviLoad.sumar.emit(1);
-  this.rest.post(url, this.token, colorx).subscribe(resp => {
-      this.servicioaler.disparador.emit();
+  this.rest.post(url, this.token, colorx).subscribe(resp => {  
       this.up.reset();
       this.ins.reset();
       this.modal.dismissAll();      

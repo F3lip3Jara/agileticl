@@ -1,5 +1,4 @@
 import { LoadingService } from './../../../servicios/loading.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -41,7 +40,7 @@ export class TrabBincorComponent implements OnInit {
   constructor( private servicio     : UsersService,
               private rest          : RestService,
               private excel         : ExcelService,
-              private servicioaler  : AlertasService,
+
               private serviLoad     : LoadingService,
               private fb           : FormBuilder,
               private modal        : NgbModal,
@@ -115,7 +114,7 @@ export class TrabBincorComponent implements OnInit {
            });
             this.carga    = 'visible';
             this.loading  = false;
-            this.servicioaler.disparador.emit( this.servicioaler.getAlert());
+         
           },1500);
           
         }else{

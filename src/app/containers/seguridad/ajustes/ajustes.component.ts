@@ -29,21 +29,21 @@ export class AjustesComponent {
   faCalendarWeek            = faCalendarWeek;
   faArrowTurnDown           = faArrowTurnDown;
   imageChangedEvent: any    = '';
-  croppedImage     : any    =  '';
-  avatar           : any    =  '';
-  password         : boolean= false;
-  showPassword     : boolean= false;
+  croppedImage     : any    = '';
+  avatar           : any    = '';
+  avatar_val       : number = 0 ;
+  password         : boolean = false;
+  showPassword     : boolean = false;
   dia              : number  = 0;
   mes              : number  = 0;
   ano              : number  = 0;
   fecha?           : Date;
-  dateModel?       : NgbDateStruct ;
-  
+  dateModel?: { year: number, month: number, day: number };
+  fechax?          : Date;
 
   constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute
@@ -71,17 +71,19 @@ export class AjustesComponent {
     }
 
   ngOnInit(){
-    this.serviLoad.sumar.emit(1);
-    this.route.params.subscribe(params => {
+    this.serviLoad.sumar.emit(1);   
+    this.route.params.subscribe(params => {      
       const dato   = params['usuario'];
       this.usuario = JSON.parse(dato);
       let name     = this.usuario.name;
       this.parms = [{key : 'userid', value:this.usuario.id}];
-      this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any) => {
-        if(data.length > 0 ){
-          this.avatar = data[0].emploAvatar;      
+      this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any) => {        
+        if(data.length > 0 && data != 'error'){
+          this.avatar = data[0].emploAvatar;   
+          this.avatar_val = 1;   
         }else{      
             this.avatar =name.substring(0,2);
+            this.avatar_val = 2;   
         }
       });
      
@@ -97,7 +99,9 @@ export class AjustesComponent {
 
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.fecha);
+  this.up.controls['empFecNac'].setValue(this.dateModel);
+ 
+
   
   this.up.controls['password'].valueChanges.pipe(
     filter(text => text.length >=1 ),
@@ -125,12 +129,11 @@ export class AjustesComponent {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {
@@ -178,14 +181,13 @@ export class AjustesComponent {
       reader.readAsDataURL(file);
     });
   }
+  
   actualizar(emploNom : any , emploApe : any ,  emploPassword : any , empFecNac:any , mantenerPassword:any  ){
       let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:0 , mantenerPassword : mantenerPassword , gerencia:null};
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
-        this.alertas.disparador.emit();
-            
-      });
+        });
   }
 }

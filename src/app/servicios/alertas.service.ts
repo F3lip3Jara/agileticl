@@ -7,8 +7,8 @@ import { Alert } from '../model/alert.model';
 })
 export class AlertasService {
 
-  @Output() disparador :EventEmitter <Alert> = new EventEmitter();
-  @Output() loading :EventEmitter <any> = new EventEmitter();
+  @Output() disparador  :EventEmitter <Alert> = new EventEmitter();
+  @Output() loading     :EventEmitter <any>  = new EventEmitter();
 
   alerta : Alert = new Alert('', '');
 
@@ -17,8 +17,8 @@ export class AlertasService {
   }
 
   setAlert(mensaje : string  , type : string){
-    this.alerta.setMessage(mensaje);
-    this.alerta.setType(type);
+    this.alerta = new Alert(mensaje, type);
+    this.disparador.emit(this.alerta);
   }
   
   constructor(){

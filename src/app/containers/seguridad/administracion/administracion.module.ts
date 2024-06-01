@@ -17,6 +17,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.component';
 import { AvatarModule } from '@coreui/angular';
+import { CalendarModule  as CalendarModuleP} from 'primeng/calendar';
 
 
 
@@ -43,6 +44,7 @@ import { AvatarModule } from '@coreui/angular';
     NgSelectModule,
     ImageCropperModule,
     AvatarModule,
+    CalendarModuleP
     
   ],
 })

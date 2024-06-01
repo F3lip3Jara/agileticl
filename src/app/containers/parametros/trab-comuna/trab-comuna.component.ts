@@ -1,13 +1,11 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { Comuna } from './../../../model/comuna.model';
-import { Region } from 'src/app/model/region.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -50,7 +48,6 @@ export class TrabComunaComponent implements OnInit {
               private servicio      : UsersService,
               private rest          : RestService,
               private modal         : NgbModal,
-              private servicioaler  : AlertasService,
               private excel         : ExcelService,
               private serviLoad     : LoadingService) {
 
@@ -176,7 +173,6 @@ public delComuna (comuna : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, comuna ).subscribe(resp => {
-    this.servicioaler.disparador.emit();
     this.tblData();
     this.modal.dismissAll();
    });
@@ -200,7 +196,6 @@ public action(xpaiId : any , xregId : any ,xciuIdd : any , xcomCod : any , xcomD
       this.val      = false;     
       this.tblData();
       this.ins.reset();
-       this.servicioaler.disparador.emit();
   }); 
   return false;
 }

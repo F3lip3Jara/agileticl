@@ -5,12 +5,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from './../../../servicios/rest.service';
 import { UsersService } from './../../../servicios/users.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Moneda } from './../../../model/moneda.model';
 import { DataTableDirective } from 'angular-datatables';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Motivo } from 'src/app/model/motivo.model';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { faFileExcel , faAddressCard, faPenToSquare, faTrash , faPlusCircle} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -47,11 +45,10 @@ export class TrabMovRechazoComponent implements OnInit {
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private modal       : NgbModal,
-              private servicioaler: AlertasService,
+              private modal       : NgbModal,              
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
-              private serLog      : LogSysService) {
+             ) {
 
       this.token    = this.servicio.getToken();
       this.motivo   = new Motivo(0,'',0);
@@ -134,7 +131,6 @@ public del( motivo : any) : boolean{
    this.rest.post(url ,this.token, motivo).subscribe(resp => {
     this.loading = false;
     this.tblData();
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
    });
   
    return false;
@@ -155,7 +151,6 @@ public action(motDes : any  , etaId : any , tipo :string ) : boolean{
   }
   this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, motivo).subscribe(resp => {
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     this.val = false;
     this.ins.reset();
     this.up.reset();

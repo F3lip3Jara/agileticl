@@ -3,7 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
-import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
@@ -29,12 +29,13 @@ export class UpUsuariosComponent {
   validNombre      : boolean = false;
   dato             : number  = 0;
   empresa          : any     = {};
-  model: NgbDateStruct | undefined;
+  model?: Date ;
   faCalendarWeek            = faCalendarWeek;
   faArrowTurnDown           = faArrowTurnDown;
   imageChangedEvent: any    = '';
   croppedImage     : any    =  '';
   avatar           : any    =  '';
+  avatar_val       : number = 0 ;
   password         : boolean= false;
   showPassword     : boolean= false;
   dia              : number  = 0;
@@ -42,12 +43,11 @@ export class UpUsuariosComponent {
   ano              : number  = 0;
   fecha?           : Date;
   dateModel?       : any ;
-  
+  date2: Date | undefined;
 
   constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute,
@@ -89,13 +89,13 @@ export class UpUsuariosComponent {
       let name     = this.usuario.name;
       this.parms = [{key : 'userid', value:this.usuario.id}];     
       this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any)=>{
-         if(data.length > 0 ){         
-            if(data[0].emploAvatar === null){             
-              this.avatar =name.substring(0,2);
-            }else{
-              this.avatar = data[0].emploAvatar;               
-            }
-         }
+        if(data.length > 0 && data != 'error'){
+          this.avatar = data[0].emploAvatar;   
+          this.avatar_val = 1;   
+        }else{      
+            this.avatar =name.substring(0,2);
+            this.avatar_val = 2;   
+        }
       } );
     });
 
@@ -117,16 +117,14 @@ export class UpUsuariosComponent {
  this.dia        = this.fecha.getUTCDate();
  this.mes        = this.fecha.getUTCMonth()+1;
  this.ano        = this.fecha.getUTCFullYear();
- this.dateModel = new NgbDate( this.ano, this.mes, this.dia)
+
   
   
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.dateModel);
- 
+  this.up.controls['empFecNac'].setValue(this.fecha);
 
-  const inputElement = document.getElementById('empFecNac') as HTMLInputElement;
-  inputElement.value = this.fecha.toISOString();
+  
 
   this.up.controls['password'].valueChanges.pipe(
     filter(text => text.length >=1 ),
@@ -154,12 +152,11 @@ export class UpUsuariosComponent {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {
@@ -214,8 +211,6 @@ export class UpUsuariosComponent {
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
-        this.alertas.disparador.emit();
-            
       });
   }
 }

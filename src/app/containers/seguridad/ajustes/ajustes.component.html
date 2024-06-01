@@ -46,16 +46,16 @@
        </div>
       </div>
       <div class="col-md-6 form-group ">
-            <label for="nombre">Fecha Nacimiento</label>
-            <div class="input-group input-group-sm" *ngIf="dia > 0">           
-              <input class="form-control" placeholder="yyyy-mm-dd"
-              name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
-              formControlName='empFecNac' [minDate]="{year: 1921, month: 1, day: 1}" 
-              [startDate]="{year: ano, month: mes, day: dia}" [ngModel]="dateModel">
-               <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
-                <fa-icon [icon]="faCalendarWeek"></fa-icon>
-              </button>           
-            </div>
+        <label for="nombre">Fecha Nacimiento</label>
+        <div class="input-group input-group-sm">           
+          <input class="form-control" placeholder="yyyy-mm-dd"
+          name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
+          formControlName='empFecNac' [minDate]="{year: 1921, month: 1, day: 1}" 
+          [startDate]="{year: ano, month: mes, day: dia}" [ngModel]="dateModel">
+           <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">
+            <fa-icon [icon]="faCalendarWeek"></fa-icon>
+          </button>           
+        </div>
       </div>
       <div class="col-md-12 mt-2 mb-2">
         <div class="form-check form-switch">
@@ -91,35 +91,35 @@
               <span class="text-danger">Las contraseñas no coinciden!</span>
             </div>
       </div>
-      <div class="col-md-12 form-group mt-4">
-            <label for="">Avatar</label>
-            <br>
-            <br>
-            <c-avatar 
-            cTextColor="primary"
-            shape="rounded-1"
-            size="md"
-            src="{{avatar}}"
-           *ngIf="avatar.length > 2"
-          >
-          </c-avatar>
-          <div   *ngIf="avatar.length ==0">
-            <i class="spinner-grow spinner-grow-sm"></i>
-            <i class="spinner-grow spinner-grow-sm"></i>
-            <i class="spinner-grow spinner-grow-sm"></i>
-          </div>
-          <c-avatar color="secondary"  *ngIf="avatar.length === 2">{{avatar}}</c-avatar>
-            <image-cropper            
-                [imageChangedEvent]="imageChangedEvent"
-                [maintainAspectRatio]="true"
-                [aspectRatio]="1 / 1"
-                (imageCropped)="imageCropped($event)"
-                (imageLoaded)="imageLoaded()"
-                (cropperReady)="cropperReady()"
-                (loadImageFailed)="loadImageFailed()"
-              ></image-cropper> 
-            <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
-                                      
+      <div class="col-md-12 form-group mt-4">       
+          <label for="">Avatar</label>
+          <br>
+          <br>
+          <c-avatar 
+          cTextColor="primary"
+          shape="rounded-1"
+          size="md"
+          src="{{avatar}}"
+        *ngIf="avatar.length > 2"
+        >
+        </c-avatar>
+        <div   *ngIf="avatar.length ==0">
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+        </div>
+        <c-avatar color="secondary"  *ngIf="avatar.length === 2">{{avatar}}</c-avatar>
+          <image-cropper            
+              [imageChangedEvent]="imageChangedEvent"
+              [maintainAspectRatio]="true"
+              [aspectRatio]="1 / 1"
+              (imageCropped)="imageCropped($event)"
+              (imageLoaded)="imageLoaded()"
+              (cropperReady)="cropperReady()"
+              (loadImageFailed)="loadImageFailed()"
+            ></image-cropper> 
+          <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
+                                          
       </div>
       <div class="col-md-12">
         <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2" *ngIf="(up.valid && mantpass.checked) || (up.valid && !mantpass.checked && up.controls['password'].value.length > 0 && !password)"  [disabled]="val">

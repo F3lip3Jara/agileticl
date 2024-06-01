@@ -136,7 +136,6 @@ export class TrabExtrusionComponent implements OnInit {
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
     }
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
   }
 
 
@@ -154,7 +153,6 @@ export class TrabExtrusionComponent implements OnInit {
     
     if(extrusion.kilos_repro <= 0 ||  extrusion.kilos <=0){
       this.servicioAlert.setAlert('Operación debe ingresar los kilos y kilos de reproceso', 'danger');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     }else{
       if(extrusion.estado_control == 'PENDIENTE' && tipo == 'A'){
         this.isEnabled     = false;
@@ -169,12 +167,10 @@ export class TrabExtrusionComponent implements OnInit {
       }else{
         if(extrusion.estado_control == 'APROBADA' && tipo == 'A'){
           this.servicioAlert.setAlert('La Extrusión ya fue autorizada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-        }else{
+          }else{
           if(extrusion.estado_control == "RECHAZADA" && tipo == 'A'){
             this.servicioAlert.setAlert('La Extrusión ya fue rechazada', 'danger');
-            this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-          }else{
+           }else{
               if( tipo == 'V'){
                 this.serviLoad.sumar.emit(1);
                 this.extrusion  = extrusion;
@@ -211,7 +207,6 @@ export class TrabExtrusionComponent implements OnInit {
             this.val      = false;
           }
         });
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     });
   }
 
@@ -219,7 +214,6 @@ export class TrabExtrusionComponent implements OnInit {
   upExtrusion(extrusion : any , tipo : string){
     if(extrusion.estado_control == 'APROBADA'){
       this.servicioAlert.setAlert('La Extrusión ya fue autorizada', 'danger');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     }else{      
         if(extrusion.estado_control == 'PENDIENTE'){
            if(tipo == 'O'){
@@ -232,11 +226,9 @@ export class TrabExtrusionComponent implements OnInit {
           }else{
             if(extrusion.estado_control == 'APROBADA'){
               this.servicioAlert.setAlert('La Extrusion ya fue autorizada', 'danger');
-              this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
             }else{
               if(extrusion.estado_control == "RECHAZADA"){
                 this.servicioAlert.setAlert('La Extrusion ya fue rechazada', 'danger');
-                this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
               }
             }
         }     
@@ -261,11 +253,9 @@ export class TrabExtrusionComponent implements OnInit {
     }else{
       if(extrusion.estado_control == 'APROBADA'){
         this.servicioAlert.setAlert('La Extrusion ya fue autorizada', 'danger');
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
       }else{
         if(extrusion.estado_control == "RECHAZADA"){
           this.servicioAlert.setAlert('La Extrusion ya fue rechazada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         }
       }
      }
@@ -287,8 +277,7 @@ export class TrabExtrusionComponent implements OnInit {
             this.val      = false;
           }
         });
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-    });
+       });
   }
 
 }

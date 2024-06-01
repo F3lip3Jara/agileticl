@@ -5,7 +5,6 @@ import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-ico
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -46,7 +45,6 @@ export class UpUserComponent{
   constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute
@@ -147,12 +145,11 @@ export class UpUserComponent{
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {
@@ -207,8 +204,6 @@ export class UpUserComponent{
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
-        this.alertas.disparador.emit();
-            
       });
   }
 }

@@ -1,7 +1,5 @@
-import { LinksService } from 'src/app/servicios/links.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { DataTableDirective } from 'angular-datatables';
@@ -34,9 +32,7 @@ export class UpDesProveeedorComponent implements OnInit {
 
   constructor(private serProveedor : ProveedoresService,
     private rest         : RestService,
-    private servicioaler : AlertasService,
     private servicio     : UsersService,
-    private servicioLink : LinksService,
     private excel        : ExcelService,
     private serLog       : LogSysService,
     private serviLoad    : LoadingService
@@ -85,7 +81,6 @@ export class UpDesProveeedorComponent implements OnInit {
             let   log  : LogSys    = new LogSys(2, '' , 24, 'ELIMINAR DIR PROVEEDOR/CLIENTE'  , des);
             this.serLog.insLog(log);
              
-             this.servicioaler.disparador.emit(this.servicioaler.getAlert());
              setTimeout(()=>{              
                this.tblProveedor = {};
                this.rest.get('trabPrvDir' , this.token, this.parametros).subscribe(data => {
@@ -105,7 +100,6 @@ export class UpDesProveeedorComponent implements OnInit {
              }
          });
      });
-     this.servicioaler.disparador.emit(this.servicioaler.getAlert());
      return false;
    }
 }

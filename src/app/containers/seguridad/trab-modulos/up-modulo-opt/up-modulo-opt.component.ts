@@ -40,7 +40,6 @@ export class UpModuloOptComponent {
                private serviLoad    : LoadingService,
                private router       : Router,
                private route        : ActivatedRoute,
-               private servicioalert: AlertasService,
                fgIns                : FormBuilder){
               
                 this.token = this.servicio.getToken();
@@ -99,7 +98,6 @@ export class UpModuloOptComponent {
     this.serviLoad.sumar.emit(1);
     this.rest.post('upModulo', this.token, this.parametros).subscribe(resp => {
         this.val = false;
-        this.servicioalert.disparador.emit();
     });
     
   }

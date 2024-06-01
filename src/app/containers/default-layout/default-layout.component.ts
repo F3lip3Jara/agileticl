@@ -1,9 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { INavData } from '@coreui/angular';
-import Echo from 'laravel-echo';
+import { INavData, SidebarComponent, SidebarService } from '@coreui/angular';
 import { AlertasService } from 'src/app/servicios/alertas.service';
+import { ISidebarAction } from '@coreui/angular/lib/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,8 +11,10 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
   styleUrls: ['./default-layout.component.scss'],
 })
 export class DefaultLayoutComponent {
+  @ViewChild('sidebar') sidebar?: SidebarComponent;
+  sidebarAction?: ISidebarAction;
 
-
+  
   token            : string ;
   parametros       : any[]      = [];  
   modulos          : any        = [];
@@ -107,11 +109,10 @@ export class DefaultLayoutComponent {
       if(this.isLoading ){        
         this.altura  = this.altura + xaltura;
       }
-    
-  })
+  });
+   console.log(this.sidebar);
    
   }
 
- 
-
+  
 }

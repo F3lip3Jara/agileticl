@@ -1,5 +1,4 @@
 import { LoadingService } from './../../../servicios/loading.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -45,7 +44,6 @@ export class TrabMaquinasComponent implements OnInit {
               private rest        : RestService,
               private modal       : NgbModal,
               private excel       : ExcelService,
-              private servicioaler: AlertasService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService,
               private fb          : FormBuilder) {
@@ -152,7 +150,6 @@ public delEtapas(maquina : any){
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, maquina).subscribe(resp => {
-    this.servicioaler.disparador.emit();
     this.loading=false;
     this.tblData();
    });
@@ -175,8 +172,7 @@ public action(  etaId : any , maqId : any , maqDes: any   ,tipo :string , maqCod
    
   }
   this.serviLoad.sumar.emit(1);
-  this.rest.post(url, this.token, maquinax).subscribe((resp:any) => {
-    this.servicioaler.disparador.emit();   
+  this.rest.post(url, this.token, maquinax).subscribe((resp:any) => {      
     this.modal.dismissAll();      
     this.loading = false;
     this.tblData();

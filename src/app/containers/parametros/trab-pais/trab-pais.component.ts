@@ -6,7 +6,6 @@ import { Pais } from './../../../model/pais.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -43,8 +42,7 @@ export class TrabPaisComponent implements OnInit {
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private modal       : NgbModal,
-              private servicioaler: AlertasService,
+              private modal       : NgbModal,              
               private excel       : ExcelService,
               private serviLoad   : LoadingService) {
 
@@ -139,8 +137,7 @@ public delPais( gerencia : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-   this.rest.post(url ,this.token, gerencia).subscribe(resp => {
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+   this.rest.post(url ,this.token, gerencia).subscribe(resp => {   
     this.tblData();
    });
    
@@ -160,7 +157,6 @@ public action(xpaiDes : any , xpaicod : any , tipo :string ) : boolean{
   }
   this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, paisx).subscribe(resp => {
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     this.tblData();
     this.limpiar();
     this.modal.dismissAll();

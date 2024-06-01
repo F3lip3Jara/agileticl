@@ -4,7 +4,6 @@ import { Proveedor } from './../../../../model/proveedor.model';
 import { Component, OnInit } from '@angular/core';
 import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
@@ -42,7 +41,6 @@ export class UpProveedorComponent implements OnInit {
 
   constructor(private serProveedor : ProveedoresService,
               private rest         : RestService,
-              private servicioaler : AlertasService,
               private servicio     : UsersService,
               private servicioLink : LinksService,
               private fg           : FormBuilder,
@@ -242,7 +240,6 @@ export class UpProveedorComponent implements OnInit {
     this.rest.post('updProveedor', this.token, proveedorx).subscribe(resp => {  
       this.val                   = false;
       this.up.reset();
-      this.servicioaler.disparador.emit();   
       this.router.navigate(['home/parametros/proveedor']);
     });
 

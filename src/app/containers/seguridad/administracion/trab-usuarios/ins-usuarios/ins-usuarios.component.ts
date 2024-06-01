@@ -37,7 +37,6 @@ export class InsUsuariosComponent {
   constructor(fgInsUser            : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router
      ) {
@@ -73,7 +72,6 @@ export class InsUsuariosComponent {
       this.val          = true;
       let empleado : any = new Empleado(nombre,apellido,this.avatar,empId,fecha,rol,gerId,empName)
       this.rest.post('insUserAdm', this.token , empleado).subscribe(data => {
-        this.alertas.disparador.emit();
         this.val          = true; 
         this.router.navigate(['home/seguridad/administracion/usuarios']);         
       });

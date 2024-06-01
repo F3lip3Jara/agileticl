@@ -224,12 +224,10 @@ export class InsProductosComponent implements OnInit {
             let des        = 'Ingreso material/producto ' + prdCod;
             let log        = new LogSys(2, '' , 34 , 'INGRESO MATERIAL' , des);
             this.serLog.insLog(log);    
-            this.servicioaler.disparador.emit();
             setTimeout(()=>{
               this.router.navigate(['home/parametros/productos']);    
             },1500);
           }else{
-            this.servicioaler.disparador.emit();       
             this.val=false;
           }
       });

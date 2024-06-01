@@ -5,8 +5,6 @@ import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { faIndustry, faMagnifyingGlass, faMoneyBillTransfer} from '@fortawesome/free-solid-svg-icons';
-import Echo from 'laravel-echo';
-import { webSocket , WebSocketSubject } from 'rxjs/webSocket';
 import { WebSocketService } from 'src/app/servicios/web-socket.service';
 import { Observable, OperatorFunction, Subject, debounceTime, distinctUntilChanged, filter, map, merge, switchMap, tap } from 'rxjs';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
@@ -29,11 +27,11 @@ export class DefaultHeaderComponent extends HeaderComponent {
   public contador   : any;
   public socket     : any;
 
-  faIndustry                  = faIndustry;
-  indicadores       :any      = {};
-  faMoneyBillTransfer         = faMoneyBillTransfer;
-  val                         = true;
-  faMagnifyingGlass           = faMagnifyingGlass;
+  faIndustry                          = faIndustry;
+  indicadores       :any              = {};
+  faMoneyBillTransfer                 = faMoneyBillTransfer;
+  val                                 = true;
+  faMagnifyingGlass                   = faMagnifyingGlass;
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -56,9 +54,17 @@ export class DefaultHeaderComponent extends HeaderComponent {
     
    
     this.usuario.menu.forEach((element:any) => {
-      element.opciones.forEach((opcion:any) => {
-        this.states.push(opcion.optDes);
-        this.statesx.push({optDes : opcion.optDes, optLink : opcion.optLink})
+  
+      element.opciones.forEach((opcion:any) => {       
+        if(opcion.optSub == 'S'){
+          opcion.childrens.forEach((element:any) => {
+            this.states.push(element.name);
+            this.statesx.push({optDes : element.name, optLink : element.url})
+          });        
+        }else{
+          this.states.push(opcion.optDes);
+          this.statesx.push({optDes : opcion.optDes, optLink : opcion.optLink})
+        }       
       });
       
     });
@@ -140,8 +146,7 @@ ajustes(){
   this.rest.get('getUsuario', this.token , parm).subscribe((data:any) => {
     data.forEach((element:any) => {
       const dato = JSON.stringify(element); 
-        this.router.navigate(['home/seguridad/ajustes/' + dato]);  
-      
+        this.router.navigate(['home/seguridad/ajustes/' + dato]);        
       });
   });
 }

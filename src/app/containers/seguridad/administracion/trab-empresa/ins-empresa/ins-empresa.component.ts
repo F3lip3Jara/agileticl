@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -28,8 +27,7 @@ export class InsEmpresaComponent {
  
   constructor(fgIns                : FormBuilder,
               private servicio     : UsersService,
-              private rest         : RestService,
-              private servicioalert: AlertasService,
+              private rest         : RestService,          
               private serviLoad    : LoadingService,
               private router       : Router ){
           
@@ -83,7 +81,6 @@ export class InsEmpresaComponent {
     let empresa                = {empDes: empDes , empDir:empDir , empRut: empRut ,  empGiro:empGiro ,empFono:empFono , empImg:this.avatar};
     this.val                   = true;
     this.serviLoad.sumar.emit(1);
-
     this.rest.post('insEmpresa', this.token, empresa).subscribe(resp => {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){           
@@ -92,7 +89,6 @@ export class InsEmpresaComponent {
           }
       });
     });
-    this.servicioalert.disparador.emit();
   }
 
   fileChangeEvent(event: any): void {

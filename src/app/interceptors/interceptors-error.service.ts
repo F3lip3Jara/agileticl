@@ -19,8 +19,8 @@ export interface MensajesSystem{
 export class InterceptorsErrorService implements HttpInterceptor  {
 
 
-//private servidor: string = 'https://app.back.agileti.cl/';
-private servidor: string = 'http://127.0.0.1:8000/';
+private servidor: string = 'https://app.back.agileti.cl/';
+//private servidor: string = 'http://127.0.0.1:8000/';
 
 constructor(private servicio : AlertasService , private serLoad : LoadingService ,    private router : Router) { }
 
@@ -29,8 +29,6 @@ constructor(private servicio : AlertasService , private serLoad : LoadingService
     if(cloneReq.method == 'POST'){
       this.servicio.loading.emit(true);
     }
-  
-    
     return next.handle(cloneReq).pipe(
       tap(event => this.handleHttpEvent(event)),
       catchError(error => this.handleError(error))
@@ -41,7 +39,6 @@ constructor(private servicio : AlertasService , private serLoad : LoadingService
     if (event.type === HttpEventType.DownloadProgress || event.type === HttpEventType.Response) {
       this.serLoad.restar.emit(1);
     }
-
     if (event instanceof HttpResponse) {
       this.handleHttpResponse(event);
     }
@@ -64,11 +61,10 @@ constructor(private servicio : AlertasService , private serLoad : LoadingService
   
   private handleSuccessResponse(body: any): void {
     try {
-    
       if (Array.isArray(body)) {
         body.forEach(element => {
-          if (element.mensaje.length > 0) {
-            this.servicio.setAlert(element.mensaje, element.type);
+          if (element.mensaje.length > 0) {      
+            this.servicio.setAlert( element.mensaje, element.type);
           }
         });
       }

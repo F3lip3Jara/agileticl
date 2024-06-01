@@ -60,6 +60,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import localeDe from '@angular/common/locales/es';
 import localeDeExtra from '@angular/common/locales/extra/es';
 
+
 registerLocaleData(localeDe, 'es', localeDeExtra);
 
 
@@ -68,6 +69,13 @@ const APP_CONTAINERS = [
   DefaultHeaderComponent,
   DefaultLayoutComponent
 ];
+
+import { ButtonModule  as ButtonModuleP } from 'primeng/button';
+import { BrowserModule  as  BrowserModuleP} from '@angular/platform-browser';
+import { BrowserAnimationsModule as BrowserAnimationsModuleP} from '@angular/platform-browser/animations';
+import { ToastModule as ToastModuleP } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 @NgModule({
   declarations: [AppComponent, ...APP_CONTAINERS,
@@ -117,13 +125,18 @@ const APP_CONTAINERS = [
     NgSelectModule,
     ImageCropperModule,
     InputGroupComponent,
-    FormCheckComponent
+    FormCheckComponent,
+    ToastModuleP,
+    ButtonModuleP,
+    
+  
   
     
   ],
   providers: [
     CookieService,
     DatePipe,
+    MessageService,
     { provide: LOCALE_ID, useValue: 'es-ES' },
     { provide: HTTP_INTERCEPTORS,
       useClass: InterceptorsErrorService,

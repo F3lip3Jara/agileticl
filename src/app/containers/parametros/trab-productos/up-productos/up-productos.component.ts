@@ -39,8 +39,6 @@ export class UpProductosComponent implements OnInit {
   constructor(private fg          : UntypedFormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private servicioaler: AlertasService,
-              private servicioLink: LinksService,
               private servicioPrd : ProductosServiceService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService,
@@ -277,12 +275,10 @@ export class UpProductosComponent implements OnInit {
             let des        = 'Actualizar material/producto ' + prdCod;
             let log        = new LogSys(2, '' , 35 , 'ACTUALIZAR MATERIAL' , des);
             this.serLog.insLog(log);    
-            this.servicioaler.disparador.emit();
             setTimeout(()=>{
               this.router.navigate(['home/parametros/productos']);
             },1500);
           }else{
-            this.servicioaler.disparador.emit();
             this.val=false;
           }
       });

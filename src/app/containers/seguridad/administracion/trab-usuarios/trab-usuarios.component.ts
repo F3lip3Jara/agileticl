@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { faAddressCard, faCalendarWeek, faFileExcel, faHand, faPenToSquare, faRetweet, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbDateStruct, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
-import { LogSys } from 'src/app/model/logSys.model';
-import { tblUsuario } from 'src/app/model/tblUsuario.model';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
@@ -53,7 +50,6 @@ export class TrabUsuariosComponent {
     private rest            : RestService, 
     private excel           : ExcelService,
     private modalService    : NgbModal,
-    private alertas         : AlertasService,
     fgUpUser                : FormBuilder,
     private serLog          : LogSysService,
     private serviLoad       : LoadingService,
@@ -161,7 +157,6 @@ export class TrabUsuariosComponent {
     this.val        = true;
     this.rest.post('reiniciarAdm', this.token , xuser).subscribe(data=>{
       this.val = false;
-      this.alertas.disparador.emit();
       this.tblData();
     });
   }
@@ -175,7 +170,6 @@ export class TrabUsuariosComponent {
     this.val          = true;
     this.rest.post('deshabilitarAdm', this.token , xuser).subscribe(data=>{
       this.val = false;
-      this.alertas.disparador.emit();
       this.tblData();
     });
   }
@@ -189,7 +183,6 @@ export class TrabUsuariosComponent {
     let xuser         = {'user':btoa(JSON.stringify(user))};
     this.val          = true;
     this.rest.post('habilitarAdm', this.token , xuser).subscribe(data=>{
-      this.alertas.disparador.emit();
       this.val = false;
       this.tblData();
     });

@@ -61,7 +61,7 @@ export class TrabCalendarioJulComponent implements OnInit {
               private excel        : ExcelService,
               private modal        : NgbModal,
               private servicioLink : LinksService,
-              private servicioAlert: AlertasService,            
+           //   private servicioAlert: AlertasService,            
               private config       : NgbModalConfig,
               private serviLoad    : LoadingService,
               private servicioCal   : CalJulService,
@@ -121,8 +121,8 @@ export class TrabCalendarioJulComponent implements OnInit {
          });
       this.serviLoad.sumar.emit(1);
     }else{
-      this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
-      this.servicioAlert.disparador.emit();
+      /*this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
+      this.servicioAlert.disparador.emit();*/
      
     }
   }
@@ -205,7 +205,7 @@ export class TrabCalendarioJulComponent implements OnInit {
             this.servicioget.post('insCalJul', this.token, this.parametros).subscribe(resp => {
                 resp.forEach((elementx : any)  => {
                   if(elementx.error == '0'){                   
-                    this.servicioAlert.setAlert('Calendario cargado de manera correcta', 'success');
+                 //   this.servicioAlert.setAlert('Calendario cargado de manera correcta', 'success');
         
                     this.modal.dismissAll();
                     this.servicioCal.actualAno();
@@ -271,13 +271,13 @@ export class TrabCalendarioJulComponent implements OnInit {
               }
           }
          
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+         // this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
       });
 
     }else{
       this.val= false;
-      this.servicioAlert.setAlert('Debe ingresar Excel con estructura correcta', 'warning');
-      this.servicioAlert.disparador.emit();
+    //  this.servicioAlert.setAlert('Debe ingresar Excel con estructura correcta', 'warning');
+//this.servicioAlert.disparador.emit();
     }
 
 

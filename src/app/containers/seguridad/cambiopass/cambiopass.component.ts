@@ -44,7 +44,6 @@ export class CambiopassComponent {
   constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
               private rest         : RestService,
-              private alertas      : AlertasService,             
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute,
@@ -195,8 +194,7 @@ export class CambiopassComponent {
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;
       this.up.enable();
-      this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
-        this.alertas.disparador.emit();    
+      this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{ 
         if(data[0].error == 0){ 
           setTimeout(()=> {
             this.val  = false;

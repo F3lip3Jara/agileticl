@@ -6,7 +6,6 @@ import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 
 @Component({
   selector: 'app-ins-emp-opciones',
@@ -33,7 +32,7 @@ export class InsEmpOpcionesComponent {
                private serviLoad    : LoadingService,
                private router       : Router,
                private route        : ActivatedRoute,
-               private servicioalert: AlertasService){
+               ){
   
                 this.token = this.servicio.getToken();
                
@@ -78,7 +77,6 @@ export class InsEmpOpcionesComponent {
     this.serviLoad.sumar.emit(1);
     this.rest.post('insEmpOpt', this.token, this.parametros).subscribe(resp => {
         this.val = false;
-        this.servicioalert.disparador.emit();
     });
   
   }

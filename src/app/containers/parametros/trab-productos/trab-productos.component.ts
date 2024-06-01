@@ -149,8 +149,7 @@ public buscar(prdDes : string  , created_at : string ){
     }else{
    
     }
-    this.servicioAlert.disparador.emit();
-  }
+   }
 
 
   public tblData(){

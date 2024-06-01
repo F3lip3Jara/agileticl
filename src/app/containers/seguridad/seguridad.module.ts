@@ -23,6 +23,7 @@ import {UpUserComponent} from './trab-user/up-user/up-user.component';
 import { AjustesComponent } from './ajustes/ajustes.component';
 import { UsuarioNoautorizadoComponent } from './usuario-noautorizado/usuario-noautorizado.component';
 import { TrabSubopcionesComponent } from './trab-modulos/trab-subopciones/trab-subopciones.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [TrabUserComponent , 
@@ -53,7 +54,8 @@ import { TrabSubopcionesComponent } from './trab-modulos/trab-subopciones/trab-s
     IconModule,
     ImageCropperModule,
     NgSelectModule,
-    AvatarModule
+    AvatarModule,
+    CalendarModule
   ]
 })
 export class SeguridadModule { }

@@ -32,7 +32,6 @@ export class InsModuloOptComponent {
   constructor( private servicio     : UsersService,
                private rest         : RestService,             
                private serviLoad    : LoadingService,
-               private servicioalert: AlertasService,
                fgIns                : FormBuilder){
               
                 this.token = this.servicio.getToken();
@@ -85,7 +84,6 @@ export class InsModuloOptComponent {
     this.serviLoad.sumar.emit(1);
     this.rest.post('insModulo', this.token, this.parametros).subscribe(resp => {
         this.val = false;
-        this.servicioalert.disparador.emit();
     });
   
   }

@@ -8,8 +8,6 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { Region } from 'src/app/model/region.model';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { Alert } from 'src/app/model/alert.model';
-import { Pais } from 'src/app/model/pais.model';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
@@ -47,7 +45,6 @@ export class TrabRegionComponent implements OnInit {
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
-              private servicioaler: AlertasService,
               private excel       : ExcelService,
               private serviLoad   : LoadingService) {
 
@@ -143,7 +140,6 @@ public delRegion (region : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
   this.rest.post(url ,this.token, region ).subscribe(resp => {
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     this.tblData();
   });
    
@@ -166,7 +162,6 @@ public action(xidPai : any , xregDes: any , xregCod : any ,  tipo :string ) : bo
  this.rest.post(url, this.token, paisx).subscribe(resp => {
     this.modal.dismissAll();
     this.ins.reset();
-    this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     this.tblData();
     this.loading = false;
    });

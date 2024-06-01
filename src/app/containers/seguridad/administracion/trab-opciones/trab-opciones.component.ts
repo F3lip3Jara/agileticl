@@ -40,7 +40,7 @@ export class TrabOpcionesComponent {
               private serviLoad    : LoadingService,
               private router       : Router,
               private modal        : NgbModal,
-              private servicioaler  : AlertasService
+             
     ) {
             this.token = this.servicio.getToken();
     }
@@ -120,7 +120,6 @@ export class TrabOpcionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
    
     return false;
@@ -133,7 +132,6 @@ export class TrabOpcionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
  
     return false;

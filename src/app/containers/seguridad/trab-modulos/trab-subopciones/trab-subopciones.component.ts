@@ -47,8 +47,7 @@ export class TrabSubopcionesComponent {
               private route        : ActivatedRoute,
               private modal        : NgbModal,
               fgIns                : FormBuilder,
-              private servicioaler : AlertasService
-         
+              
     ) {
             this.token = this.servicio.getToken();
             this.ins = fgIns.group({
@@ -169,8 +168,7 @@ export class TrabSubopcionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-    });
+      });
    
     return false;
   } 

@@ -5,10 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
 import { Router } from '@angular/router';
 import { faArrowTurnDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -35,7 +33,6 @@ export class InsProveedoresComponent implements OnInit {
   constructor( private fg                 : FormBuilder,
               private servicio            : UsersService,
               private rest                : RestService,
-              private servicioaler        : AlertasService,
               private servicioLink        : LinksService,
               private serviLoad           : LoadingService,
               private serLog              : LogSysService,
@@ -201,7 +198,6 @@ export class InsProveedoresComponent implements OnInit {
     this.rest.post('insProveedor', this.token, proveedor).subscribe(resp => {
       this.val                   = false;
       this.ins.reset();
-      this.servicioaler.disparador.emit();   
       this.router.navigate(['home/parametros/proveedor']);
     });
   }

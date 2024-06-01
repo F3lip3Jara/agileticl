@@ -20,9 +20,8 @@ export class LoginComponent {
   constructor(fb          : FormBuilder,
     private UsersService  : UsersService,
     private router        : Router,
-    private servicioAler  : AlertasService,
-
-
+    private alertService  : AlertasService
+   
 ) {
 
     this.login = fb.group({
@@ -48,7 +47,6 @@ export class LoginComponent {
     this.UsersService.login(user).subscribe({
       next: (data) => {
         if (!data.id) {
-          this.servicioAler.disparador.emit(this.servicioAler.getAlert());
         } else {
           const { reinicio, token, crf, menu, rol, name, img, empresa, imgEmp } = data;  
           this.UsersService.setToken(token);

@@ -112,11 +112,9 @@ export class TrabMezclaComponent implements OnInit {
     }else{
       if(mezcla.estado_control == 'APROBADA' && tipo == 'A'){
         this.servicioAlert.setAlert('Le Mezcla ya fue autorizada', 'danger');
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
       }else{
         if(mezcla.estado_control == "RECHAZADA" ){
           this.servicioAlert.setAlert('Le Mezcla ya fue rechazada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         }else{
             if( tipo == 'V'){
               this.serviLoad.sumar.emit(1);
@@ -152,8 +150,7 @@ export class TrabMezclaComponent implements OnInit {
             this.val      = false;
           }
         });
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-    });
+     });
   }
 
   buscar(lote_salida : string){
@@ -170,7 +167,6 @@ export class TrabMezclaComponent implements OnInit {
     }else{
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
     }
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
   }
 
   refrescar(){
@@ -181,11 +177,9 @@ export class TrabMezclaComponent implements OnInit {
   rechazar(content : any , mezcla: any){
     if(mezcla.estado_control == "APROBADA"){
       this.servicioAlert.setAlert('Le Mezcla ya fue autorizada', 'danger');
-      this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
-    }else{
+     }else{
         if(mezcla.estado_control == "RECHAZADA"){
           this.servicioAlert.setAlert('Le Mezcla ya fue rechazada', 'danger');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         }else{
           this.mezcla     = {};
           this.mezcla     = mezcla;
@@ -213,7 +207,7 @@ export class TrabMezclaComponent implements OnInit {
             this.val      = false;
           }
         });
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
+       
     });
 
 

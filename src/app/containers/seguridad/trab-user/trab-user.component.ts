@@ -54,7 +54,6 @@ export class TrabUserComponent implements OnInit {
     private rest            : RestService, 
     private excel           : ExcelService,
     private modalService    : NgbModal,
-    private alertas         : AlertasService,
     fgUpUser                : FormBuilder,
     private serLog          : LogSysService,
     private serviLoad       : LoadingService,
@@ -166,7 +165,7 @@ export class TrabUserComponent implements OnInit {
     this.val        = true;
     this.rest.post('reiniciar', this.token , xuser).subscribe(data=>{
       this.val = false;
-      this.alertas.disparador.emit();
+      
       this.tblData();
     });
   }
@@ -180,7 +179,6 @@ export class TrabUserComponent implements OnInit {
     this.val          = true;
     this.rest.post('deshabilitar', this.token , xuser).subscribe(data=>{
       this.val = false;
-      this.alertas.disparador.emit();
       this.tblData();
     });
   }
@@ -194,7 +192,7 @@ export class TrabUserComponent implements OnInit {
     let xuser         = {'user':btoa(JSON.stringify(user))};
     this.val          = true;
     this.rest.post('habilitar', this.token , xuser).subscribe(data=>{
-      this.alertas.disparador.emit();
+     
       this.val = false;
       this.tblData();
     });

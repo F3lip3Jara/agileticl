@@ -3,7 +3,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Etapas } from 'src/app/model/etapas.model';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -32,12 +31,12 @@ export class TrabEtapasComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
+  etaProdx                            = '';
   constructor(
               private servicio     : UsersService,
               private rest         : RestService,
               private modal        : NgbModal,
-              private excel        : ExcelService,
-              private servicioaler : AlertasService,         
+              private excel        : ExcelService,         
               private serviLoad    : LoadingService,
               private router       : Router) {
 
@@ -89,6 +88,7 @@ export class TrabEtapasComponent implements OnInit {
     this.etapas.setetaId(etapasx.etaId);
     this.etapas.setEtaDes(etapasx.etaDes);
     this.etapas.setEtProd(etapasx.etaProd);
+    this.etaProdx = this.etapas.etaProd;
     this.modal.open(content);
   }
 
@@ -102,8 +102,7 @@ export class TrabEtapasComponent implements OnInit {
     this.carga   = 'invisible';
     this.loading = true;
     this.serviLoad.sumar.emit(1);
-     this.rest.post(url ,this.token, etapas).subscribe(resp => {
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+     this.rest.post(url ,this.token, etapas).subscribe(resp => {  
       this.tblData();
      });
      return false;
@@ -123,8 +122,7 @@ export class TrabEtapasComponent implements OnInit {
     this.serviLoad.sumar.emit(2);
     this.rest.post(url, this.token, etapasx).subscribe((resp:any) => {
       this.modal.dismissAll(); 
-      this.loading = false;      
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
+      this.loading = false;          
       this.tblData();
     
     });

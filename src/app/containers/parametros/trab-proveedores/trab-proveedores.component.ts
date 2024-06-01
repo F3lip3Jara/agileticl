@@ -8,7 +8,6 @@ import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { Router } from '@angular/router';
 import { ProveedoresService } from 'src/app/servicios/proveedores.service';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
@@ -57,8 +56,7 @@ export class TrabProveedoresComponent implements OnInit {
     private rest            : RestService,
     private servicioLink    : LinksService,
     private excel           : ExcelService,
-    private modal           : NgbModal,
-    private alertas         : AlertasService,
+    private modal           : NgbModal,   
     private fg              : UntypedFormBuilder,
     private router          : Router,
     private serProveedor    : ProveedoresService,

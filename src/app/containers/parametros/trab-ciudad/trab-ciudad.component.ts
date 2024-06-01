@@ -6,7 +6,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -46,8 +45,7 @@ export class TrabCiudadComponent implements OnInit {
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private modal       : NgbModal,
-              private servicioaler: AlertasService,
+              private modal       : NgbModal,          
               private excel       : ExcelService,
               private serviLoad   : LoadingService) {
 
@@ -158,8 +156,7 @@ public delCiudad(ciudad : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, ciudad ).subscribe(resp => {
-      this.tblData();
-      this.servicioaler.disparador.emit( this.servicioaler.getAlert());
+      this.tblData();      
       this.loading = false;
    });
 
@@ -180,7 +177,6 @@ public action(xpaiId : any , xregId : any ,  xciuCod : any , xciuDes : any , tip
   }
   this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, xciudad).subscribe(resp => {
-    this.servicioaler.disparador.emit( this.servicioaler.getAlert());
     this.tblData();
     this.val = false;
     this.modal.dismissAll();

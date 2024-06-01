@@ -1,5 +1,4 @@
 import { LoadingService } from './../../../servicios/loading.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -35,7 +34,6 @@ export class TrabGerenciaComponent implements OnInit {
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
-              private servicioaler: AlertasService,
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
@@ -98,7 +96,6 @@ public delGerencia( gerencia : any) : boolean{
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, gerencia).subscribe(resp => {
     this.tblData();
-    this.servicioaler.disparador.emit();
   });
    return false;
 }
@@ -115,8 +112,7 @@ public action(gerDesx : any , tipo :string ) : boolean{
    }
 
  this.serviLoad.sumar.emit(1);
- this.rest.post(url, this.token, gerenciax).subscribe(resp => {    
-     this.servicioaler.disparador.emit();
+ this.rest.post(url, this.token, gerenciax).subscribe(resp => {   
      this.modal.dismissAll();
      this.tblData();
   });

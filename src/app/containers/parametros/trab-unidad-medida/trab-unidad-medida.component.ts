@@ -5,7 +5,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LoadingService } from 'src/app/servicios/loading.service';
@@ -45,7 +44,6 @@ export class TrabUnidadMedidaComponent implements OnInit {
     private servicio    : UsersService,
     private rest        : RestService,
     private modal       : NgbModal,
-    private servicioaler: AlertasService,
     private excel       : ExcelService,
     private serviLoad   : LoadingService,
     ) {
@@ -132,7 +130,6 @@ public del( unidad : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, unidad).subscribe(resp => {
-    this.servicioaler.disparador.emit();
     this.tblData();
     this.loading = false;
    });
@@ -154,7 +151,6 @@ public action(xunDes : any , xunCod : any , tipo :string ) : boolean{
   }
   this.serviLoad.sumar.emit(1);
   this.rest.post(url, this.token, unidadx).subscribe(resp => {
-    this.servicioaler.disparador.emit();
     this.up.reset();
     this.ins.reset();
     this.modal.dismissAll();      

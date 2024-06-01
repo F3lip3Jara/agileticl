@@ -6,7 +6,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
@@ -45,7 +44,6 @@ export class TrabMonedasComponent implements OnInit {
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
-              private servicioaler: AlertasService,
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
@@ -136,7 +134,6 @@ public del( moneda : any) : boolean{
   this.loading = true;
   this.serviLoad.sumar.emit(1);
    this.rest.post(url ,this.token, moneda).subscribe(resp => {
-    this.servicioaler.disparador.emit();     
     this.modal.dismissAll();
     this.carga    = 'visible';
     this.loading  = false;
@@ -161,7 +158,6 @@ public action(xmonDes : any , xmonCod : any , tipo :string ) : boolean{
 
  this.serviLoad.sumar.emit(1);
  this.rest.post(url, this.token, monedax).subscribe(resp => {
-    this.servicioaler.disparador.emit();     
     this.modal.dismissAll();
     this.val      = false;
     this.tblData();    

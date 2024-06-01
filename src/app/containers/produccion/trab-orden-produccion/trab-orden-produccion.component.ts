@@ -137,7 +137,6 @@ ngAfterViewInit(): void {
       this.servicioAlert.setAlert('Debe ingresar un filtro', 'warning');
 
     }
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
     setTimeout(()=> {
       this.servicioAlert.setAlert('', '');
    },2000 );
@@ -190,7 +189,6 @@ ngAfterViewInit(): void {
 
   if(this.valJul){
     this.servicioAlert.setAlert('Debe ingresar calendario juliano', 'warning');
-    this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
   }else{   
     this.xorden       = orden ;
     let idOrp         = this.xorden.id ;
@@ -220,7 +218,6 @@ ngAfterViewInit(): void {
        
         if(this.valEqui){
           this.servicioAlert.setAlert('Productos sin equivalencia', 'warning');
-          this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());            
         }else{
           this.modal.open(content , { size: 'xl' });
         }    
@@ -251,7 +248,6 @@ ngAfterViewInit(): void {
     ordenTrab.push({ 'idOrp'    : idOrp, 'orptPrio' : orptPrio,'otdet': this.ot });
      this.servicioget.post('insOT', this.token, ordenTrab).subscribe(resp => {       
       resp.forEach((elementx : any)  => {
-        this.servicioAlert.disparador.emit(this.servicioAlert.getAlert());
         if(elementx.error == '0'){
             setTimeout(()=>{
               this.servicioAlert.setAlert('','');

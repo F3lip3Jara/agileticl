@@ -1,7 +1,5 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { LogSysService } from './../../../servicios/log-sys.service';
-import { LogSys } from './../../../model/logSys.model';
-import { AlertasService } from './../../../servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component,  OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, FormGroup } from '@angular/forms';
@@ -41,7 +39,6 @@ export class TrabRolesComponent implements OnInit {
     private rest          : RestService,
     private modal         : NgbModal,
     private excel         : ExcelService,
-    private servicioaler  : AlertasService,
     private serLog        : LogSysService,
     private serviLoad     : LoadingService
     ) {
@@ -114,7 +111,6 @@ export class TrabRolesComponent implements OnInit {
     this.rest.post(url, this.token, rolesx).subscribe(resp => {      
       this.loading = false; 
       this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
 
     
@@ -129,8 +125,6 @@ export class TrabRolesComponent implements OnInit {
       this.rest.post(url ,this.token, rol).subscribe(resp => {
           this.tblData();
           this.loading = false;
-          this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-     
       });
      return false;
   }

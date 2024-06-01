@@ -23,6 +23,7 @@ export class DefaultFooterComponent extends FooterComponent {
       this.load.setTotal(data*2);
       this.loadx.setTotal(data*2);
     });  
+    
   this.serviLoad.restar.subscribe((data:any)=>{
     let total      = this.load.total;
     let diferencia = this.loadx.total;

@@ -4,8 +4,7 @@ export class Alert {
     public message: string;
 
 
-   constructor(  typex : string ,  messagex : string ){
-
+   constructor(  messagex : string , typex : string ){
      this.type = typex;
      this.message = messagex;
    }

@@ -1,67 +1,52 @@
-
-import { Component } from '@angular/core';
-import { Alert } from 'src/app/model/alert.model';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-
+import { Alert } from 'src/app/model/alert.model';
+import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-alert',
- 
+  selector: 'app-alert', 
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss']
-  
-
 })
-export class AlertComponent {
-  position           = 'top-end';
-  visible            = false;
-  percentage         = 0;
-  show               = false;
-  type     : string  = '';
-  alerta   : Alert   ;
-  mensaje  : string  = '';
- 
+export class AlertComponent implements OnInit, OnDestroy {
+  private subscription?: Subscription;
 
-  onVisibleChange($event: boolean) {
-    this.visible = $event;
-    this.percentage = !this.visible ? 0 : this.percentage;
-  }
+  constructor(private messageService: MessageService, private servicio: AlertasService) {}
 
-  onTimerChange($event: number) {
-    this.percentage = $event * 50;
-  }
-
-  constructor( private  servicio : AlertasService){
-
-    this.alerta = this.servicio.getAlert();
-  
-    
-  }
-
-
-  ngOnInit() {
-    this.servicio.disparador.subscribe(data=>{   
-      //  this.alerta  = data;
-   
-      
-      setTimeout(()=> {
-        this.show    = true; 
-        this.mensaje = '';        
-        this.visible = !this.visible;  
-        this.mensaje = this.alerta.getMessage();    
-        if(this.alerta.getType() == 'success'){
-          const audio = new Audio('assets/notificacion.mp3');
-          audio.play();
+  ngOnInit(): void {
+    this.subscription = this.servicio.disparador.subscribe({
+      next: (alert: Alert) => {
+        let summary = '';
+        switch (alert.type) {
+          case 'success':
+            summary = 'Correcto';
+            this.playAudio('assets/notificacion.mp3');
+            break;
+          case 'danger':
+            summary = 'Error';
+            this.playAudio('assets/error.mp3');
+            break;
+          case 'warning':
+            summary = 'Precaución';
+            break;    
         }
+        this.messageService.add({ severity: alert.type, summary: summary, detail: alert.message, key: 'br', life: 3000 });
+      },
+      error: (err: any) => {
+        console.error('Error handling alert:', err);
+      }
+    });
+  }
 
-        if(this.alerta.getType() == 'danger'){
-          const audio = new Audio('assets/error.mp3');
-          audio.play();
-        }
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
-     },1500 );
-      
-    
-   });
+  private playAudio(audioUrl: string): void {
+    const audio = new Audio(audioUrl);
+    audio.play();
   }
 }

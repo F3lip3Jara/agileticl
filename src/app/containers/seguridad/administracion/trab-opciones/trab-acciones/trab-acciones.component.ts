@@ -40,8 +40,7 @@ export class TrabAccionesComponent {
               private router       : Router,
               private route        : ActivatedRoute,
               private modal        : NgbModal,
-              fgIns                : FormBuilder,
-              private servicioaler : AlertasService
+              fgIns                : FormBuilder
          
     ) {
             this.token = this.servicio.getToken();
@@ -120,8 +119,7 @@ export class TrabAccionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-       this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-    });
+     });
    
     return false;
   }
@@ -140,7 +138,6 @@ export class TrabAccionesComponent {
       this.modal.dismissAll(); 
       this.loading = false; 
       this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
     });
    
     return false;

@@ -5,7 +5,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LoadingService } from 'src/app/servicios/loading.service';
@@ -46,7 +45,6 @@ export class TrabSubGrupoComponent implements OnInit {
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
-              private servicioaler: AlertasService,
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService) {
@@ -143,8 +141,7 @@ public del (subGrupo : any) : boolean{
   this.carga   = 'invisible';
   this.loading = true;
   this.serviLoad.sumar.emit(1);
-   this.rest.post(url ,this.token, subGrupo ).subscribe(resp => {
-    this.servicioaler.disparador.emit();
+   this.rest.post(url ,this.token, subGrupo ).subscribe(resp => {    
     this.tblData();
     this.loading = false;
    });
@@ -165,7 +162,6 @@ public action(xgrpId : any , xgrpsDes: any , xgrpsCod : any ,  tipo :string ) : 
   }
 
  this.rest.post(url, this.token, paisx).subscribe(resp => {
-  this.servicioaler.disparador.emit();
   this.up.reset();
   this.ins.reset();
   this.modal.dismissAll();      
