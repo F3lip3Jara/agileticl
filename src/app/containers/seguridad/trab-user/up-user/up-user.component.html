@@ -83,10 +83,10 @@
           </div>
     </div>
     <div class="col-md-6 form-group ">
-          <label for="nombre">Fecha Nacimiento 6</label>
-          <div class="input-group input-group-sm" *ngIf="dia > 0">           
-            <input type="text" class="form-control" placeholder="yyyy-mm-dd"
-            id="empFecNac" name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
+          <label for="nombre">Fecha Nacimiento</label>
+          <div class="input-group input-group-sm">           
+            <input class="form-control" placeholder="yyyy-mm-dd"
+            name="dp" autocomplete="off"  ngbDatepicker #d="ngbDatepicker" 
             formControlName='empFecNac' [minDate]="{year: 1921, month: 1, day: 1}" 
             [startDate]="{year: ano, month: mes, day: dia}" [ngModel]="dateModel">
              <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button">

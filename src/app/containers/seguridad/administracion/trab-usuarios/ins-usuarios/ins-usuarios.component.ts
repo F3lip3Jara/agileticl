@@ -122,14 +122,11 @@ export class InsUsuariosComponent {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
-  
-    
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {

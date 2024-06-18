@@ -80,7 +80,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'modulos/upModulo/:modulo',
+        path: 'modulos/upModulo/:array',
         component:UpModuloOptComponent ,
         data: {
           title: 'Módulos - Opciones',

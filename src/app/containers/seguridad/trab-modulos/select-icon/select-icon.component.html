@@ -1,10 +1,11 @@
 <div class="form-group">
     <label for="">Icono</label>
-    <div class="col-md-6">
+    <div class="col-md-12">
        <div class="btn btn-sm btn-ghost-light mt-1">
-        <button class="btn btn-outline-secondary m-2" (click)="modalOpen(modalSelIcon)" type="button" ngbTooltip="Cambiar icono" >  <fa-icon [icon]="faMagnifyingGlass"></fa-icon></button>
-        <svg cIcon name="{{icono}}" size="xl"></svg> {{icono}}
+        <button class="btn btn-outline-secondary btn-sm m-2" (click)="modalOpen(modalSelIcon)" type="button" ngbTooltip="Cambiar icono" >  <fa-icon [icon]="faMagnifyingGlass"></fa-icon></button>
+        
        </div>
+       <svg cIcon name="{{icono}}" size="xl"></svg> {{icono}}
     </div>
   </div>
 

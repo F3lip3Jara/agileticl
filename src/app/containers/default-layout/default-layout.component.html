@@ -28,15 +28,15 @@
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        src="{{usrimg}}"
+        src="{{avatar}}"
         status="success"
-       *ngIf="usrimg.length > 2"
+       *ngIf="avatar.length > 2"
       >
       </c-avatar>
-      <c-avatar color="secondary" status="success" *ngIf="usrimg.length ===2">{{usrimg}}</c-avatar>
+      <c-avatar color="secondary" status="success" *ngIf="avatar.length ===2">{{avatar}}</c-avatar>
       </div>
       <div class="info">
-         <a  class="d-block">{{usrname}} <span>( {{rol}} )</span> </a>         
+         <a  class="d-block">{{name}} <span>( {{rol}} )</span> </a>         
       </div>
       </div>
     <c-sidebar-nav

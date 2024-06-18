@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faArrowTurnDown, faArrowUp, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faArrowTurnDown, faArrowUp, faStar ,faGear} from '@fortawesome/free-solid-svg-icons';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
@@ -21,10 +21,11 @@ export class InsEmpOpcionesComponent {
   mensaje         : string  = '';
   faArrowTurnDown           = faArrowTurnDown;
   empresa         :any      = {};
-  optAsig         :any    = [];
-  optnAsig        :any    = [];
+  optAsig         :any      = [];
+  optnAsig        :any      = [];
   faStar                    = faStar;
   faArrowUp                 = faArrowUp;
+  faGear                    = faGear;
 
   constructor( private servicio     : UsersService,
                private rest         : RestService,
@@ -48,8 +49,6 @@ export class InsEmpOpcionesComponent {
     this.parametros = [{key: 'empId' , value:this.empresa.empId}]
     this.rest.get('optsnAsig', this.token,this.parametros).subscribe(data => {
       this.optnAsig = data;
-   
-      
     });
     
     this.rest.get('optAsig', this.token,this.parametros).subscribe(data => {

@@ -88,6 +88,7 @@ export class UpUserComponent{
          if(data.length > 0 ){                  
             if(data[0].emploAvatar === null){             
               this.avatar =name.substring(0,2);
+              this.up.controls['gerencia'].setValue(data[0].gerId);
             }else{
               this.avatar = data[0].emploAvatar;               
             }
@@ -117,7 +118,7 @@ export class UpUserComponent{
 
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.fecha);
+  this.up.controls['empFecNac'].setValue(this.dateModel);
   
   this.up.controls['password'].valueChanges.pipe(
     filter(text => text.length >=1 ),
@@ -126,6 +127,7 @@ export class UpUserComponent{
         this.up.controls['password2'].setValue('');
         this.password  = false;
     });
+
   this.up.controls['password2'].valueChanges.pipe(
     filter(text => text.length >= 1),
     debounceTime(200),
@@ -204,6 +206,7 @@ export class UpUserComponent{
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
+        this.servicio.disparador.emit(this.avatar)
       });
   }
 }

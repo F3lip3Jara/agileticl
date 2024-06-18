@@ -5,7 +5,6 @@ import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-ico
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -81,10 +80,12 @@ export class AjustesComponent {
         if(data.length > 0 && data != 'error'){
           this.avatar = data[0].emploAvatar;   
           this.avatar_val = 1;   
+
         }else{      
             this.avatar =name.substring(0,2);
             this.avatar_val = 2;   
         }
+        
       });
      
     });
@@ -110,6 +111,7 @@ export class AjustesComponent {
         this.up.controls['password2'].setValue('');
         this.password  = false;
     });
+
   this.up.controls['password2'].valueChanges.pipe(
     filter(text => text.length >= 1),
     debounceTime(200),
@@ -188,6 +190,7 @@ export class AjustesComponent {
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
-        });
+        this.servicio.disparador.emit(this.avatar)
+      });
   }
 }

@@ -19,7 +19,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   @Input() sidebarId: string = "sidebar";
   public usuario    : any     = {};
   public rol        : string  = '';
-  public imgName    : string  = '';
+  public avatar    : string  = '';
   public idRol      : number  = 0;
   public token      : string  = '';
   public parametros : any[]   = []; 
@@ -32,6 +32,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
   faMoneyBillTransfer                 = faMoneyBillTransfer;
   val                                 = true;
   faMagnifyingGlass                   = faMagnifyingGlass;
+
+
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -44,13 +46,13 @@ export class DefaultHeaderComponent extends HeaderComponent {
                private servicioUser     : UsersService,
                private servicioAler     : AlertasService,
                private router           : Router,
-               private webSocketService : WebSocketService 
+               private websocket        : WebSocketService 
               
               ) {
     super();
     this.token   = this.servicioUser.getToken();
     this.usuario = this.servicioUser.getUser();
-    this.imgName = this.usuario.img;
+    this.avatar = this.usuario.img;
     
    
     this.usuario.menu.forEach((element:any) => {
@@ -69,8 +71,8 @@ export class DefaultHeaderComponent extends HeaderComponent {
       
     });
 
-    if(this.imgName == ''){
-     this.imgName = this.usuario.usuario.substring(0,2);
+    if(this.avatar == ''){
+     this.avatar = this.usuario.usuario.substring(0,2);
     } 
    
   }
@@ -83,13 +85,18 @@ export class DefaultHeaderComponent extends HeaderComponent {
         this.val = true;
       } 
     });    
-    this.webSocketService.startListening();
+      this.servicioUser.disparador.subscribe(next =>{
+            this.avatar = next;
+          
+      });
   }
 
   salir(){
-    this.router.navigate(['/login']);
+    this.websocket.close();
     this.servicioAler.setAlert('','');
     this.servicioUser.eliminarToken();
+    this.router.navigate(['/login']);
+
   }
 
   lectura(datos: any){

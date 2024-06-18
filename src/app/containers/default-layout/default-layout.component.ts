@@ -1,29 +1,27 @@
 import { Component, HostListener, ViewChild } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
-import { INavData, SidebarComponent, SidebarService } from '@coreui/angular';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-import { ISidebarAction } from '@coreui/angular/lib/sidebar/sidebar.service';
-
+import { NavService  } from 'src/app/servicios/_nav.service';
+import { INavData } from '@coreui/angular';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
-  styleUrls: ['./default-layout.component.scss'],
+  styleUrls: ['./default-layout.component.scss']  
+  
 })
 export class DefaultLayoutComponent {
-  @ViewChild('sidebar') sidebar?: SidebarComponent;
-  sidebarAction?: ISidebarAction;
-
   
   token            : string ;
   parametros       : any[]      = [];  
   modulos          : any        = [];
-  public navItems  : INavData[] = []; 
-  menu             : any        = {};
-  usrimg           :string      = '';           
-  usrname          :string      = '';
+  menu             : any;
+  navItems : INavData[] ;
+  avatar           :string      = '';           
+  name             :string      = '';
   rol              :string      = '';
   logo             :string      = '';
+  empresa          :string      = '';
   isLoading        :boolean     = false;
   altura           :number      = 0;
 
@@ -41,59 +39,30 @@ export class DefaultLayoutComponent {
       audio.play();
     }
   }
-   constructor(  private rest        : RestService ,
-                 private servicioUser: UsersService,
+   constructor(  private rest           : RestService ,
+                 private servicioUser   : UsersService,
+                 private servicioNav    : NavService,
                  private servicioAlerta : AlertasService) {
-
-                  this.token    = servicioUser.getToken();                
-                  this.menu     = this.servicioUser.getUser().menu;
-                  this.usrimg   = this.servicioUser.getUser().img;
-                  this.usrname  = this.servicioUser.getUser().usuario;
-                  this.rol      = this.servicioUser.getUser().rol;
-                  this.logo     = this.servicioUser.getUser().imgEmp;
+                  
+                  this. navItems = this.servicioNav.navItems;
+                  this.token     = servicioUser.getToken();
+                  this.avatar    = this.servicioUser.getUser().img;
+                  this.name      = this.servicioUser.getUser().usuario;
+                  this.name      = this.servicioUser.getUser().usuario;
+                  this.rol       = this.servicioUser.getUser().rol;
+                  this.logo      = this.servicioUser.getUser().imgEmp;
+                  this.empresa   = this.servicioUser.getUser().empresa;
+                  this.menu      = this.servicioUser.getUser().menu;
+                  
                  
-                  if(this.usrimg == ''){
-                    this.usrimg = this.usrname.substring(0,2);
+                  if(this.avatar == ''){
+                    this.avatar = this.name.substring(0,2);
                   }
                
-                  this.menu.forEach((element:any) => {
-                    let icono             = {};
-                    let module : INavData = 
-                    {
-                      title: true,
-                      name: element.molDes
-                    };   
-                    
-                    icono    = { name: element.molIcon };
-
-                    this.navItems.push(module);                   
-              
-                    let opciones  = element.opciones;
-              
-                    opciones.forEach((opt : any) => {
-
-                     if(opt.optSub === 'S'){                      
-                      let opcion : INavData = 
-                      {
-                        name: opt.optDes,
-                        url:  opt.optLink,
-                        iconComponent: icono,
-                        children: opt.childrens
-                      };
-                      this.navItems.push(opcion);
-                    }else{
-                      let opcion : INavData = 
-                      {
-                        name: opt.optDes,
-                        url:  opt.optLink,
-                        iconComponent: icono,
-                      };
-                      this.navItems.push(opcion);
-                    }                
-                    });
-                  
-                  });
-  }
+               
+  
+  
+   }
 
   ngOnInit(): void {
     this.servicioAlerta.loading.subscribe(data=>{         
@@ -109,9 +78,13 @@ export class DefaultLayoutComponent {
       if(this.isLoading ){        
         this.altura  = this.altura + xaltura;
       }
-  });
-   console.log(this.sidebar);
-   
+    });
+
+    this.servicioUser.disparador.subscribe(next =>{
+        this.avatar = next;
+        this.servicioUser.setUsuario(this.name, this.rol, this.menu, this.avatar, this.empresa, this.logo);  
+    })
+  
   }
 
   

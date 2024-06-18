@@ -3,11 +3,8 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
-
-
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -42,8 +39,7 @@ export class UpUsuariosComponent {
   mes              : number  = 0;
   ano              : number  = 0;
   fecha?           : Date;
-  dateModel?       : any ;
-  date2: Date | undefined;
+  dateModel?: { year: number, month: number, day: number };
 
   constructor(fgUser               : FormBuilder,
               private servicio     : UsersService,
@@ -92,6 +88,7 @@ export class UpUsuariosComponent {
         if(data.length > 0 && data != 'error'){
           this.avatar = data[0].emploAvatar;   
           this.avatar_val = 1;   
+          this.up.controls['gerencia'].setValue(data[0].gerId);
         }else{      
             this.avatar =name.substring(0,2);
             this.avatar_val = 2;   
@@ -117,12 +114,11 @@ export class UpUsuariosComponent {
  this.dia        = this.fecha.getUTCDate();
  this.mes        = this.fecha.getUTCMonth()+1;
  this.ano        = this.fecha.getUTCFullYear();
-
-  
+ this.dateModel  = { year: this.ano, month: this.mes, day: this.dia };
   
   this.up.controls['empApe'].setValue(this.usuario.emploApe);
   this.up.controls['empNombre'].setValue(this.usuario.emploNom);
-  this.up.controls['empFecNac'].setValue(this.fecha);
+  this.up.controls['empFecNac'].setValue(this.dateModel);
 
   
 
@@ -204,13 +200,15 @@ export class UpUsuariosComponent {
       reader.readAsDataURL(file);
     });
   }
+ 
   actualizar(emploNom : any , emploApe : any ,  emploPassword : any , rol:any ,empFecNac:any , mantenerPassword:any , gerencia:any ){
       this.serviLoad.sumar.emit(1);
-      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: '', emploFecNac:empFecNac, emploPassword:emploPassword, rol:rol , mantenerPassword : mantenerPassword , gerencia:gerencia};
+      let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar, emploFecNac:empFecNac, emploPassword:emploPassword, rol:rol , mantenerPassword : mantenerPassword , gerencia:gerencia};
       let xuser = {'user':btoa(JSON.stringify(user))};
       this.val  = true;
       this.rest.post('upUsuario', this.token , xuser).subscribe(data=>{
         this.val = false;
+    //    this.servicio.disparador.emit(this.avatar);
       });
   }
 }

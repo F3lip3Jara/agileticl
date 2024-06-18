@@ -10,34 +10,40 @@ import {Environment} from '../model/env.model';
 export class WebSocketService {
 
  private environment = new Environment();
-
+ private echo: Echo;
+ 
   constructor( ) {
+        this.echo = new Echo ({
+            broadcaster       : 'pusher',
+            cluster           : this.environment.cluster ,
+            key               : this.environment.key,
+            wsHost            : this.environment.wsHost,
+            wsPort            : this.environment.wsPort,
+            wssHost           : this.environment.wsHost,
+            wssPort           : this.environment.wsPort,
+            forceTLS          : false,
+            disableStats      : true,
+            enabledTransports : ['ws','wss']
+      });
 
    }
 
    startListening() { 
-
-    const echo = new Echo ({
-      broadcaster       : 'pusher',
-      cluster           : this.environment.cluster ,
-      key               : this.environment.key,
-      wsHost            : this.environment.wsHost,
-      wsPort            : this.environment.wsPort,
-      wssHost           : this.environment.wsHost,
-      wssPort           : this.environment.wsPort,
-      forceTLS          : false,
-      disableStats      : true,
-      enabledTransports : ['ws','wss']
-    });
-
-    echo.connector.options.debug = true;  
-
-    echo.channel('channel-message').listen('MensajeEvent', (resp:any)=>{
-        console.log(resp);
-    });
-
-
+    this.echo.connector.options.debug = true; 
+    this.echo.channel('channel-message').listen('MensajeEvent', (resp:any)=>{
+      console.log(resp);
+  });
   }
 
+  close(){
+    this.echo.disconnect();
+    console.log('Disconnected from channel-message');
+  }
+
+  connect(){
+    this.echo.connect();
+
+  
+  }
    
 }

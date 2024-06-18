@@ -9,6 +9,7 @@ import { Roles } from 'src/app/model/rol.model';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { MenuItem } from 'primeng/api';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class TrabRolesComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
+  items: MenuItem[] | undefined;
 
   constructor(private fb  : UntypedFormBuilder,
     private servicio      : UsersService,
@@ -68,6 +70,23 @@ export class TrabRolesComponent implements OnInit {
           previous: 'Ant.'
         }
       }}
+
+      this.items = [
+        {
+            icon: 'pi pi-pencil',
+            command: () => {
+            }
+        },
+        {
+            icon: 'pi pi-refresh',
+            command: () => {
+            }
+        },
+        {
+            icon: 'pi pi-trash',
+            command: () => {
+            }
+        }   ];
 
 
   }

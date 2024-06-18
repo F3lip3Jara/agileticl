@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserIdleService } from 'angular-user-idle';
 import { AlertasService } from 'src/app/servicios/alertas.service';
 import { UsersService } from 'src/app/servicios/users.service';
+import { WebSocketService } from 'src/app/servicios/web-socket.service';
 
 
 @Component({
@@ -21,7 +22,8 @@ export class ModalEsperaComponent implements OnInit {
               private modalService  : NgbModal,
               private router        : Router,
               private servicioAler  : AlertasService,
-              private servicioUser  : UsersService
+              private servicioUser  : UsersService,
+              private websocket     : WebSocketService
               ) {
   }
 
@@ -68,6 +70,7 @@ export class ModalEsperaComponent implements OnInit {
         this.servicioAler.setAlert('','');
         this.modalService.dismissAll();
         this.userIdle.resetTimer();
+        this.websocket.close();
        // this.router.navigate(['/']);
        window.location.href = '/';
       }

@@ -136,12 +136,11 @@ export class CambiopassComponent {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {
@@ -189,6 +188,8 @@ export class CambiopassComponent {
       reader.readAsDataURL(file);
     });
   }
+
+
   actualizar(emploNom : any , emploApe : any ,  emploPassword : any , empFecNac:any , mantenerPassword:any  ){
       let user  = {usrid : this.usuario.id , emploNom : emploNom , emploApe: emploApe , avatar: this.avatar , emploFecNac:empFecNac, emploPassword:emploPassword, rol:0 , mantenerPassword : mantenerPassword , gerencia:null};
       let xuser = {'user':btoa(JSON.stringify(user))};

@@ -33,6 +33,9 @@ export class TrabModulosComponent implements OnInit {
   faPenToSquare                       = faPenToSquare;
   faTrash                             = faTrash;
   faSquarePlus                        = faSquarePlus;
+  optnAsig?    : any []               = [];                
+  optAsig?     : any []               = [];
+
 
   constructor(private fb            : UntypedFormBuilder,
               private servicio      : UsersService,
@@ -93,8 +96,45 @@ export class TrabModulosComponent implements OnInit {
   }
 
   public up(modulo:any){
-    const objstring = JSON.stringify(modulo);
-    this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring]);
+   
+    
+    this.parametros = [{key: 'empId' , value:modulo.empId } , {key:'molId' , value:modulo.molId}]
+
+    this.rest.get('snAsig', this.token,this.parametros).subscribe((data:any) => {        
+          data.forEach((element:any) => {
+            this.optnAsig?.push({'optId' : element.optId , 'optDes' : element.optDes , 'movable': true , icon: modulo.molIcon});      
+          });     
+    this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
+      if(data.opt.length > 0){
+        data.opt.forEach((element:any) => {
+          this.optAsig?.push({'optId' : element.optId , 'optDes' : element.optDes , 'movable': true ,  icon: modulo.molIcon});      
+        });
+      }
+      if(data.sub.length > 0){
+        data.sub.forEach((element:any) => {
+            this.optAsig?.push({'optId' : 1 , 'optDes' : element.molsDes , 'movable': false, icon : 'cilReportSlash'});              
+        });
+      } 
+    
+    
+    const arrayParametros = {modulo: modulo, optAsig: this.optAsig, optnAsig: this.optnAsig}; 
+    console.log(arrayParametros);
+      
+    const objstring       =btoa(JSON.stringify(arrayParametros));
+    this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring ]);
+    
+      });
+    });
+   
+   
+    
+   
+   
+
+    
+    
+   // this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring ]);
+  // this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring]);
   }
 
   public del(modulo:any){

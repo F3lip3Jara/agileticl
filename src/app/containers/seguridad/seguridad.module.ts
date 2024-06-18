@@ -23,7 +23,12 @@ import {UpUserComponent} from './trab-user/up-user/up-user.component';
 import { AjustesComponent } from './ajustes/ajustes.component';
 import { UsuarioNoautorizadoComponent } from './usuario-noautorizado/usuario-noautorizado.component';
 import { TrabSubopcionesComponent } from './trab-modulos/trab-subopciones/trab-subopciones.component';
-import { CalendarModule } from 'primeng/calendar';
+import { StepsModule } from 'primeng/steps';
+import { ButtonModule as ButtonModuleP } from 'primeng/button';
+import { UpMolRolesComponent } from './trab-modulos/up-modulo-opt/up-mol-roles/up-mol-roles.component';
+import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
+import { PickListModule } from 'primeng/picklist';
+import { StepperModule } from 'primeng/stepper';
 
 @NgModule({
   declarations: [TrabUserComponent , 
@@ -38,7 +43,10 @@ import { CalendarModule } from 'primeng/calendar';
                  UpUserComponent,
                  AjustesComponent,
                  UsuarioNoautorizadoComponent,
-                 TrabSubopcionesComponent
+                 TrabSubopcionesComponent,
+                 UpMolRolesComponent,
+                 ReceptorDirective
+            
                 ],
   imports: [
     CommonModule,
@@ -55,7 +63,11 @@ import { CalendarModule } from 'primeng/calendar';
     ImageCropperModule,
     NgSelectModule,
     AvatarModule,
-    CalendarModule
-  ]
+    StepsModule,
+    ButtonModuleP,
+    PickListModule,
+    StepperModule
+  ],
+ 
 })
 export class SeguridadModule { }

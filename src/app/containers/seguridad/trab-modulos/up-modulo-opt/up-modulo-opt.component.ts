@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faArrowUp, faStar } from '@fortawesome/free-solid-svg-icons';
-import { ExcelService } from 'src/app/servicios/excel.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
+import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
+import { UpMolRolesComponent } from './up-mol-roles/up-mol-roles.component';
 
 
 @Component({
@@ -16,6 +16,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./up-modulo-opt.component.scss']
 })
 export class UpModuloOptComponent {
+
+  @ViewChild(ReceptorDirective, { static: true }) receptor?: ReceptorDirective;
+
 
   token           : string  = '';
   parametros      : any     = [];
@@ -34,13 +37,16 @@ export class UpModuloOptComponent {
   rolSnAsig       : any     = [];
   rolAsig         : any     = [];
 
+  items: MenuItem[] | undefined;
+  activeIndex: number       = 0;
+  active: number            = 0;
+
   constructor( private servicio     : UsersService,
                private rest         : RestService,
-               private excel        : ExcelService,             
                private serviLoad    : LoadingService,
-               private router       : Router,
                private route        : ActivatedRoute,
-               fgIns                : FormBuilder){
+               fgIns                : FormBuilder,
+               private componentFactoryResolver: ComponentFactoryResolver){
               
                 this.token = this.servicio.getToken();
 
@@ -54,44 +60,20 @@ export class UpModuloOptComponent {
               }
 
   ngOnInit(){
-    this.route.params.subscribe(params => {
-      const obj   = params['modulo'];
-      this.modulo = JSON.parse(obj);
-      this.ins.controls['molDes'].setValue(this.modulo.molDes);
-      this.icon   = this.modulo.molIcon;
-    });
 
-    this.parametros = [{key: 'empId' , value:this.modulo.empId } , {key:'molId' , value:this.modulo.molId}]
-    this.rest.get('snAsig', this.token,this.parametros).subscribe(data => {
-      this.optnAsig = data;
-    });
-    
-    this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
-      this.optAsig = data.opt;
-      this.sub     = data.sub;
-    });
-
-    this.rest.get('snAsigRol', this.token,this.parametros).subscribe(data => {
-      this.rolSnAsig = data;
-    });
-
-    this.rest.get('asigRol', this.token,this.parametros).subscribe(data => {
-      this.rolAsig = data;
-    });
-   
+    this.items = [
+      {
+          label: 'Opciones'
+      },
+      {
+          label: 'Roles'
+      },
+      
+  ];
+  
+  this.links(UpMolRolesComponent);
   }
-
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
-  }
-
+  
   guardar( molDes: any ){
     this.parametros   = {molId: this.modulo.molId , opt:this.optAsig , molDes: molDes , molIcon : this.icon , ok:'S' , roles:this.rolAsig};
     this.val          = true;
@@ -102,9 +84,25 @@ export class UpModuloOptComponent {
     
   }
 
-  icono(icono :any){
-      this.icon = icono;
-      
+  
+
+  public links(component: any) {
+    let miComponent : any = component;
+    let componentFactory  = this.componentFactoryResolver.resolveComponentFactory(miComponent);
+    this.receptor?.viewContainerRef.clear();
+    this.receptor?.viewContainerRef.createComponent(componentFactory);
+    return false;
+  }
+
+  onActiveIndexChange(event: number) {
+    switch (event) {
+      case 0:
+        this.links(UpMolRolesComponent);
+        break;
+      case 1:
+        // Otro caso
+        break;
+    }
   }
  
 }

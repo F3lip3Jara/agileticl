@@ -13,8 +13,7 @@
       ></svg>
     </button>
     <c-header-nav  class="ms-3">     
-        <div class="input-group mb-2">
-          
+        <div class="input-group mb-2">          
           <input type="text"
                 [(ngModel)]="model"
                 [ngbTypeahead]="search"      
@@ -63,12 +62,12 @@
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        src="{{imgName}}"
+        src="{{avatar}}"
         status="success"
-       *ngIf="imgName.length > 2"
+       *ngIf="avatar.length > 2"
       >
       </c-avatar>
-      <c-avatar color="secondary" status="success" *ngIf="imgName.length === 2">{{imgName}}</c-avatar>
+      <c-avatar color="secondary" status="success" *ngIf="avatar.length === 2">{{avatar}}</c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">
       <li>

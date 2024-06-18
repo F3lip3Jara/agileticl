@@ -30,6 +30,7 @@ import { DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent 
 
 
 
+
 import {
   AvatarModule,
   BadgeModule,
@@ -71,8 +72,6 @@ const APP_CONTAINERS = [
 ];
 
 import { ButtonModule  as ButtonModuleP } from 'primeng/button';
-import { BrowserModule  as  BrowserModuleP} from '@angular/platform-browser';
-import { BrowserAnimationsModule as BrowserAnimationsModuleP} from '@angular/platform-browser/animations';
 import { ToastModule as ToastModuleP } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
@@ -128,9 +127,6 @@ import { MessageService } from 'primeng/api';
     FormCheckComponent,
     ToastModuleP,
     ButtonModuleP,
-    
-  
-  
     
   ],
   providers: [

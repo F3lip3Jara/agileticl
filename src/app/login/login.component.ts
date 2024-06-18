@@ -5,6 +5,7 @@ import {AlertasService} from '../servicios/alertas.service';
 import { Router } from '@angular/router';
 import { Usuario } from '../model/usuario.model';
 import { faLock , faUser } from '@fortawesome/free-solid-svg-icons';
+import { WebSocketService } from '../servicios/web-socket.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -20,7 +21,8 @@ export class LoginComponent {
   constructor(fb          : FormBuilder,
     private UsersService  : UsersService,
     private router        : Router,
-    private alertService  : AlertasService
+    private alertService  : AlertasService,
+    private websocket     : WebSocketService
    
 ) {
 
@@ -41,6 +43,9 @@ export class LoginComponent {
   }
   
   guardar(email: string, password: string): void {
+    this.websocket.close();
+    this.websocket.connect();
+    this.websocket.startListening();
     const user = new Usuario(1, '', password, '', email);
     this.UsersService.eliminarToken();
     this.log = true;
@@ -51,6 +56,7 @@ export class LoginComponent {
           const { reinicio, token, crf, menu, rol, name, img, empresa, imgEmp } = data;  
           this.UsersService.setToken(token);
           this.UsersService.setTokenCrf(crf);
+       
           this.UsersService.setUsuario(name, rol, menu, img, empresa, imgEmp);  
           if (reinicio === 'S') {
             this.router.navigate(['cambiopass']);

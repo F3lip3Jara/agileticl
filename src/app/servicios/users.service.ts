@@ -1,5 +1,5 @@
 
-import { Injectable } from "@angular/core";
+import { EventEmitter, Injectable, Output } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
@@ -9,6 +9,9 @@ import { Observable } from "rxjs";
   providedIn: "root"
 })
 export class UsersService {
+
+  @Output() disparador  :EventEmitter <any> = new EventEmitter();  
+
 
   constructor(private http: HttpClient , private cookies: CookieService ) {}
 

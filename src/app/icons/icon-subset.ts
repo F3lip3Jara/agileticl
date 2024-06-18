@@ -93,7 +93,8 @@ import {
   cilCog,
   cilInstitution,
   cilBank,
-  cilCircle
+  cilCircle,
+
   
 } from '@coreui/icons';
 
@@ -290,5 +291,6 @@ export enum IconSubset {
   cilCog = 'cilCog',
   cilInstitution = 'cilInstitution ',
   cilBank = 'cilBank',
-  cilCircle = 'cilCircle'
+  cilCircle = 'cilCircle',
+ 
 }
