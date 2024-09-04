@@ -22,6 +22,7 @@ import { TrabProveedoresComponent } from "./trab-proveedores/trab-proveedores.co
 import {InsProveedoresComponent} from './trab-proveedores/ins-proveedores/ins-proveedores.component';
 import {UpProveedorComponent} from './trab-proveedores/up-proveedor/up-proveedor.component'
 import { TrabEtapasComponent } from "./trab-etapas/trab-etapas.component";
+import { BookComponent } from "./book/book.component";
 
 const routes: Routes = [
   {
@@ -185,7 +186,13 @@ const routes: Routes = [
           title: 'Etapas',
         }
       },
-    
+      {
+        path: 'books',
+        component: BookComponent,
+        data: {
+          title: 'Etapas',
+        }
+      },
       
     ],
   },

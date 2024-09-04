@@ -61,7 +61,6 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import localeDe from '@angular/common/locales/es';
 import localeDeExtra from '@angular/common/locales/extra/es';
 
-
 registerLocaleData(localeDe, 'es', localeDeExtra);
 
 
@@ -126,7 +125,7 @@ import { MessageService } from 'primeng/api';
     InputGroupComponent,
     FormCheckComponent,
     ToastModuleP,
-    ButtonModuleP,
+    ButtonModuleP
     
   ],
   providers: [

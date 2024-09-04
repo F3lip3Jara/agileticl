@@ -29,6 +29,7 @@ import { UpMolRolesComponent } from './trab-modulos/up-modulo-opt/up-mol-roles/u
 import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
 import { PickListModule } from 'primeng/picklist';
 import { StepperModule } from 'primeng/stepper';
+import { UpMolOptComponent } from './trab-modulos/up-modulo-opt/up-mol-opt/up-mol-opt.component';
 
 @NgModule({
   declarations: [TrabUserComponent , 
@@ -45,7 +46,8 @@ import { StepperModule } from 'primeng/stepper';
                  UsuarioNoautorizadoComponent,
                  TrabSubopcionesComponent,
                  UpMolRolesComponent,
-                 ReceptorDirective
+                 ReceptorDirective,
+                 UpMolOptComponent
             
                 ],
   imports: [

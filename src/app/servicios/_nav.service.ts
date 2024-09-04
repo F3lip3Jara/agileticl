@@ -13,8 +13,8 @@ export class NavService {
     menu    : any;
 
   constructor( private servicioUser: UsersService ){
-         this.menu      = this.servicioUser.getUser().menu;
 
+         this.menu      = this.servicioUser.getUser().menu;
          let icono             = {};
    
 

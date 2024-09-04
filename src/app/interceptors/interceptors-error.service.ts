@@ -19,12 +19,30 @@ export interface MensajesSystem{
 export class InterceptorsErrorService implements HttpInterceptor  {
 
 
-private servidor: string = 'https://app.back.agileti.cl/';
-//private servidor: string = 'http://127.0.0.1:8000/';
+//private servidor: string = 'https://app.back.agileti.cl/';
+private servidor: string = 'http://127.0.0.1:8000/';
+
+private excludedUrl  : any [] = [
+  {url : 'https://www.googleapis.com/books/v1/volumes?maxResults=5&orderBy=relevance&q=oliver%20sacks'}
+
+]; 
 
 constructor(private servicio : AlertasService , private serLoad : LoadingService ,    private router : Router) { }
 
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+   
+   let count = 0;
+   
+   this.excludedUrl.forEach((element : any) => { 
+    if (req.url === element.url) {
+       count ++;
+    }
+   });
+
+   if(count > 0 ){  
+      return next.handle(req);  
+   }else{
     const cloneReq = req.clone({ url: this.servidor + req.url });  
     if(cloneReq.method == 'POST'){
       this.servicio.loading.emit(true);
@@ -33,6 +51,10 @@ constructor(private servicio : AlertasService , private serLoad : LoadingService
       tap(event => this.handleHttpEvent(event)),
       catchError(error => this.handleError(error))
     );
+   }
+  
+
+   
   }
   
   private handleHttpEvent(event: HttpEvent<any>): void {

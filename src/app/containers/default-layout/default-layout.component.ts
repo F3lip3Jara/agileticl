@@ -44,7 +44,7 @@ export class DefaultLayoutComponent {
                  private servicioNav    : NavService,
                  private servicioAlerta : AlertasService) {
                   
-                  this. navItems = this.servicioNav.navItems;
+                  this.navItems  = this.servicioNav.navItems;
                   this.token     = servicioUser.getToken();
                   this.avatar    = this.servicioUser.getUser().img;
                   this.name      = this.servicioUser.getUser().usuario;

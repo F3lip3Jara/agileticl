@@ -6,7 +6,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { Gerencia } from 'src/app/model/gerencia.model';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { LogSysService } from 'src/app/servicios/log-sys.service';
+
 import {  faPenToSquare,faTrash,faFileExcel,faAddressCard} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -30,13 +30,15 @@ export class TrabGerenciaComponent implements OnInit {
   faTrash                             = faTrash;
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
+
+  
   constructor(
               private servicio    : UsersService,
               private rest        : RestService,
               private modal       : NgbModal,
               private excel       : ExcelService,
               private serviLoad   : LoadingService,
-              private serLog      : LogSysService) {
+             ) {
 
       this.token    = this.servicio.getToken();
       this.gerencia = new Gerencia(0, '');

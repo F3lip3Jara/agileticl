@@ -25,8 +25,7 @@ $enable-rtl: true;
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
 
-
-
+@import "primeicons/primeicons.css";
 
 .is-valid{
     border-color: var(--bs-form-valid-border-color);
@@ -57,6 +56,11 @@ $text-error-final-font-size:1em;
   font-size: $text-error-font-size;
   color: #dc3545;
   animation: errorMessageAnimation $text-error-animation-duration;;
+}
+
+.pi-fj{
+  font-size: 7px !important;
+  align-content : center;
 }
 
 

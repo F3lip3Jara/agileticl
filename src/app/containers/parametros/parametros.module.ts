@@ -30,7 +30,14 @@ import {UpDesProveeedorComponent} from './trab-proveedores/up-proveedor/up-des-p
 import {ParametrosRoutingModule} from './parametros-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrabEtapasComponent } from './trab-etapas/trab-etapas.component';
-
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { BookCollectionComponent } from './book-collection/book-collection.component';
+import { BookListComponent } from './book-list/book-list.component';
+import { BookComponent } from './book/book.component';
+import { booksReducer } from './reducer_parametros/todo.reducer.parametros';
+import { collectionReducer } from './reducer_parametros/collection.reducer';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [TrabGerenciaComponent , 
@@ -55,8 +62,10 @@ import { TrabEtapasComponent } from './trab-etapas/trab-etapas.component';
                 InsProveedoresComponent,
                 UpProveedorComponent,
                 UpDesProveeedorComponent,
-                TrabEtapasComponent
-                
+                TrabEtapasComponent,
+                BookCollectionComponent,
+                BookListComponent,
+                BookComponent
               ],
   imports: [
     CommonModule,
@@ -69,7 +78,8 @@ import { TrabEtapasComponent } from './trab-etapas/trab-etapas.component';
     NgbModule,
     NgbDatepicker,
     NgSelectModule,
-   
+    StoreModule.forRoot({ books: booksReducer, collection: collectionReducer }),
+    StoreDevtoolsModule.instrument({})
   ]
 })
 export class ParametrosModule { }
