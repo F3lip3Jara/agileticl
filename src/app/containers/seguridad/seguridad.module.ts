@@ -30,6 +30,8 @@ import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
 import { PickListModule } from 'primeng/picklist';
 import { StepperModule } from 'primeng/stepper';
 import { UpMolOptComponent } from './trab-modulos/up-modulo-opt/up-mol-opt/up-mol-opt.component';
+import { InsMolOptComponent } from './trab-modulos/ins-modulo-opt/ins-mol-opt/ins-mol-opt.component';
+import { InsMolRolComponent } from './trab-modulos/ins-modulo-opt/ins-mol-rol/ins-mol-rol.component';
 
 @NgModule({
   declarations: [TrabUserComponent , 
@@ -47,7 +49,9 @@ import { UpMolOptComponent } from './trab-modulos/up-modulo-opt/up-mol-opt/up-mo
                  TrabSubopcionesComponent,
                  UpMolRolesComponent,
                  ReceptorDirective,
-                 UpMolOptComponent
+                 UpMolOptComponent,
+                 InsMolOptComponent,
+                 InsMolRolComponent
             
                 ],
   imports: [

@@ -1,22 +1,6 @@
- <div class="card-body row">
-        <div class="col-md-6  form-group">
-                <form [formGroup] = "ins">
-                    <label for="molDes">Descripción</label>
-                    <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="molDes" placeholder="Ingresar descripción..." formControlName='molDes'
-                    [ngClass]="(ins.controls['molDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
-                    </div>
-                    <div *ngIf = "ins.controls['molDes'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                    </div>
-            </form>
-          </div>
-          <div class="col-md-6"> 
-            <app-select-icon [icono]="modulo.molIcon" (onItemAdded)="icono($event)"></app-select-icon>
 
-          </div>
-    <div class="col-md-12">
-        <p-pickList 
+<div class="col-md-12">
+    <p-pickList 
         [source]="optnAsig" 
         [target]="optAsig" 
         sourceHeader="No Asignada"
@@ -35,12 +19,12 @@
                 <div class="flex flex-wrap p-2 align-items-center gap-3  border-1 border-black">                 
                     <div class="flex-1 flex flex-column gap-2 ">
                         <span class="font-bold text-900">
-                            {{ optnAsig.optDes }}
+                            {{ optnAsig.rolDes }}
                         </span>
                         <div class="flex align-items-center gap-2">
                             <svg cIcon name="{{optnAsig.icon}}" size="xs"></svg>      
                             <span>
-                                {{ optnAsig.optDes }}
+                                {{ optnAsig.rolDes }}
                             </span>
                         </div>
                     </div>
@@ -50,7 +34,5 @@
             </ng-template>
        
     </p-pickList>
-   
-    </div>
-  
 </div>
+

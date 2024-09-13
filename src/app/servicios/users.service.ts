@@ -3,6 +3,7 @@ import { EventEmitter, Injectable, Output } from "@angular/core";
 import { CookieService } from "ngx-cookie-service";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
+import { INavData } from "@coreui/angular";
 
 
 @Injectable({
@@ -10,7 +11,10 @@ import { Observable } from "rxjs";
 })
 export class UsersService {
 
-  @Output() disparador  :EventEmitter <any> = new EventEmitter();  
+  @Output() disparador  :EventEmitter <any> = new EventEmitter();   
+  modulo : any         = [];
+  navItems: INavData[] = [];
+  menu    : any        = [];
 
 
   constructor(private http: HttpClient , private cookies: CookieService ) {}
@@ -37,6 +41,11 @@ export class UsersService {
 
   eliminarToken () {
     localStorage.clear();
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    this.setUsuario('','','','','','');
+    this.navItems = [];
+    this.menu     = [];
   }
 
 
@@ -56,16 +65,63 @@ export class UsersService {
   setUsuario(usuario : string , rol : string , menu:string , img:string , empresa:string , imgEmp:string ){
     let user = {usuario : usuario , rol : rol , menu : menu, img:img , empresa: empresa , imgEmp : imgEmp};
     localStorage.setItem('user',btoa(JSON.stringify(user)));
-  }
+   }
 
   getUser() :any{
-    let datos = localStorage.getItem('user');   
+    let datos = localStorage.getItem('user'); 
     if (!datos) {
       datos = '';
     }
-    return JSON.parse(atob(datos));
+    let datox  = JSON.parse(atob(datos));
+    return datox;    
+
    }
 
+
+   getNavItem(){
+    let icono      = {};
+    let dato = this.getUser();
+    this.menu = [];
+    this.menu = dato.menu;
+    console.log(dato);
+    
+    this.menu.forEach((element:any) => {
+       let icono             = {}; 
+       let module : INavData = 
+           {
+           title: true,
+           name: element.molDes
+           }; 
+       
+       icono    = { name: element.molIcon };
+       this.navItems.push(module);    
+        
+       let opciones  = element.opciones;
+        
+       opciones.forEach((opt : any) => {
+           if(opt.optSub === 'S'){ 
+            let opcion : INavData = 
+            {
+              name: opt.optDes,
+              url:  opt.optLink,
+              iconComponent: icono,
+              children :opt.childrens
+            };
+            this.navItems.push(opcion);
+          }else{
+            let opcion : INavData = 
+            {
+              name: opt.optDes,
+              url:  opt.optLink,
+              iconComponent: icono,
+            };
+           
+            this.navItems.push(opcion);
+          }                
+        });
+    });
+    return this.navItems;
+   }
   
 
 }

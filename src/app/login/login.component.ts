@@ -49,6 +49,7 @@ export class LoginComponent {
     const user = new Usuario(1, '', password, '', email);
     this.UsersService.eliminarToken();
     this.log = true;
+
     this.UsersService.login(user).subscribe({
       next: (data) => {
         if (!data.id) {
@@ -56,13 +57,14 @@ export class LoginComponent {
           const { reinicio, token, crf, menu, rol, name, img, empresa, imgEmp } = data;  
           this.UsersService.setToken(token);
           this.UsersService.setTokenCrf(crf);
-       
+          console.log(menu);
+          
           this.UsersService.setUsuario(name, rol, menu, img, empresa, imgEmp);  
           if (reinicio === 'S') {
             this.router.navigate(['cambiopass']);
           } else {
             this.router.navigate(['/home']);
-          }
+         }
         }
       },
       error: (err) => {

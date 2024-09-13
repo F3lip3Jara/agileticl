@@ -7,7 +7,45 @@
         (activeIndexChange)="onActiveIndexChange($event)"
         [styleClass]="'linkn'"
   />
-  <ng-template  appReceptor  ></ng-template>
 
-
+  <div class="card-body row">
+    <form [formGroup] = "ins"
+          (ngSubmit)  ="guardar(ins.controls['molDes'].value)"
+    >
+    <div class="col-md-6  form-group">
+           
+                <label for="molDes">Descripción</label>
+                <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="molDes" placeholder="Ingresar descripción..." formControlName='molDes'
+                [ngClass]="(ins.controls['molDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                </div>
+                <div *ngIf = "ins.controls['molDes'].hasError('required')">
+                <span class="text-danger">Campo obligatorio!</span>
+                </div>
+       
+      </div>
+      <div class="col-md-6"> 
+        <app-select-icon [icono]="modulo.molIcon" (onItemAdded)="icono($event)"></app-select-icon>
+      </div>
+      <div class="col-md-12">  <ng-template  appReceptor  ></ng-template></div>
+      <div class="col-md-12" *ngIf="ins.valid  && optAsig.length > 0">
+        <hr>
+        <button
+          type="submit"
+          class="btn btn-outline-primary btn-sm mb-3 mt-2"
+          [disabled]="val"          
+        >
+          <div *ngIf="val">
+            Guardando..
+            <span class="spinner-border spinner-border-sm mr-2"></span>
+          </div>
+          <div *ngIf="!val">Guardar</div>
+        </button>
+        <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+          <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+          Volver
+        </a>
+      </div>
+    </form>
+ </div>
 </div>

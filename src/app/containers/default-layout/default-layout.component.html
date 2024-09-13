@@ -22,7 +22,7 @@
   />
 
   <ng-scrollbar pointerEventsMethod="scrollbar">
-    <div class="user-panel mt-3  d-flex">
+    <div class="user-panel mt-3 d-block">     
       <div class="image">
         <c-avatar 
         cTextColor="primary"
@@ -36,13 +36,15 @@
       <c-avatar color="secondary" status="success" *ngIf="avatar.length ===2">{{avatar}}</c-avatar>
       </div>
       <div class="info">
-         <a  class="d-block">{{name}} <span>( {{rol}} )</span> </a>         
+         <a  class="d-block">{{name}} <span>( {{rol}} )</span> </a>
       </div>
+      <div class="text-sm-center" *ngIf="val"> <span class="spinner-border spinner-border-sm mr-2"></span>  </div>
       </div>
     <c-sidebar-nav
       [navItems]="navItems"
       dropdownMode="close"
-    />
+     />
+
   </ng-scrollbar>
   <c-sidebar-toggler
     *ngIf="!sidebar.narrow"

@@ -13,6 +13,7 @@ import { UpUserComponent } from "./trab-user/up-user/up-user.component";
 import { AjustesComponent } from "./ajustes/ajustes.component";
 import { UsuarioNoautorizadoComponent } from "./usuario-noautorizado/usuario-noautorizado.component";
 import { TrabSubopcionesComponent } from "./trab-modulos/trab-subopciones/trab-subopciones.component";
+import { UpMolOptComponent } from "./trab-modulos/up-modulo-opt/up-mol-opt/up-mol-opt.component";
 
 const routes: Routes = [
   {
@@ -82,6 +83,13 @@ const routes: Routes = [
       {
         path: 'modulos/upModulo/:array',
         component:UpModuloOptComponent ,
+        data: {
+          title: 'Módulos - Opciones',
+        }
+      },
+      {
+        path: 'modulos/upModulo/opciones/',
+        component:UpMolOptComponent ,
         data: {
           title: 'Módulos - Opciones',
         }

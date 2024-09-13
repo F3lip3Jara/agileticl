@@ -32,7 +32,12 @@
             <td>{{modulo.molIcon}}</td>  
             <td>
               <a style= "margin : 1px ;" (click) = "up(modulo)" class="btn btn-warning btn-xs" ngbTooltip="Opciones">
-              <fa-icon [icon]="faPenToSquare"></fa-icon>
+             
+              <div *ngIf="val">
+                <fa-icon [icon]="faPenToSquare"></fa-icon> 
+                <span class="spinner-border spinner-border-sm"></span>
+              </div>
+              <div *ngIf="!val"> <fa-icon [icon]="faPenToSquare"></fa-icon></div>
               </a>
               <a style= "margin : 1px ;" (click)="subopciones(modulo)" class="btn btn-warning btn-xs" ngbTooltip="Sub Módulos">
                 <fa-icon [icon]="faSquarePlus"></fa-icon>
@@ -47,6 +52,7 @@
     </div>
     </div>
   </div>
+  
     <!-- /.card-body -->
     <div class="card-footer">
       

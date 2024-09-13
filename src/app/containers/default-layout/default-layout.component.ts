@@ -2,7 +2,6 @@ import { Component, HostListener, ViewChild } from '@angular/core';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { AlertasService } from 'src/app/servicios/alertas.service';
-import { NavService  } from 'src/app/servicios/_nav.service';
 import { INavData } from '@coreui/angular';
 @Component({
   selector: 'app-dashboard',
@@ -15,8 +14,8 @@ export class DefaultLayoutComponent {
   token            : string ;
   parametros       : any[]      = [];  
   modulos          : any        = [];
-  menu             : any;
-  navItems : INavData[] ;
+  menu             : any        = [];
+  navItems         : INavData[];
   avatar           :string      = '';           
   name             :string      = '';
   rol              :string      = '';
@@ -24,6 +23,8 @@ export class DefaultLayoutComponent {
   empresa          :string      = '';
   isLoading        :boolean     = false;
   altura           :number      = 0;
+  val              :boolean     = true;
+
 
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent) {
@@ -41,10 +42,8 @@ export class DefaultLayoutComponent {
   }
    constructor(  private rest           : RestService ,
                  private servicioUser   : UsersService,
-                 private servicioNav    : NavService,
                  private servicioAlerta : AlertasService) {
-                  
-                  this.navItems  = this.servicioNav.navItems;
+                  this.navItems = [];
                   this.token     = servicioUser.getToken();
                   this.avatar    = this.servicioUser.getUser().img;
                   this.name      = this.servicioUser.getUser().usuario;
@@ -53,22 +52,21 @@ export class DefaultLayoutComponent {
                   this.logo      = this.servicioUser.getUser().imgEmp;
                   this.empresa   = this.servicioUser.getUser().empresa;
                   this.menu      = this.servicioUser.getUser().menu;
-                  
-                 
+                  setTimeout(() => {
+                    this.navItems = this.servicioUser.getNavItem();
+                    console.log(this.navItems);                  
+                    this.val = false;
+                  }, 500);
+             
                   if(this.avatar == ''){
                     this.avatar = this.name.substring(0,2);
                   }
-               
-               
-  
-  
    }
 
   ngOnInit(): void {
     this.servicioAlerta.loading.subscribe(data=>{         
       let xaltura     = 0;
-      this.altura     = 10;
-      
+      this.altura     = 10;        
       const xelemento = document.getElementsByTagName('body')[0];
       if (xelemento instanceof HTMLElement) {
         xaltura  = xelemento.offsetHeight; 
@@ -83,9 +81,16 @@ export class DefaultLayoutComponent {
     this.servicioUser.disparador.subscribe(next =>{
         this.avatar = next;
         this.servicioUser.setUsuario(this.name, this.rol, this.menu, this.avatar, this.empresa, this.logo);  
-    })
+    });
+      
+   
+    
   
   }
 
+  ngOnDestroy() {
+    this.navItems = [];
+    this.menu     = [];
+  }
   
 }

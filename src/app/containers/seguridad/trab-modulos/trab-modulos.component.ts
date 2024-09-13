@@ -35,7 +35,9 @@ export class TrabModulosComponent implements OnInit {
   faSquarePlus                        = faSquarePlus;
   optnAsig?    : any []               = [];                
   optAsig?     : any []               = [];
-
+  rolAsig?     : any []               = [];
+  rolnAsig?    : any []               = [];
+  val                                 = false;
 
   constructor(private fb            : UntypedFormBuilder,
               private servicio      : UsersService,
@@ -96,14 +98,14 @@ export class TrabModulosComponent implements OnInit {
   }
 
   public up(modulo:any){
-   
-    
+    this.val = true;
     this.parametros = [{key: 'empId' , value:modulo.empId } , {key:'molId' , value:modulo.molId}]
 
     this.rest.get('snAsig', this.token,this.parametros).subscribe((data:any) => {        
           data.forEach((element:any) => {
             this.optnAsig?.push({'optId' : element.optId , 'optDes' : element.optDes , 'movable': true , icon: modulo.molIcon});      
-          });     
+          });
+
     this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
       if(data.opt.length > 0){
         data.opt.forEach((element:any) => {
@@ -115,28 +117,31 @@ export class TrabModulosComponent implements OnInit {
             this.optAsig?.push({'optId' : 1 , 'optDes' : element.molsDes , 'movable': false, icon : 'cilReportSlash'});              
         });
       } 
-    
-    
-    const arrayParametros = {modulo: modulo, optAsig: this.optAsig, optnAsig: this.optnAsig}; 
-    console.log(arrayParametros);
-      
-    const objstring       =btoa(JSON.stringify(arrayParametros));
-    this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring ]);
-    
+
+      this.rest.get('asigRol', this.token,this.parametros).subscribe((data:any) => {
+        
+        data.forEach((element:any) => {
+          this.rolAsig?.push({'rolId': element.rolId , 'rolDes': element.rolDes});
+        });
+        this.rest.get('snAsigRol', this.token,this.parametros).subscribe((data:any) => {
+          data.forEach((element:any) => {
+            this.rolnAsig?.push({'rolId': element.rolId , 'rolDes': element.rolDes});
+          });
+
+          const arrayParametros = {modulo: modulo, optAsig: this.optAsig, optnAsig: this.optnAsig , rolAsig:this.rolAsig , rolnAsi:this.rolnAsig}; 
+          const objstring       = btoa(JSON.stringify(arrayParametros));
+          this.val = false;
+          this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring ]); 
+         // console.log(arrayParametros);
+          
+        });
+       
+       
+       });
       });
     });
-   
-   
-    
-   
-   
-
-    
-    
-   // this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring ]);
-  // this.router.navigate(['home/seguridad/modulos/upModulo/' + objstring]);
   }
-
+ 
   public del(modulo:any){
     let url      = 'delModulo';
     this.carga   = 'invisible';

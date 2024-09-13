@@ -2,12 +2,14 @@ import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faArrowTurnDown, faArrowUp, faStar } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/servicios/loading.service';
+import { ModuloService } from 'src/app/servicios/modulo.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
 import { UpMolRolesComponent } from './up-mol-roles/up-mol-roles.component';
+import { UpMolOptComponent } from './up-mol-opt/up-mol-opt.component';
 
 
 @Component({
@@ -23,7 +25,6 @@ export class UpModuloOptComponent {
   token           : string  = '';
   parametros      : any     = [];
   val             : boolean = false;
-  valRut          : boolean = false;
   mensaje         : string  = '';
   faArrowTurnDown           = faArrowTurnDown;
   modulo          : any     = {};
@@ -34,7 +35,6 @@ export class UpModuloOptComponent {
   faArrowUp                 = faArrowUp;
   ins             : FormGroup;
   icon            : string  = '';
-  rolSnAsig       : any     = [];
   rolAsig         : any     = [];
 
   items: MenuItem[] | undefined;
@@ -46,7 +46,9 @@ export class UpModuloOptComponent {
                private serviLoad    : LoadingService,
                private route        : ActivatedRoute,
                fgIns                : FormBuilder,
-               private componentFactoryResolver: ComponentFactoryResolver){
+               private moduloser    : ModuloService,
+               private componentFactoryResolver: ComponentFactoryResolver,
+              ){
               
                 this.token = this.servicio.getToken();
 
@@ -56,26 +58,70 @@ export class UpModuloOptComponent {
                    ])]
                   
                 });
-              
+
+           
               }
 
   ngOnInit(){
-
+  
+    this.moduloser.clear(); 
+   
     this.items = [
       {
           label: 'Opciones'
       },
       {
           label: 'Roles'
-      },
+      }
+    ];
+
+    this.route.params.subscribe((params :any) => {
+      let parm:any = JSON.parse(atob(params.array));
+      this.modulo   = parm.modulo;
+      this.icon     = parm.modulo.molIcon;
+      this.ins.controls['molDes'].setValue(this.modulo.molDes);
+    
+      this.moduloser.setOptAsig(parm.optAsig);
+      this.moduloser.setRolAsig(parm.rolAsig);       
+      this.moduloser.setOptnAsig(parm.optnAsig);
+      this.moduloser.setRolnAsig(parm.rolnAsi);
+
+      this.optAsig = this.moduloser.getOptAsig();
+      this.rolAsig = this.moduloser.getRolAsig();
       
-  ];
-  
-  this.links(UpMolRolesComponent);
+
+     
+     
+    });
+
+    this.moduloser.disparador.subscribe((data:any) =>{
+      if(data.tipo ==='O'){
+          if(data.parm.length === 0){            
+            console.log("error sin opciones");       
+            this.optAsig = data.parm;      
+          }else{         
+            this.optAsig = data.parm;
+            console.log(this.optAsig); 
+          }
+      }else{
+        if(data.parm.length === 0){            
+          console.log("error sin roles"); 
+          this.rolAsig = data.parm;   
+        }else{
+          this.rolAsig = data.parm;
+          console.log(this.rolAsig); 
+        }
+      }
+      
+    })
+
+   
+
+    this.links(UpMolOptComponent);
   }
   
-  guardar( molDes: any ){
-    this.parametros   = {molId: this.modulo.molId , opt:this.optAsig , molDes: molDes , molIcon : this.icon , ok:'S' , roles:this.rolAsig};
+  guardar(molDes:any){
+   this.parametros    = {molId: this.modulo.molId , opt:this.optAsig , molDes: molDes , molIcon : this.icon , ok:'S' , roles:this.rolAsig};
     this.val          = true;
     this.serviLoad.sumar.emit(1);
     this.rest.post('upModulo', this.token, this.parametros).subscribe(resp => {
@@ -84,7 +130,6 @@ export class UpModuloOptComponent {
     
   }
 
-  
 
   public links(component: any) {
     let miComponent : any = component;
@@ -95,14 +140,22 @@ export class UpModuloOptComponent {
   }
 
   onActiveIndexChange(event: number) {
+   
+    this.activeIndex = event;
     switch (event) {
       case 0:
-        this.links(UpMolRolesComponent);
+        this.links(UpMolOptComponent);
         break;
       case 1:
-        // Otro caso
+        this.links(UpMolRolesComponent);
         break;
     }
   }
+
+  icono(icono :any){
+    this.icon = icono;    
+  }
+
+ 
  
 }

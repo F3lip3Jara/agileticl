@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core';
 import { faArrowTurnDown, faArrowUp, faStar } from '@fortawesome/free-solid-svg-icons';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MenuItem } from 'primeng/api';
+import { ReceptorDirective } from 'src/app/servicios/receptor.directive';
+import { InsMolOptComponent } from './ins-mol-opt/ins-mol-opt.component';
+import { ModuloService } from 'src/app/servicios/modulo.service';
+import { InsMolRolComponent } from './ins-mol-rol/ins-mol-rol.component';
+
 
 @Component({
   selector: 'app-ins-modulo-opt',
@@ -13,10 +17,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./ins-modulo-opt.component.scss']
 })
 export class InsModuloOptComponent {
+
   token           : string  = '';
   parametros      : any     = [];
   val             : boolean = false;
-  valRut          : boolean = false;
   mensaje         : string  = '';
   faArrowTurnDown           = faArrowTurnDown;
   modulo          : any     = {};
@@ -28,11 +32,19 @@ export class InsModuloOptComponent {
   icon            : string  = '';
   rolSnAsig       : any     = [];
   rolAsig         : any     = [];
+  
+  items: MenuItem[] | undefined;
+  activeIndex: number       = 0;
+  active: number            = 0;
+
+  @ViewChild(ReceptorDirective, { static: true }) receptor?: ReceptorDirective;
 
   constructor( private servicio     : UsersService,
                private rest         : RestService,             
                private serviLoad    : LoadingService,
-               fgIns                : FormBuilder){
+               fgIns                : FormBuilder,
+               private componentFactoryResolver: ComponentFactoryResolver,
+              private moduloser       :ModuloService){
               
                 this.token = this.servicio.getToken();
 
@@ -46,38 +58,52 @@ export class InsModuloOptComponent {
               }
 
   ngOnInit(){
-    
     this.rest.get('snAsig', this.token,this.parametros).subscribe(data => {
+      this.moduloser.clear();     
       this.optnAsig = data;
+
+      this.rest.get('snAsigRol', this.token,this.parametros).subscribe(data => {
+        this.rolSnAsig = data;
+        this.moduloser.setRolnAsig(this.rolSnAsig);
+        this.moduloser.setOptnAsig(this.optnAsig);
+        this.links(InsMolOptComponent);
+      });
+     
+      
     });
     
-    this.rest.get('asig', this.token,this.parametros).subscribe((data:any) => {
-     // this.optAsig = data;
-     this.optAsig = data.opt;
-     
-    });
-
-    this.rest.get('snAsigRol', this.token,this.parametros).subscribe(data => {
-      this.rolSnAsig = data;
-    });
-
-    this.rest.get('asigRol', this.token,this.parametros).subscribe(data => {
-      this.rolAsig = data;
-    });
+    this.items = [
+      {
+          label: 'Opciones'
+      },
+      {
+          label: 'Roles'
+      }
+    ];
+    this.moduloser.disparador.subscribe((data:any) =>{
+      if(data.tipo ==='O'){
+          if(data.parm.length === 0){            
+            console.log("error sin opciones");       
+            this.optAsig = data.parm;      
+          }else{         
+            this.optAsig = data.parm;
+            console.log(this.optAsig); 
+          }
+      }else{
+        if(data.parm.length === 0){            
+          console.log("error sin roles"); 
+          this.rolAsig = data.parm;   
+        }else{
+          this.rolAsig = data.parm;
+          console.log(this.rolAsig); 
+        }
+      }
+      
+    })
    
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
-  }
-
+ 
   guardar( molDes: any ){
     this.parametros   = {molId: this.modulo.molId , opt:this.optAsig , molDes: molDes , molIcon : this.icon , ok:'S' , roles:this.rolAsig};
     this.val          = true;
@@ -92,6 +118,28 @@ export class InsModuloOptComponent {
       this.icon = icono;
       
   }
+
+  onActiveIndexChange(event: number) {
+   
+    this.activeIndex = event;
+    switch (event) {
+      case 0:
+        this.links(InsMolOptComponent);
+        break;
+      case 1:
+        this.links(InsMolRolComponent);
+        break;
+    }
+  }
+
+  public links(component: any) {
+    let miComponent : any = component;
+    let componentFactory  = this.componentFactoryResolver.resolveComponentFactory(miComponent);
+    this.receptor?.viewContainerRef.clear();
+    this.receptor?.viewContainerRef.createComponent(componentFactory);
+    return false;
+  }
+
  
 }
 

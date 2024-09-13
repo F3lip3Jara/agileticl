@@ -27,7 +27,9 @@ export class RestService {
   public post(url:string , token: string , data : any) : Observable<any> {
       
     let crf                   = this.UsersService.getTokenCrf();     
-    let headers : HttpHeaders = new HttpHeaders ({"access-token" : token , "Content-Type":"application/json" ,  "X-CSRF-TOKEN": crf });   
+    let headers : HttpHeaders = new HttpHeaders ({"access-token" : token , "Content-Type":"application/json" ,  "X-CSRF-TOKEN": crf ,  'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0' });   
     return this.http.post(url, data, { headers : headers , reportProgress:true });
   }
  
