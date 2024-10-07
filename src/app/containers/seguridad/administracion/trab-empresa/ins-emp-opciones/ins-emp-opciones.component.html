@@ -5,7 +5,12 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body row">
-    
+      <div class="form-group col-md-6 p-4">
+      <label for=""  *ngIf="empresa.empDes.length > 0 ">Empresa</label>
+      <input *ngIf="empresa.empDes.length > 0 " type="text" class="form-control" id="" placeholder="" value="{{empresa.empDes}}"   disabled  #upregId>
+      </div>
+      
+     
       <p-pickList 
         [source]="optnAsig" 
         [target]="optAsig" 

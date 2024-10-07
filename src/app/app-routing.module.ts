@@ -37,7 +37,16 @@ const routes: Routes = [
         loadChildren: () =>
           import('./containers/produccion/produccion.module').then((m) => m.ProduccionModule)
       },
-      
+      {
+        path: 'sd',
+        loadChildren: () =>
+          import('./containers/sd/sd.module').then((m) => m.SdModule)
+      },
+      {
+        path: 'ventas',
+        loadChildren: () =>
+          import('./containers/ventas/venta.module').then((m) => m.VentaModule)
+      },
       
     ]
   },

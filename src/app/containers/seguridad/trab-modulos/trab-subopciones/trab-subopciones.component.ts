@@ -94,7 +94,6 @@ export class TrabSubopcionesComponent {
   }
 
   public tblData(){
-
     this.serviLoad.sumar.emit(1);
     this.tblobj     = {}; 
     this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) } ];
@@ -110,27 +109,13 @@ export class TrabSubopcionesComponent {
   public Excel(){
     this.excel.exportAsExcelFile(this.tblobj, 'acciones');
      return false;
-  }
-
-  public del(accion:any){
-   /* let url      = 'delAcciones';
-    this.carga   = 'invisible';
-    this.loading = true;   
-    let  acciones= {optId:this.modulo, accId:accion.accId}
-    this.serviLoad.sumar.emit(1);
-    this.rest.post(url, this.token, acciones).subscribe(resp => {
-      this.modal.dismissAll(); 
-      this.loading = false; 
-      this.tblData();
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-    });
-   
-    return false;*/
-  }
+  } 
 
   public modalO(modalIns:any){
     this.molsId     = 0;
     this.optnAsig   = [];
+    this.optAsig    = [];
+    this.val        = false;
     this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:this.molsId}];
     this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
       this.optnAsig = data;
@@ -142,9 +127,9 @@ export class TrabSubopcionesComponent {
     this.submodulo  = obj;
     this.optnAsig   = [];
     this.optAsig    = [];
-    this.molsId     = this.submodulo.molsId;
-
-    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:this.molsId}];
+    this.val        = false;
+    this.molsId     = obj.molsId;
+    this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:obj.molsId}];
     this.rest.get('snAsigOpt', this.token,this.parametros).subscribe(data => {
       this.optnAsig = data;
     });
@@ -152,7 +137,6 @@ export class TrabSubopcionesComponent {
       this.optAsig = data;
     });
 
-    
     this.modal.open(modalUp);
     
   }
@@ -162,7 +146,7 @@ export class TrabSubopcionesComponent {
     this.carga    = 'invisible';
     this.loading  = true;
     this.val      = true;
-    let  acciones = {modulo : this.modulo , molsDes:molsDes , opt:this.optAsig };
+    let  acciones = {modulo : this.modulo , molsDes:molsDes , opt:this.optAsig  , molsId:this.molsId};
     this.serviLoad.sumar.emit(1);
     this.rest.post(url, this.token, acciones).subscribe(resp => {
       this.modal.dismissAll(); 
@@ -172,6 +156,25 @@ export class TrabSubopcionesComponent {
    
     return false;
   } 
+
+  public del(obj:any){
+    let url       = 'delSubOpc';
+    this.carga    = 'invisible';
+    this.loading  = true;
+    this.val      = true;
+    let  acciones = {modulo : this.modulo , opt:this.optAsig , molsId:obj.molsId };
+  //  this.parametros = [{key: 'modulo' , value: JSON.stringify(this.modulo) }, {key:'molsId' , value:obj.molsId}];
+    this.serviLoad.sumar.emit(1);
+
+    this.rest.post(url, this.token, acciones).subscribe(resp => {
+      this.modal.dismissAll(); 
+      this.loading = false; 
+      this.tblData();
+      });
+   
+    return false;
+  } 
+
 
   drop(event: CdkDragDrop<string[]>) {
     if (event.previousContainer === event.container) {

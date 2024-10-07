@@ -1,0 +1,120 @@
+
+<div class="row">
+    <form [formGroup] = "up"
+    (ngSubmit)="guardar(up.controls['empDes'].value,
+                        up.controls['empDir'].value,
+                        up.controls['empGiro'].value,
+                        up.controls['empFono'].value,
+                        up.controls['empTokenOMS'].value)"
+    >
+          <div class="card card-outline card-primary">
+            <div class="card-header">
+              <h5 class="card-title">Actualizar de Empresa</h5>
+              <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">            
+                  <div class="row">                    
+                    <div class="col-md-6 form-group">
+                        <label for="empRut">Rut (99999999-0)</label>
+                        <div class="input-group input-group-sm">
+                            <input  type="text" class="form-control" id="" placeholder="" value="{{empresa.empRut}}"   disabled  #upregId> 
+                       </div>
+                    </div>
+                    <div class="col-md-6  form-group">
+                        <label for="prvNom">Nombre</label>
+                        <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDes" placeholder="Ingresar nombre..." formControlName = 'empDes'   oninput="this.value = this.value.toUpperCase()"
+                          [ngClass]="(up.controls['empDes'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                        </div>
+                        <div *ngIf = "up.controls['empDes'].hasError('required')">
+                          <span class="text-danger">Campo obligatorio!</span>
+                        </div>
+                      </div>                
+                    <div class="col-md-6  form-group">
+                      <label for="prvNom">Teléfono</label>
+                      <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="empFono" placeholder="Ingresar nombre..." formControlName = 'empFono'   oninput="this.value = this.value.toUpperCase()"
+                        [ngClass]="(up.controls['empFono'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                      </div>
+                      <div *ngIf = "up.controls['empFono'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                    </div>                  
+                    <div class="col-md-6 form-group">
+                       <label for="prvGiro">Giro Comercial</label>
+                       <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empGiro" placeholder="Ingresar giro..." formControlName = 'empGiro'  oninput="this.value = this.value.toUpperCase()" 
+                          [ngClass]="(up.controls['empGiro'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                        </div>
+                        <div *ngIf = "up.controls['empGiro'].hasError('required')">
+                            <span class="text-danger">Campo obligatorio!</span>
+                          </div>
+                    </div>          
+                    <div class="col-md-6 form-group">
+                      <label for="prvDir">Dirección</label>
+                      <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDir" placeholder="Ingresar dirección..." formControlName = 'empDir'
+                          [ngClass]="(up.controls['empDir'].hasError('required'))? 'was-validated' : 'is-valid'" >
+                      </div>
+                      <div *ngIf = "up.controls['empDir'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label for="prvDir">OMS Token</label>
+                      <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDir" placeholder="Ingresar dirección..." formControlName = 'empTokenOMS'>
+                      </div>
+                    </div>
+                    <div class="col-md-12 form-group mt-4">
+                            <label for="">Logo</label>
+                            <br>
+                            <br>
+                            <c-avatar 
+                            cTextColor="primary"
+                            shape="rounded-1"
+                            size="md"
+                            src="{{avatar}}"
+                           *ngIf="avatar.length > 2"
+                          />
+                          <div   *ngIf="avatar.length ==0">
+                            <i class="spinner-grow spinner-grow-sm"></i>
+                            <i class="spinner-grow spinner-grow-sm"></i>
+                            <i class="spinner-grow spinner-grow-sm"></i>
+                          </div>
+                          
+                       
+                            <image-cropper            
+                                [imageChangedEvent]="imageChangedEvent"
+                                [maintainAspectRatio]="true"
+                                [aspectRatio]="1 / 1"
+                                (imageCropped)="imageCropped($event)"
+                                (imageLoaded)="imageLoaded()"
+                                (cropperReady)="cropperReady()"
+                                (loadImageFailed)="loadImageFailed()"
+                              ></image-cropper> 
+                            <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
+                    </div>
+                    <div class="col-md-12">
+                      <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"  *ngIf ="up.valid" [disabled]="val" >
+                        <div *ngIf= "val">
+                          Guardando..
+                          <span class="spinner-border spinner-border-sm mr-2"></span>
+                        </div>
+                        <div *ngIf= "!val">
+                          Guardar
+                        </div>      
+                      </button>                   
+                      <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+                        <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+                        Volver
+                      </a>
+                    </div>
+                </div>
+               
+              </div>            
+            <!-- /.card-body -->
+          </div>           
+    </form>
+    </div>

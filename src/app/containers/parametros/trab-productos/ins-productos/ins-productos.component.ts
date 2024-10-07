@@ -1,15 +1,11 @@
 import { LoadingService } from './../../../../servicios/loading.service';
 import { Producto } from 'src/app/model/producto.model';
-import { LinksService } from 'src/app/servicios/links.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { LogSys } from 'src/app/model/logSys.model';
-import { faCalendarWeek, faArrowTurnDown} from '@fortawesome/free-solid-svg-icons';
+import { faCalendarWeek, faArrowTurnDown, faGears, faCartFlatbed, faTruckMoving, faTableColumns} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class InsProductosComponent implements OnInit {
 
-  insProd      : FormGroup;
+  ins      : FormGroup;
   loading      : boolean              = true;
   medidas      :any;
   monedas      :any;
@@ -34,14 +30,16 @@ export class InsProductosComponent implements OnInit {
   valEan       : any;
   mensaje      : string               = '';
   faArrowTurnDown                     = faArrowTurnDown;
+  faGears                             = faGears;
+  faCartFlatbed                       = faCartFlatbed;
+  faTruckMoving                       = faTruckMoving;
+  faTableColumns                      = faTableColumns;
+    active = 1;
 
   constructor(private fg            : FormBuilder,
               private servicio      : UsersService,
-              private rest          : RestService,
-              private servicioaler  : AlertasService,
-              private servicioLink  : LinksService,
-              private serviLoad     : LoadingService,
-              private serLog        : LogSysService,
+              private rest          : RestService,           
+              private serviLoad     : LoadingService,          
               private router       : Router
               ) {
 
@@ -54,7 +52,7 @@ export class InsProductosComponent implements OnInit {
       this.token     = this.servicio.getToken();
 
 
-      this.insProd = fg.group({
+      this.ins = fg.group({
         prdCod : ['', Validators.compose([
           Validators.required
           ])],
@@ -73,15 +71,15 @@ export class InsProductosComponent implements OnInit {
              Validators.pattern('^-?[0-9]\\d*?$')
             ])],
 
-            idUn : ['', Validators.compose([
+            unId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idGrp : ['', Validators.compose([
+            grpId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idSubGrp : ['', Validators.compose([
+            grpsId : ['', Validators.compose([
               Validators.required
             ])],
 
@@ -89,11 +87,11 @@ export class InsProductosComponent implements OnInit {
               Validators.required
             ])],
 
-            idCol : ['', Validators.compose([
+            colId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idMon : ['', Validators.compose([
+            monId : ['', Validators.compose([
               Validators.required
             ])],
 
@@ -146,15 +144,15 @@ export class InsProductosComponent implements OnInit {
       this.carga = 'visible';
   });
 
-  this.insProd.controls['idGrp'].valueChanges.subscribe(field => {
+  this.ins.controls['grpId'].valueChanges.subscribe(field => {
     this.subgrupos = {};
-    this.parametros = [{key :'idGrp' ,value: field}];
+    this.parametros = [{key :'grpId' ,value: field}];
     this.rest.get('subGrp' , this.token, this.parametros).subscribe(data => {
       this.subgrupos = data;
       });
   });
 
-  this.insProd.controls['prdCod'].valueChanges.pipe(
+  this.ins.controls['prdCod'].valueChanges.pipe(
     filter(text => text.length > 1),
     debounceTime(200),
     distinctUntilChanged()).subscribe(field => {
@@ -170,7 +168,7 @@ export class InsProductosComponent implements OnInit {
       });
   });
 
- this.insProd.controls['prdEan'].valueChanges.pipe(
+ this.ins.controls['prdEan'].valueChanges.pipe(
   filter(text => text.length > 1),
   debounceTime(200),
   distinctUntilChanged()).subscribe(field => {
@@ -219,18 +217,7 @@ export class InsProductosComponent implements OnInit {
     this.val                 = true;
     this.serviLoad.sumar.emit(1);
     this.rest.post('insProducto', this.token, producto).subscribe(resp => {
-     resp.forEach((elementx : any)  => {
-          if(elementx.error == '0' ){
-            let des        = 'Ingreso material/producto ' + prdCod;
-            let log        = new LogSys(2, '' , 34 , 'INGRESO MATERIAL' , des);
-            this.serLog.insLog(log);    
-            setTimeout(()=>{
-              this.router.navigate(['home/parametros/productos']);    
-            },1500);
-          }else{
-            this.val=false;
-          }
-      });
+      this.router.navigate(['home/parametros/productos']);
     });
   }
 

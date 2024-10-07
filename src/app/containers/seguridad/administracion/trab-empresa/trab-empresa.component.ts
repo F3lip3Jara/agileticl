@@ -86,4 +86,9 @@ export class TrabEmpresaComponent implements OnInit {
     this.router.navigate(['home/seguridad/administracion/empresa/opciones/' + empresaString]);
   }
 
+  public actualizar(empresa:any){
+    const empresaString = JSON.stringify(empresa);  
+    this.router.navigate(['home/seguridad/administracion/empresa/up/' + empresaString]);
+  }
+
 }

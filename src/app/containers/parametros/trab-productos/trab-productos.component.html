@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card card-primary card-outline">
   <div class="card-header">
     <h5 class="card-title">Productos</h5>
    </div>
@@ -79,10 +79,9 @@
               <th *ngIf=" productos.tipo == 'B'">Materia Base</th>
               <th *ngIf=" productos.tipo == 'M'">Materia Prima</th>
               <th *ngIf=" productos.tipo == 'V'">Materia Virgen</th>
-              <th *ngIf=" productos.tipo == 'P'">Producto Terminado</th>
+              <th *ngIf=" productos.tipo == 'T'">Producto Terminado</th>
               <th *ngIf=" productos.tipo == 'I'">Insumo</th>
               <th *ngIf=" productos.tipo == 'S'">Servicio</th>
-
             <th>{{productos.grupo}}</th>
             <th>{{productos.sub_grupo}}</th>
             <th>{{productos.color}}</th>
@@ -103,7 +102,7 @@
 </div>
   <!-- /.card-body -->
   <div class="card-footer">
-    Marple
+    
   </div>
   <!-- /.card-footer-->
 </div>

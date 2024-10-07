@@ -30,7 +30,7 @@ export class CambiopassComponent {
   faArrowTurnDown           = faArrowTurnDown;
   imageChangedEvent: any    = '';
   croppedImage     : any    =  '';
-  avatar           : any    =  '';
+  avatar           : string = '';
   password         : boolean= false;
   showPassword     : boolean= false;
   dia              : number  = 0;
@@ -69,7 +69,8 @@ export class CambiopassComponent {
       });
 
     this.token = this.servicio.getToken();
-    }
+    
+  }
 
   ngOnInit(){
     this.serviLoad.sumar.emit(1);
@@ -84,12 +85,13 @@ export class CambiopassComponent {
         this.router.navigate(['./login']);
       }else{
         let name     = this.usuario.name;
+        this.avatar  =   name.substring(0,2);
+
         this.parms = [{key : 'userid', value:this.usuario.id}];
+
           this.rest.get('getUsuarios', this.token , this.parms).subscribe((data:any) => {
-            if(data.length > 0 ){
+            if(data[0].emploAvatar != null ){
               this.avatar = data[0].emploAvatar;      
-            }else{      
-                this.avatar =name.substring(0,2);
             }
           });
           let emploFecNAc = this.usuario.emploFecNac;
@@ -137,7 +139,7 @@ export class CambiopassComponent {
 
   imageCropped(event: ImageCroppedEvent): void {
     this.croppedImage = event.blob;     
-    this.resizeImage(this.croppedImage).then(resizedImage => {
+    this.resizeImage(this.croppedImage).then((resizedImage:any) => {
      // Usa la imagen redimensionada
      this.avatar = resizedImage;
    });

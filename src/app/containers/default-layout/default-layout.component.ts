@@ -54,7 +54,6 @@ export class DefaultLayoutComponent {
                   this.menu      = this.servicioUser.getUser().menu;
                   setTimeout(() => {
                     this.navItems = this.servicioUser.getNavItem();
-                    console.log(this.navItems);                  
                     this.val = false;
                   }, 500);
              

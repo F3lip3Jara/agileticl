@@ -1,7 +1,7 @@
 
 export class Producto {
 
-  public idPrd: number;
+  public prdId: number;
   public prdDes: string;
   public prdCod: string;
   public prdObs: string;
@@ -14,14 +14,14 @@ export class Producto {
   public prdInv: string;
   public prdPes: number;
   public prdMin: number;
-  public idGrp: number;
-  public idSubGrp: number;
-  public idCol: number;
-  public idMon: number;
-  public idUn : number;
+  public grpId: number;
+  public grpsId: number;
+  public colId: number;
+  public monId: number;
+  public unId : number;
 
 
- constructor( idPrd: number,
+ constructor( prdId: number,
   prdDes: string,
   prdCod: string,
   prdObs: string,
@@ -34,13 +34,13 @@ export class Producto {
   prdInv: string,
   prdPes: number,
   prdMin: number,
-  idGrp: number,
-  idSubGrp: number,
-  idCol: number,
-  idMon: number,
-  idUn: number){
+  grpId: number,
+  grpsId: number,
+  colId: number,
+  monId: number,
+  unId: number){
 
-    this.idPrd = idPrd ;
+    this.prdId = prdId ;
     this.prdDes = prdDes ;
     this.prdCod = prdCod;
     this.prdObs = prdObs;
@@ -53,20 +53,20 @@ export class Producto {
     this.prdInv = prdInv;
     this.prdPes = prdPes;
     this.prdMin =prdMin ;
-    this.idGrp =idGrp ;
-    this.idSubGrp = idSubGrp;
-    this.idCol = idCol;
-    this.idMon = idMon;
-    this.idUn  = idUn;
+    this.grpId =grpId ;
+    this.grpsId = grpsId;
+    this.colId = colId;
+    this.monId = monId;
+    this.unId  = unId;
 
   }
 
-  public getidPrd() {
-    return this.idPrd;
+  public getprdId() {
+    return this.prdId;
   }
 
-  public setidPrd(idPrd : number) {
-    this.idPrd = idPrd ;
+  public setprdId(prdId : number) {
+    this.prdId = prdId ;
   }
 
   public  getprdDes() {
@@ -167,44 +167,44 @@ export class Producto {
     this.prdMin =prdMin ;
   }
 
-  public  getidGrp() {
-    return this.idGrp;
+  public  getgrpId() {
+    return this.grpId;
   }
 
-  public  setidGrp(idGrp : number) {
-    this.idGrp =idGrp ;
+  public  setgrpId(grpId : number) {
+    this.grpId =grpId ;
   }
 
-  public  getidSubGrp() {
-    return this.idSubGrp;
+  public  getgrpsId() {
+    return this.grpsId;
   }
 
-  public  setidSubGrp(idSubGrp : number) {
-    this.idSubGrp = idSubGrp;
+  public  setgrpsId(grpsId : number) {
+    this.grpsId = grpsId;
   }
 
-  public  getidCol() {
-    return this.idCol;
+  public  getcolId() {
+    return this.colId;
   }
 
-  public  setidCol(idCol : number) {
-    this.idCol = idCol;
+  public  setcolId(colId : number) {
+    this.colId = colId;
   }
 
-  public  getidMon() {
-    return this.idMon;
+  public  getmonId() {
+    return this.monId;
   }
 
-  public  setidMon(idMon : number) {
-    this.idMon = idMon;
+  public  setmonId(monId : number) {
+    this.monId = monId;
   }
 
-  public  getidUn() {
-    return this.idUn;
+  public  getunId() {
+    return this.unId;
   }
 
-  public  setidUn(idUn : number) {
-    this.idUn = idUn;
+  public  setunId(unId : number) {
+    this.unId = unId;
   }
 
 

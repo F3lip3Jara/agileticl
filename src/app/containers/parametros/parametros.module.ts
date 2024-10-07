@@ -38,6 +38,8 @@ import { BookComponent } from './book/book.component';
 import { booksReducer } from './reducer_parametros/todo.reducer.parametros';
 import { collectionReducer } from './reducer_parametros/collection.reducer';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import { TrabTipPagoComponent } from './trab-tip-pago/trab-tip-pago.component';
+import { TrabTipDocComponent } from './trab-tip-doc/trab-tip-doc.component';
 
 @NgModule({
   declarations: [TrabGerenciaComponent , 
@@ -65,7 +67,9 @@ import {StoreDevtoolsModule} from '@ngrx/store-devtools';
                 TrabEtapasComponent,
                 BookCollectionComponent,
                 BookListComponent,
-                BookComponent
+                BookComponent,
+                TrabTipPagoComponent,
+                TrabTipDocComponent
               ],
   imports: [
     CommonModule,

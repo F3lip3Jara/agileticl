@@ -36,6 +36,7 @@ export class ModalEsperaComponent implements OnInit {
     this.userIdle.onTimerStart().subscribe(count => {
       //console.log(count);
     });
+    
     this.userIdle.onTimerStart().subscribe(() => {
       // Cuando comienza el temporizador, verificamos si el modal está activo
       // y, si no lo está, lo abrimos.

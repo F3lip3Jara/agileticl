@@ -34,8 +34,9 @@ export class LoginComponent {
         Validators.required
       ])],
     });
-    this.UsersService.setToken("");
-
+    this.UsersService.eliminarToken();
+    this.alertService.setAlert('','');
+ 
   }
 
   ngOnInit(): void {
@@ -57,7 +58,6 @@ export class LoginComponent {
           const { reinicio, token, crf, menu, rol, name, img, empresa, imgEmp } = data;  
           this.UsersService.setToken(token);
           this.UsersService.setTokenCrf(crf);
-          console.log(menu);
           
           this.UsersService.setUsuario(name, rol, menu, img, empresa, imgEmp);  
           if (reinicio === 'S') {

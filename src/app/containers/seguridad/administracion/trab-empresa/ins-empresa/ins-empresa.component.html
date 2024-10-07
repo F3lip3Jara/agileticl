@@ -5,7 +5,8 @@
                         ins.controls['empDir'].value,
                         ins.controls['empRut'].value,
                         ins.controls['empGiro'].value,
-                        ins.controls['empFono'].value)"
+                        ins.controls['empFono'].value,
+                        ins.controls['empTokenOMS'].value)"
     >
           <div class="card card-outline card-primary">
             <div class="card-header">
@@ -70,6 +71,12 @@
                       </div>
                       <div *ngIf = "ins.controls['empDir'].hasError('required')">
                         <span class="text-danger">Campo obligatorio!</span>
+                      </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label for="prvDir">OMS Token</label>
+                      <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="empDir" placeholder="Ingresar dirección..." formControlName = 'empTokenOMS'>
                       </div>
                     </div>
                     <div class="col-md-12 form-group mt-4">

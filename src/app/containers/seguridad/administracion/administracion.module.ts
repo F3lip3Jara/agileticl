@@ -18,6 +18,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.component';
 import { AvatarModule } from '@coreui/angular';
 import { PickListModule } from 'primeng/picklist';
+import { UpEmpresaComponent } from './trab-empresa/up-empresa/up-empresa.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { PickListModule } from 'primeng/picklist';
     TrabUsuariosComponent,
     InsUsuariosComponent,
     UpUsuariosComponent,
+    UpEmpresaComponent,
       ],
   imports: [
     CommonModule,

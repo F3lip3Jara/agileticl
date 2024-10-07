@@ -48,7 +48,8 @@ export class InsEmpresaComponent {
                      ])],
                   empFono : ['' , Validators.compose([
                       Validators.required
-                    ])]
+                    ])],
+                    empTokenOMS:['']
                 });
 
                 this.token = this.servicio.getToken();
@@ -77,8 +78,8 @@ export class InsEmpresaComponent {
       });
     }
 
-  public guardar(empDes: any , empDir:any , empRut:any, empGiro:any , empFono:any ){
-    let empresa                = {empDes: empDes , empDir:empDir , empRut: empRut ,  empGiro:empGiro ,empFono:empFono , empImg:this.avatar};
+  public guardar(empDes: any , empDir:any , empRut:any, empGiro:any , empFono:any , empTokenOMS:any ){
+    let empresa                = {empDes: empDes , empDir:empDir , empRut: empRut ,  empGiro:empGiro ,empFono:empFono , empImg:this.avatar , empTokenOMS:empTokenOMS};
     this.val                   = true;
     this.serviLoad.sumar.emit(1);
     this.rest.post('insEmpresa', this.token, empresa).subscribe(resp => {
@@ -96,12 +97,11 @@ export class InsEmpresaComponent {
   }
 
   imageCropped(event: ImageCroppedEvent): void {
-    this.croppedImage = event.blob;   
-    var myReader: FileReader = new FileReader();
-     myReader.readAsDataURL(this.croppedImage);
-     myReader.onloadend = (event) => {
-      this.avatar =event.target?.result;
-     }
+    this.croppedImage = event.blob;     
+    this.resizeImage(this.croppedImage).then(resizedImage => {
+     // Usa la imagen redimensionada
+     this.avatar = resizedImage;
+   });
   }
 
   imageLoaded(): void {

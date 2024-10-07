@@ -83,7 +83,7 @@ export class UsersService {
     let dato = this.getUser();
     this.menu = [];
     this.menu = dato.menu;
-    console.log(dato);
+    
     
     this.menu.forEach((element:any) => {
        let icono             = {}; 

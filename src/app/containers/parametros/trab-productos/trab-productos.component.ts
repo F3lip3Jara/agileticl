@@ -1,7 +1,5 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { ProductosServiceService } from './../../../servicios/productos-service.service';
-import { AlertasService } from 'src/app/servicios/alertas.service';
-import { LinksService } from 'src/app/servicios/links.service';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Observable, OperatorFunction, merge } from 'rxjs';
 import { Subject } from 'rxjs';
@@ -22,6 +20,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./trab-productos.component.css']
 })
 export class TrabProductosComponent implements OnInit {
+
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
   @ViewChild("prdDesx")  prdDesx? : ElementRef;
@@ -29,9 +28,6 @@ export class TrabProductosComponent implements OnInit {
   @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-
-
-
 
   dtOptions    : DataTables.Settings  = {} ;
   loading      : boolean              = true;
@@ -59,8 +55,6 @@ export class TrabProductosComponent implements OnInit {
               private modal        : NgbModal,
               private fb           : FormBuilder,
               private excel        : ExcelService,
-              private servicioLink : LinksService,
-              private servicioAlert: AlertasService,
               private servicePrd   : ProductosServiceService,
               private serviLoad    : LoadingService,
               private router       : Router
@@ -199,13 +193,9 @@ public buscar(prdDes : string  , created_at : string ){
  }
 
  public modelUp(xproductos : any){
+  const objstring = JSON.stringify(xproductos.id);    
+  this.router.navigate(['home/parametros/productos/actualizar/'  + objstring]);
 
-  this.servicePrd.setProductos(xproductos);
-  this.parametros = [{key :'idPrd' ,value: xproductos.id}];
-  this.servicioget.get('datPrd' , this.token, this.parametros).subscribe(data => {
-    this.servicePrd.setDatPrd(data);
-    this.router.navigate(['home/parametros/productos/actualizar']);
-  });
  }
 
 }

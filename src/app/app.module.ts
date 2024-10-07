@@ -82,7 +82,7 @@ import { MessageService } from 'primeng/api';
   ProgresoComponent,
   ScrollToTopButtonComponent,
   ModalEsperaComponent,
-  CambiopassComponent
+  CambiopassComponent,
   //TrabUserComponent
 
 ],
@@ -148,6 +148,7 @@ import { MessageService } from 'primeng/api';
     Title
   ],
   bootstrap: [AppComponent]
+  
 })
 
 

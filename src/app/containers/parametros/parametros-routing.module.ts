@@ -23,6 +23,7 @@ import {InsProveedoresComponent} from './trab-proveedores/ins-proveedores/ins-pr
 import {UpProveedorComponent} from './trab-proveedores/up-proveedor/up-proveedor.component'
 import { TrabEtapasComponent } from "./trab-etapas/trab-etapas.component";
 import { BookComponent } from "./book/book.component";
+import { TrabTipPagoComponent } from "./trab-tip-pago/trab-tip-pago.component";
 
 const routes: Routes = [
   {
@@ -117,7 +118,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'productos/actualizar',
+        path: 'productos/actualizar/:id',
         component: UpProductosComponent,
         data: {
           title: 'Productos / Actualizar',
@@ -184,6 +185,13 @@ const routes: Routes = [
         component: TrabEtapasComponent,
         data: {
           title: 'Etapas',
+        }
+      },
+      {
+        path: 'tipo_pago',
+        component: TrabTipPagoComponent,
+        data: {
+          title: 'Tipos de pago',
         }
       },
       {

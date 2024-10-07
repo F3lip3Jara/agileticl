@@ -1,17 +1,14 @@
 import { LoadingService } from './../../../../servicios/loading.service';
-import { ProductosServiceService } from './../../../../servicios/productos-service.service';
-import { LinksService } from './../../../../servicios/links.service';
-import { AlertasService } from './../../../../servicios/alertas.service';
 import { RestService } from './../../../../servicios/rest.service';
 import { UsersService } from './../../../../servicios/users.service';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup,  Validators } from '@angular/forms';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Producto } from 'src/app/model/producto.model';
 import { LogSys } from 'src/app/model/logSys.model';
 import { LogSysService } from 'src/app/servicios/log-sys.service';
-import { faCalendarWeek, faArrowTurnDown} from '@fortawesome/free-solid-svg-icons';
-import { Router } from '@angular/router';
+import { faCalendarWeek, faArrowTurnDown, faGears, faCartFlatbed, faTruckMoving, faTableColumns} from '@fortawesome/free-solid-svg-icons';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-up-productos',
@@ -20,7 +17,8 @@ import { Router } from '@angular/router';
 })
 export class UpProductosComponent implements OnInit {
 
-  insProd      : UntypedFormGroup;
+ 
+  ins          : FormGroup;
   loading      : boolean              = true;
   medidas      :any;
   monedas      :any;
@@ -34,15 +32,23 @@ export class UpProductosComponent implements OnInit {
   valCod       : any;
   valEan       : any;
   mensaje      : string               = '';
-  idPrd        : number               = 0;
   faArrowTurnDown                     = faArrowTurnDown;
-  constructor(private fg          : UntypedFormBuilder,
+  faGears                             = faGears;
+  faCartFlatbed                       = faCartFlatbed;
+  faTruckMoving                       = faTruckMoving;
+  faTableColumns                      = faTableColumns;
+  active = 1;
+  prdId                                = 0;
+  prdCod                               ='';
+  prdEan                               = '';
+
+  constructor(private fg          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
-              private servicioPrd : ProductosServiceService,
               private serviLoad   : LoadingService,
               private serLog      : LogSysService,
-              private router       : Router
+              private router       : Router,
+              private route        : ActivatedRoute
               ) {
 
       this.medidas       = {};
@@ -52,11 +58,17 @@ export class UpProductosComponent implements OnInit {
       this.colores       = {};
 
       this.token     = this.servicio.getToken();
+      this.medidas       = {};
+      this.monedas       = {};
+      this.grupos        = {};
+      this.subgrupos     = {};
+      this.colores       = {};
 
+      this.token     = this.servicio.getToken();
 
-      this.insProd = fg.group({
+      this.ins = fg.group({
         prdCod : ['', Validators.compose([
-          Validators.required
+        
           ])],
           prdInv : ['', Validators.compose([
             ])],
@@ -69,19 +81,18 @@ export class UpProductosComponent implements OnInit {
            ])],
 
            prdEan : ['', Validators.compose([
-             Validators.required ,
-             Validators.pattern('^-?[0-9]\\d*?$')
+           
             ])],
 
-            idUn : ['', Validators.compose([
+            unId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idGrp : ['', Validators.compose([
+            grpId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idSubGrp : ['', Validators.compose([
+            grpsId : ['', Validators.compose([
               Validators.required
             ])],
 
@@ -89,11 +100,11 @@ export class UpProductosComponent implements OnInit {
               Validators.required
             ])],
 
-            idCol : ['', Validators.compose([
+            colId : ['', Validators.compose([
               Validators.required
             ])],
 
-            idMon : ['', Validators.compose([
+            monId : ['', Validators.compose([
               Validators.required
             ])],
 
@@ -120,18 +131,47 @@ export class UpProductosComponent implements OnInit {
               Validators.required,
               Validators.pattern('^-?[0-9]\\d*?$')
             ])],
-
-
       });
     }
 
 
   ngOnInit(): void {
 
+    this.route.params.subscribe(params => {
+      const obj = params['id'];
+      this.prdId = JSON.parse(obj);
+    });
+
+  this.parametros = [{key :'prdId' ,value: this.prdId}];
+  this.rest.get('datPrd' , this.token, this.parametros).subscribe((data:any) => {
+
+  data.forEach((element:any) => {
+      
+    this.ins.controls['prdDes'].setValue(element.prdDes);
+    this.ins.controls['prdObs'].setValue(element.prdObs);
+    this.ins.controls['prdEan'].setValue(element.prdEan);
+    this.ins.controls['unId'].setValue(element.unId);
+    this.ins.controls['grpId'].setValue(element.grpId);
+    this.ins.controls['grpsId'].setValue(element.grpsId);
+    this.ins.controls['prdTip'].setValue(element.prdTip);
+    this.ins.controls['colId'].setValue(element.colId);
+    this.ins.controls['monId'].setValue(element.monId);
+    this.ins.controls['prdCost'].setValue(element.prdCost);
+    this.ins.controls['prdNet'].setValue(element.prdNet);
+    this.ins.controls['prdBrut'].setValue(element.prdBrut);
+    this.ins.controls['prdPes'].setValue(element.prdPes);
+    this.ins.controls['prdMin'].setValue(element.prdMin);
+    this.ins.controls['prdCod'].setValue(element.prdCod);
+    this.prdCod = element.prdCod;
+    this.prdEan = element.prdEan;
+  });
+  
+    
+  })
 
 
     this.rest.get('trabUnidad' , this.token,this.parametros).subscribe(data => {
-      this.medidas = data;
+          this.medidas = data;
     });
 
     this.rest.get('trabGrupo' , this.token,this.parametros).subscribe(data => {
@@ -148,96 +188,18 @@ export class UpProductosComponent implements OnInit {
       this.carga = 'visible';
     });
 
-    this.insProd.controls['idGrp'].valueChanges.subscribe(field => {
+    this.ins.controls['grpId'].valueChanges.subscribe(field => {
     this.subgrupos = {};
-    this.parametros = [{key :'idGrp' ,value: field}];
+    this.parametros = [{key :'grpId' ,value: field}];
     this.rest.get('subGrp' , this.token, this.parametros).subscribe(data => {
       this.subgrupos = data;
       });
     });
 
+  
+   
+    this.serviLoad.sumar.emit(4);
 
-
-    let productox  =  this.servicioPrd.getDatPrd();
-    let prdcodx    = '';
-    let prdEanx    = '';
-    productox.forEach((element : any) => {
-      this.insProd.controls['prdCod'].setValue(element.prdCod);
-      prdcodx = element.prdCod;
-      prdEanx = element.prdEan;
-      if(element.prdInv == 'S'){
-        this.insProd.controls['prdInv'].setValue(true);
-      }else{
-        this.insProd.controls['prdInv'].setValue(false);
-      }
-      this.insProd.controls['prdDes'].setValue(element.prdDes);
-      this.insProd.controls['prdObs'].setValue(element.prdObs);
-      this.insProd.controls['prdEan'].setValue(element.prdEan);
-      this.insProd.controls['idUn'].setValue(element.idUn);
-      this.insProd.controls['idGrp'].setValue(element.idGrp);
-      this.insProd.controls['idSubGrp'].setValue(element.idSubGrp);
-      this.insProd.controls['prdTip'].setValue(element.prdTip);
-      this.insProd.controls['idCol'].setValue(element.idCol);
-      this.insProd.controls['idMon'].setValue(element.idMon);
-      this.insProd.controls['prdCost'].setValue(element.prdCost);
-      this.insProd.controls['prdNet'].setValue(element.prdNet);
-      this.insProd.controls['prdBrut'].setValue(element.prdBrut);
-      this.insProd.controls['prdPes'].setValue(element.prdPes);
-      this.insProd.controls['prdMin'].setValue(element.prdMin);
-      this.idPrd  = element.idPrd;
-
-    });
-
-
-
-
-    this.insProd.controls['prdCod'].valueChanges.pipe(
-      filter(text => text.length > 1),
-      debounceTime(200),
-      distinctUntilChanged()).subscribe(field => {
-      this.parametros = [{key :'prdCod' ,value: field}];
-      if(field == prdcodx){
-        this.valCod = false;
-        this.mensaje='';
-      }else{
-        this.rest.get('valPrdCod', this.token , this.parametros).subscribe( (data : any) => {
-          if(data != 0){
-            this.valCod = true;
-            this.mensaje= 'El código ya existe';
-          }else{
-            this.valCod = false;
-            this.mensaje='';
-          }
-
-        });
-      }
-
-
-
-      });
-
-     this.insProd.controls['prdEan'].valueChanges.pipe(
-      filter(text => text.length > 1 ),
-      debounceTime(200),
-      distinctUntilChanged()).subscribe(field => {
-      if(field == prdEanx){
-        this.valEan = false;
-        this.mensaje='';
-      }else{
-        this.parametros = [{key :'prdEan' ,value: field}];
-        this.rest.get('valPrdEan', this.token , this.parametros).subscribe( (data : any) => {
-            if(data != 0){
-              this.valEan = true;
-              this.mensaje= 'El código ya existe';
-            }else{
-              this.valEan = false;
-              this.mensaje='';
-          }
-        });
-      }
-      });
-
-      this.serviLoad.sumar.emit(4);
   }
 
   public guardar(
@@ -265,24 +227,13 @@ export class UpProductosComponent implements OnInit {
         prdInv = 'N';
     }
 
-    let producto : Producto  = new Producto(this.idPrd, prdDes , prdCod , prdObs, '', prdEan , prdTip , prdCost , prdNet , prdBrut , prdInv , prdPes , prdMin , idGrp , idSubGrp , idCol , idMon , idUn )
-
-    console.log(producto);
+    let producto : Producto  = new Producto(0, prdDes , prdCod , prdObs, '', prdEan , prdTip , prdCost , prdNet , prdBrut , prdInv , prdPes , prdMin , idGrp , idSubGrp , idCol , idMon , idUn )
     this.val                 = true;
+    this.serviLoad.sumar.emit(1);
     this.rest.post('updProducto', this.token, producto).subscribe(resp => {
-     resp.forEach((elementx : any)  => {
-          if(elementx.error == '0' ){
-            let des        = 'Actualizar material/producto ' + prdCod;
-            let log        = new LogSys(2, '' , 35 , 'ACTUALIZAR MATERIAL' , des);
-            this.serLog.insLog(log);    
-            setTimeout(()=>{
-              this.router.navigate(['home/parametros/productos']);
-            },1500);
-          }else{
-            this.val=false;
-          }
-      });
+      this.router.navigate(['home/parametros/productos']);
     });
   }
+
 
 }

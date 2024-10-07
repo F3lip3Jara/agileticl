@@ -45,7 +45,7 @@ export class InsEmpOpcionesComponent {
       const empresaString = params['empresa'];
       this.empresa = JSON.parse(empresaString);
     });
-
+    
     this.parametros = [{key: 'empId' , value:this.empresa.empId}]
     this.rest.get('optsnAsig', this.token,this.parametros).subscribe(data => {
       this.optnAsig = data;
@@ -55,19 +55,6 @@ export class InsEmpOpcionesComponent {
       this.optAsig = data;
     });
 
-  }
-
- 
-
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
   }
 
   guardar(){

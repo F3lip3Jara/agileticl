@@ -28,12 +28,13 @@
         <app-select-icon [icono]="modulo.molIcon" (onItemAdded)="icono($event)"></app-select-icon>
       </div>
       <div class="col-md-12">  <ng-template  appReceptor  ></ng-template></div>
-      <div class="col-md-12" *ngIf="ins.valid  && optAsig.length > 0">
+      <div class="col-md-12" >
         <hr>
         <button
           type="submit"
           class="btn btn-outline-primary btn-sm mb-3 mt-2"
-          [disabled]="val"          
+          [disabled]="val"  
+          *ngIf="ins.valid && optAsig.length > 0  && icon != ''"        
         >
           <div *ngIf="val">
             Guardando..
@@ -45,7 +46,7 @@
           <fa-icon [icon]="faArrowTurnDown"></fa-icon>
           Volver
         </a>
-      </div>
+      </div> 
     </form>
  </div>
 </div>

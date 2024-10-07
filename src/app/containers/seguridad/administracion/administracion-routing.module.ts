@@ -8,6 +8,7 @@ import { TrabAccionesComponent } from "./trab-opciones/trab-acciones/trab-accion
 import { TrabUsuariosComponent } from "./trab-usuarios/trab-usuarios.component";
 import { InsUsuariosComponent } from "./trab-usuarios/ins-usuarios/ins-usuarios.component";
 import { UpUsuariosComponent } from "./trab-usuarios/up-usuarios/up-usuarios.component";
+import { UpEmpresaComponent } from "./trab-empresa/up-empresa/up-empresa.component";
 
 const routes: Routes = [
   {
@@ -29,7 +30,15 @@ const routes: Routes = [
         data: {
           title: 'Empresa - Ingreso',
         }
-      },{
+      },
+      {
+        path: 'empresa/up/:empresa',
+        component:UpEmpresaComponent,
+        data: {
+          title: 'Empresa - Opciones',
+        }
+      },
+      {
         path: 'empresa/opciones/:empresa',
         component:InsEmpOpcionesComponent,
         data: {

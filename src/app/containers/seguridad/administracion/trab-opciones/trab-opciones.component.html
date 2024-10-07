@@ -71,7 +71,7 @@
           </div>
           <div class="form-group">
             <label for="">Opción</label>
-            <input type="text" class="form-control"  oninput="this.value = this.value.toUpperCase()" #optDes 
+            <input type="text" class="form-control"  #optDes 
             [ngClass]="(!optDes.value)? 'was-validated' : 'is-valid'" >
              <div *ngIf="!optDes.value">
               <span class="text-danger">Campo obligatorio!</span>
@@ -101,7 +101,7 @@
           </div>
           <div class="form-group">
             <label for="">Opción</label>
-            <input type="text" class="form-control"  oninput="this.value = this.value.toUpperCase()" value="{{opcion.optDes}}" #optDes 
+            <input type="text" class="form-control"   value="{{opcion.optDes}}" #optDes 
             [ngClass]="(!optDes.value)? 'was-validated' : 'is-valid'" >
              <div *ngIf="!optDes.value">
               <span class="text-danger">Campo obligatorio!</span>

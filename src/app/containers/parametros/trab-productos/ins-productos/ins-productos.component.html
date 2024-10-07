@@ -1,288 +1,313 @@
-<div class="row" >
-  <form [formGroup] = "insProd"
-  (ngSubmit)  = "guardar(
-  insProd.controls['prdDes'].value,
-  insProd.controls['prdCod'].value,
-  insProd.controls['prdObs'].value,
-  insProd.controls['prdEan'].value,
-  insProd.controls['prdTip'].value,
-  insProd.controls['prdCost'].value,
-  insProd.controls['prdNet'].value,
-  insProd.controls['prdBrut'].value,
-  insProd.controls['prdInv'].value,
-  insProd.controls['prdPes'].value,
-  insProd.controls['prdMin'].value,
-  insProd.controls['idGrp'].value,
-  insProd.controls['idSubGrp'].value,
-  insProd.controls['idCol'].value,
-  insProd.controls['idMon'].value,
-  insProd.controls['idUn'].value
-  )"
+
+<div class="row">
+  <form [formGroup] = "ins"
+  (ngSubmit)="guardar(ins.controls['prdDes'].value,
+  ins.controls['prdCod'].value,
+  ins.controls['prdObs'].value,
+  ins.controls['prdEan'].value,
+  ins.controls['prdTip'].value,
+  ins.controls['prdCost'].value,
+  ins.controls['prdNet'].value,
+  ins.controls['prdBrut'].value,
+  ins.controls['prdInv'].value,
+  ins.controls['prdPes'].value,
+  ins.controls['prdMin'].value,
+  ins.controls['grpId'].value,
+  ins.controls['grpsId'].value,
+  ins.controls['colId'].value,
+  ins.controls['monId'].value,
+  ins.controls['unId'].value)"
   >
-    <div class="col-md-9">
-      <div class="col-md-12">
         <div class="card card-outline card-primary">
           <div class="card-header">
-            <h5 class="card-title">Ingreso de Productos/ Servicio</h5>           
+            <h5 class="card-title">Ingreso de Producto</h5>
             <!-- /.card-tools -->
           </div>
           <!-- /.card-header -->
-          <div class="card-body">
-            <div class="modal-body">
-              <div class="loading" *ngIf= "loading" >
-                <img src = "assets/Circles-menu-3.gif">
-               </div>
+          <div class="card-body">            
+                <div class="row">  
+                  <div class="loading" *ngIf= "loading" >
+                    <img src = "assets/Circles-menu-3.gif">
+                   </div>
 
-                <div class="row"  class="{{carga}}">
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Codigo</label>
+                  <div class="container" class="{{carga}}">
+                    <div class="row">
+                      <div class="col-12 mb-3">
+                        <label for="productName" class="form-label">Código del producto</label>
+                        <div class="input-group input-group-sm">
+                          <input type="text" class="form-control" id="prdCod" placeholder="Ingrese Código..." formControlName = 'prdCod'
+                          [ngClass]="(ins.controls['prdCod'].hasError('required') )
+                           ? 'was-validated' : 'is-valid'" >
+                         </div>
+                    </div>
+                    <div class="col-12 mb-3">
+                      <label for="productName" class="form-label">Código Ean</label>
                       <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar código."  formControlName = 'prdCod' >
-                    </div>
+                        <input type="text" class="form-control" id="prdEan" placeholder="Ingrese Código..." formControlName = 'prdEan'
+                        [ngClass]="(ins.controls['prdEan'].hasError('required') )
+                         ? 'was-validated' : 'is-valid'" >
+                       </div>
                   </div>
-                  <div *ngIf = "insProd.controls['prdCod'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                  <div *ngIf = "valCod">
-                    <span class="text-danger">{{mensaje}}</span>
-                  </div>
-                 </div>
-                  <div class="col-md-8">
-                    <div class="form-group">
-                      <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="prdInv" formControlName='prdInv'>
-                        <label class="custom-control-label" for="prdInv">Es Inventariable</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class=" col-md-12">
-                  <div class="form-group">
-                    <label for="prvNom">Descripción</label>
-                    <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="prvNom" placeholder="Ingresar descripción..." formControlName = 'prdDes' >
-                  </div>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdDes'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="prvNom2">Información Adicional</label>
-                    <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="empApe" placeholder="Ingresar inforamción adicional..." formControlName = 'prdObs'  >
-                  </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="prvGiro">Cód Barra</label>
-                    <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" id="prdEan" placeholder="Ingresar cód..." formControlName='prdEan'>
-                  </div>
-                  </div>
-                   <div *ngIf = "insProd.controls['prdEan'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdEan'].hasError('pattern')">
-                    <span class="text-danger">formato incorrecto!</span>
-                  </div>
-                  <div *ngIf = "valEan">
-                    <span class="text-danger">{{mensaje}}</span>
-                  </div>
-
-                  </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="prvDir">Unidad de Medida</label>
-                        <div class=" input-group-sm" *ngIf="medidas.length > 0">
-                          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName='idUn'>
-                            <option   value="">Seleccione</option>
-                            <option  *ngFor = "let medida of medidas"  value="{{medida.idUn}}">{{medida.unDes}}</option>
-                          </select>
+                        <!-- Nombre del producto -->
+                        <div class="col-12 mb-3">
+                            <label for="productName" class="form-label">Descripción del producto</label>
+                            <div class="input-group input-group-sm">
+                              <input type="text" class="form-control" id="prdDes" placeholder="Ingresar Descripción..." formControlName = 'prdDes'
+                              [ngClass]="(ins.controls['prdDes'].hasError('required') )
+                               ? 'was-validated' : 'is-valid'" >
+                             </div>
                         </div>
-                      </div>
-                       <div *ngIf = "insProd.controls['idUn'].hasError('required')">
-                        <span class="text-danger">Campo obligatorio!</span>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="prvDir">Grupo</label>
-                        <div class=" input-group-sm" *ngIf="grupos.length > 0">
-                          <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName="idGrp">
-                            <option   value="">Seleccione</option>
-                            <option  *ngFor = "let grupo of grupos"  value="{{grupo.idGrp}}">{{grupo.grpDes}}</option>
-                          </select>
+                
+                        <!-- Descripción del producto -->
+                        <div class="col-12 mb-3">
+                            <label for="productDescription" class="form-label">Descripción del producto</label>
+                            <textarea class="form-control" id="productDescription" rows="3" formControlName="prdObs"></textarea>
                         </div>
+                
+                        <!-- Datos del producto (Tabs) -->
+                      <div class="col-12">
+                        <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+                          <li [ngbNavItem]="1">
+                            <button ngbNavLink><fa-icon [icon]="faGears"></fa-icon> General</button>
+                            <ng-template ngbNavContent>
+                              <div class="col-md-5">
+                                <label for="nombre">Moneda</label>
+                                <div  *ngIf="!monedas.length">
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                </div>
+                                <div class="" *ngIf="monedas.length > 0" >
+                                    <ng-select  [items]="monedas"
+                                                bindLabel="monDes"
+                                                bindValue="monId"
+                                                formControlName="monId"
+                                                [ngClass]="(ins.controls['monId'].hasError('required'))
+                                                ? 'was-validated' : 'is-valid'" >
+                                    </ng-select >
+                                  </div>
+                                    <div *ngIf = "ins.controls['monId'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="productName" class="form-label">Costo</label>
+                                <div class=" input-group input-group-sm">
+                                  <input type="text" class="form-control" id="prdCost" placeholder="Ingresar precio..." formControlName = 'prdCost'
+                                  [ngClass]="(ins.controls['prdCost'].hasError('required')  || ins.controls['prdCost'].hasError('pattern') )
+                                   ? 'was-validated' : 'is-valid'" >                                   
+                                 </div>
+                                 <div *ngIf = "ins.controls['prdCost'].hasError('required')">
+                                  <span class="text-danger">Campo obligatorio!</span>
+                                </div>
+                                <div *ngIf = "ins.controls['prdCost'].hasError('pattern')">
+                                  <span class="text-danger">Formato incorrecto!</span>
+                                </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="productName" class="form-label">Precio Bruto</label>
+                                <div class=" input-group input-group-sm">
+                                  <input type="text" class="form-control" id="prdBrut" placeholder="Ingresar precio..." formControlName = 'prdBrut'
+                                  [ngClass]="(ins.controls['prdBrut'].hasError('required') || ins.controls['prdBrut'].hasError('pattern') )
+                                   ? 'was-validated' : 'is-valid'" >                                   
+                                 </div>
+                                 <div *ngIf = "ins.controls['prdBrut'].hasError('required')">
+                                  <span class="text-danger">Campo obligatorio!</span>
+                                </div>
+                                <div *ngIf = "ins.controls['prdBrut'].hasError('pattern')">
+                                  <span class="text-danger">Formato incorrecto!</span>
+                                </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="productName" class="form-label">Precio Neto</label>
+                                <div class=" input-group input-group-sm">
+                                  <input type="text" class="form-control" id="prdNet" placeholder="Ingresar precio..." formControlName = 'prdNet'
+                                  [ngClass]="(ins.controls['prdNet'].hasError('required') || ins.controls['prdNet'].hasError('pattern')  )
+                                   ? 'was-validated' : 'is-valid'" >
+                                 </div>
+                                 <div *ngIf = "ins.controls['prdNet'].hasError('required')">
+                                  <span class="text-danger">Campo obligatorio!</span>
+                                </div>
+                                <div *ngIf = "ins.controls['prdNet'].hasError('pattern')">
+                                  <span class="text-danger">Formato incorrecto!</span>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                          <li [ngbNavItem]="2">
+                            <button ngbNavLink><fa-icon [icon]="faCartFlatbed"></fa-icon> Inventario</button>
+                            <ng-template ngbNavContent> 
+                              <div class="col-md-12 mt-2 mb-2">
+                                <div class="form-check form-switch">
+                                  <input class="form-check-input" type="checkbox" checked formControlName="prdInv">
+                                  <label class="form-check-label" for="flexSwitchCheckDefault">Inventariable</label>
+                                </div>
+                              </div>                             
+                              <div class="col-md-5">
+                                <label for="productName" class="form-label">Min. Stock</label>
+                                <div class=" input-group input-group-sm">
+                                  <input type="text" class="form-control" id="prdMin" placeholder="Min..." formControlName = 'prdMin'
+                                  [ngClass]="(ins.controls['prdMin'].hasError('required') || ins.controls['prdMin'].hasError('pattern'))
+                                   ? 'was-validated' : 'is-valid'" >
+                                 </div>
+                                 <div *ngIf = "ins.controls['prdMin'].hasError('required')">
+                                  <span class="text-danger">Campo obligatorio!</span>
+                                </div>
+                                <div *ngIf = "ins.controls['prdMin'].hasError('pattern')">
+                                  <span class="text-danger">formato incorrecto!</span>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                          <li [ngbNavItem]="3">
+                            <button ngbNavLink><fa-icon [icon]="faTruckMoving"></fa-icon> Envío</button>
+                            <ng-template ngbNavContent>                           
+                              <div class="col-md-5">
+                                <label for="productName" class="form-label">Peso KG</label>
+                                <div class=" input-group input-group-sm">
+                                  <input type="text" class="form-control" id="prdPes" placeholder="Ingresar peso..." formControlName = 'prdPes'
+                                  [ngClass]="(ins.controls['prdPes'].hasError('required') || ins.controls['prdPes'].hasError('pattern') )
+                                   ? 'was-validated' : 'is-valid'" >                                   
+                                 </div>
+                                 <div *ngIf = "ins.controls['prdPes'].hasError('required')">
+                                  <span class="text-danger">Campo obligatorio!</span>
+                                </div>
+                                <div *ngIf = "ins.controls['prdPes'].hasError('pattern')">
+                                  <span class="text-danger">Formato incorrecto!</span>
+                                </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                          <li [ngbNavItem]="4">
+                            <button ngbNavLink><fa-icon [icon]="faTableColumns"></fa-icon>Atributos</button>
+                            <ng-template ngbNavContent>
+                              <div class="col-md-5">
+                                <label for="nombre">Tipo</label>                               
+                                <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName ='prdTip'
+                                [ngClass]="(ins.controls['prdTip'].hasError('required')) ? 'was-validated' : 'is-valid'">
+                                  <option   value="">Seleccione</option>
+                                  <option   value="I">Insumos</option>
+                                  <option   value="B">Materia Base</option>
+                                  <option   value="M">Materia Prima</option>
+                                  <option   value="V">Materia Virgen</option>
+                                  <option   value="T">Producto Terminado</option>
+                                  <option   value="S">Servicio</option>
+                                </select>
+                                    <div *ngIf = "ins.controls['prdTip'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="nombre">Unidad de Medida</label>
+                                <div  *ngIf="!medidas.length">
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                </div>
+                                <div class="" *ngIf="medidas.length > 0" >
+                                    <ng-select  [items]="medidas"
+                                                bindLabel="unDes"
+                                                bindValue="unId"
+                                                formControlName="unId"
+                                                [ngClass]="(ins.controls['unId'].hasError('required'))
+                                                ? 'was-validated' : 'is-valid'" >
+                                    </ng-select >
+                                  </div>
+                                    <div *ngIf = "ins.controls['unId'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="nombre">Grupo</label>
+                                <div  *ngIf="!grupos.length">
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                </div>
+                                <div class="" *ngIf="grupos.length > 0" >
+                                    <ng-select  [items]="grupos"
+                                                bindLabel="grpDes"
+                                                bindValue="grpId"
+                                                formControlName="grpId"
+                                                [ngClass]="(ins.controls['grpId'].hasError('required'))
+                                                ? 'was-validated' : 'is-valid'" >
+                                    </ng-select >
+                                  </div>
+                                    <div *ngIf = "ins.controls['grpId'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="nombre">Sub Grupo</label>
+                                <div  *ngIf="!subgrupos.length">
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                </div>
+                                <div class="" *ngIf="subgrupos.length > 0" >
+                                    <ng-select  [items]="subgrupos"
+                                                bindLabel="grpsDes"
+                                                bindValue="grpsId"
+                                                formControlName="grpsId"
+                                                [ngClass]="(ins.controls['grpsId'].hasError('required'))
+                                                ? 'was-validated' : 'is-valid'" >
+                                    </ng-select >
+                                  </div>
+                                    <div *ngIf = "ins.controls['grpsId'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                              <div class="col-md-5">
+                                <label for="nombre">Color</label>
+                                <div  *ngIf="!colores.length">
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                  <i class="spinner-grow spinner-grow-sm"></i>
+                                </div>
+                                <div class="" *ngIf="colores.length > 0" >
+                                    <ng-select  [items]="colores"
+                                                bindLabel="colDes"
+                                                bindValue="colId"
+                                                formControlName="colId"
+                                                [ngClass]="(ins.controls['colId'].hasError('required'))
+                                                ? 'was-validated' : 'is-valid'" >
+                                    </ng-select >
+                                  </div>
+                                    <div *ngIf = "ins.controls['colId'].hasError('required')">
+                                      <span class="text-danger">Campo obligatorio!</span>
+                                    </div>
+                              </div>
+                            </ng-template>
+                          </li>
+                        </ul>                        
+                        <div [ngbNavOutlet]="nav" class="mt-2"></div>
                       </div>
-                      <div *ngIf = "insProd.controls['idGrp'].hasError('required')">
-                        <span class="text-danger">Campo obligatorio!</span>
+                    </div>
+                    <!-- Publicar producto -->
+                  </div>
+                
+                  <div class="col-md-12 mt-2">
+                    <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"   *ngIf="ins.valid" [disabled]="val" >
+                      <div *ngIf= "val">
+                        Guardando..
+                        <span class="spinner-border spinner-border-sm mr-2"></span>
                       </div>
-                    </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="nombre">Sub Grupo</label>
-                    <div  *ngIf=" !subgrupos.length ">
-                      <div class="spinner-border spinner-border-sm" role="status">
-                        <span class="sr-only">Loading...</span>
-                      </div>
-                      <div class="spinner-grow spinner-grow-sm" role="status">
-                        <span class="sr-only">Loading...</span>
-                      </div>
-                    </div>
-                   <div class=" input-group-sm" *ngIf="grupos.length > 0 && subgrupos.length > 0">
-                      <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName = 'idSubGrp'>
-                        <option   value="">Seleccione</option>
-                        <option  *ngFor = "let subGrp of subgrupos"  value="{{subGrp.idSubGrp}}">{{subGrp.grpsDes}}</option>
-                      </select>
-                    </div>
-                    <div *ngIf = "insProd.controls['idSubGrp'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
+                      <div *ngIf= "!val">
+                        Guardar
+                      </div>      
+                    </button>                   
+                    <a routerLink="./.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+                      <fa-icon [icon]="faArrowTurnDown"></fa-icon>
+                      Volver
+                    </a>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="nombre">Tipo</label>
-                    <div class=" input-group-sm">
-                      <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true" formControlName ='prdTip'>
-                        <option   value="">Seleccione</option>
-                        <option   value="I">Insumos</option>
-                        <option   value="B">Materia Base</option>
-                        <option   value="M">Materia Prima</option>
-                        <option   value="V">Materia Virgen</option>
-                        <option   value="P">Producto Terminado</option>
-                        <option   value="S">Servicio</option>
-                      </select>
-                    </div>
-                    <div *ngIf = "insProd.controls['prdTip'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
-                  </div>
-                </div>
-
-                <hr>
-              <h6>Datos Adicionales</h6>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="prvDir">Color</label>
-                  <div class=" input-group-sm" *ngIf="colores.length > 0" >
-                    <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName = 'idCol'>
-                      <option   value="">Seleccione</option>
-                      <option  *ngFor = "let color of colores"  value="{{color.idCol}}">{{color.colDes}}</option>
-                    </select>
-                  </div>
-                  <div *ngIf = "insProd.controls['idCol'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                </div>
               </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="prvDir">Moneda</label>
-                    <div class=" input-group-sm" *ngIf="monedas.length > 0">
-                      <select  class="form-select"  style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName = 'idMon'>
-                        <option   value="">Seleccione</option>
-                        <option  *ngFor = "let moneda of monedas"  value="{{moneda.idMon}}">{{moneda.monDes}}</option>
-                      </select>
-                    </div>
-                    <div *ngIf = "insProd.controls['idMon'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
-                  </div>
-                </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Costo</label>
-                      <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar costo..." formControlName = 'prdCost' >
-                    </div>
-                    <div *ngIf = "insProd.controls['prdCost'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
-                    <div *ngIf = "insProd.controls['prdCost'].hasError('pattern')">
-                      <span class="text-danger">formato incorrecto!</span>
-                    </div>
-                  </div>
-                </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Precio Neto</label>
-                      <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar precio neto..."  formControlName ='prdNet'>
-                    </div>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdNet'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdNet'].hasError('pattern')">
-                    <span class="text-danger">formato incorrecto!</span>
-                  </div>
-                </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Precio Bruto</label>
-                      <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar precio bruto..." formControlName='prdBrut'>
-                    </div>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdBrut'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdBrut'].hasError('pattern')">
-                    <span class="text-danger">formato incorrecto!</span>
-                  </div>
-                </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Peso KG</label>
-                      <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar KG..."  formControlName='prdPes'  >
-                    </div>
-                    <div *ngIf = "insProd.controls['prdPes'].hasError('pattern')">
-                      <span class="text-danger">formato incorrecto!</span>
-                    </div>
-                  </div>
-                </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label for="prdCod">Min. Stock</label>
-                      <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="prdCod" placeholder="Ingresar Min Stock..." formControlName='prdMin' >
-                    </div>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdMin'].hasError('required')">
-                    <span class="text-danger">Campo obligatorio!</span>
-                  </div>
-                  <div *ngIf = "insProd.controls['prdMin'].hasError('pattern')">
-                    <span class="text-danger">formato incorrecto!</span>
-                  </div>
-                </div>
-
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"   *ngIf ="insProd.valid && !valCod && !valEan" [disabled]="val">
-                    <div *ngIf= "val">
-                      Guardando..
-                      <span class="spinner-border spinner-border-sm mr-2"></span>
-                    </div>
-                    <div *ngIf= "!val">
-                      Guardar
-                    </div>
-
-                  </button>
-                  <a  routerLink=".." class="btn btn-outline-primary btn-sm mb-3 mt-2">
-                    <fa-icon [icon]=" faArrowTurnDown"></fa-icon>             
-                    Volver
-                  </a>
-                </div>
-              </div>
-            </div>
-
-          </div>
+             
+            </div>            
           <!-- /.card-body -->
-        </div>
-      </div>
-    </div>
+        </div>           
   </form>
   </div>
-
+  
+  
+  

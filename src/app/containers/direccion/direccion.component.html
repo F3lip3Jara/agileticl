@@ -1,0 +1,4 @@
+<input type="text" class="form-control"  #cenDir 
+[ngClass]="(!cenDir.value)? 'was-validated' : 'is-valid'">
+ <div *ngIf="!cenDir.value">
+  <span class="text-danger">Campo obligatorio!</span>
