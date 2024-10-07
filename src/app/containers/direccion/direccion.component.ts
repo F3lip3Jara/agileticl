@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChild } from '@angular/core';
+import { Environment } from 'src/app/model/env.model';
 
 @Component({
   selector: 'app-direccion',
@@ -11,7 +12,9 @@ export class DireccionComponent {
   @Output() onItemAdded: EventEmitter<any>;
   @Input() cenDes? : string;
 
-  constructor(private renderer : Renderer2){
+  constructor(private renderer : Renderer2,
+              private environment :Environment
+  ){
     this.onItemAdded = new EventEmitter();
   }
 
@@ -23,7 +26,7 @@ export class DireccionComponent {
    // Carga el script de Google Maps
    public loadGoogleMaps() {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key==places`;
+    script.src = "https://maps.googleapis.com/maps/api/js?key="+ this.environment.keygoogle +"=places";
     script.async = true;
     script.defer = true;
     script.onload = () => this.initAutocomplete();
