@@ -23,7 +23,7 @@ export class DireccionComponent {
    // Carga el script de Google Maps
    public loadGoogleMaps() {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCg2LRrhwpEmKeGKGBaVUTD6cQdbuiPMjM&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key==places`;
     script.async = true;
     script.defer = true;
     script.onload = () => this.initAutocomplete();
