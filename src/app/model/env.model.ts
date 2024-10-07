@@ -6,4 +6,5 @@ export class Environment {
  public wsPort      = '6001';
  public forceTLS    = 'false';
  public disableStats= 'false';
+ public keygoogle   = "AIzaSyADuggTVu7JnRb0L_fIENMWltBUgHBCSkI";
 }

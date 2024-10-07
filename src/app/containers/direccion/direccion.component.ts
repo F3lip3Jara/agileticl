@@ -26,7 +26,11 @@ export class DireccionComponent {
    // Carga el script de Google Maps
    public loadGoogleMaps() {
     const script = document.createElement('script');
+<<<<<<< HEAD
     script.src = "https://maps.googleapis.com/maps/api/js?key="+ this.environment.keygoogle +"=places";
+=======
+    script.src = `https://maps.googleapis.com/maps/api/js?key=&libraries=places`;
+>>>>>>> 1dadb8836a3a8b8ff0cfecded66c66c92f7848b3
     script.async = true;
     script.defer = true;
     script.onload = () => this.initAutocomplete();
