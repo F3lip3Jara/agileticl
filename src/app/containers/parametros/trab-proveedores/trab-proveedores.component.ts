@@ -92,9 +92,6 @@ export class TrabProveedoresComponent implements OnInit {
       ])]
 
      });
-
-    
-
    }
    
   ngOnInit(): void {

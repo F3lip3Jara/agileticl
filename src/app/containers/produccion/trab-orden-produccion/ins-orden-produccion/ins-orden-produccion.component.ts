@@ -5,8 +5,9 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ins-orden-produccion',
@@ -17,8 +18,8 @@ export class InsOrdenProduccionComponent implements OnInit {
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
 
-  insPrd       : UntypedFormGroup;
-  insOrd       : UntypedFormGroup;
+  insPrd       : FormGroup;
+  insOrd       : FormGroup;
   token        :string                = '';
   proveedores  : any;
   carga        : string               = "";
@@ -40,11 +41,12 @@ export class InsOrdenProduccionComponent implements OnInit {
 
   constructor(
     private servicio     : UsersService,
-    private fb           : UntypedFormBuilder,
+    private fb           : FormBuilder,
     private rest         : RestService,
     private modal        : NgbModal,
     private servicioaler : AlertasService,
-    private servicioLink : LinksService) {
+    private servicioLink : LinksService,
+    ) {
 
       this.token    = this.servicio.getToken();
       this.insPrd   = fb.group({

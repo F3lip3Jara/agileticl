@@ -26,6 +26,8 @@ export class InsEmpOpcionesComponent {
   faStar                    = faStar;
   faArrowUp                 = faArrowUp;
   faGear                    = faGear;
+  loading      : boolean    = true;
+  carga        : string     = "invisible";
 
   constructor( private servicio     : UsersService,
                private rest         : RestService,
@@ -41,18 +43,30 @@ export class InsEmpOpcionesComponent {
               }
 
   ngOnInit(){
+    this.serviLoad.sumar.emit(2);
+
     this.route.params.subscribe(params => {
-      const empresaString = params['empresa'];
-      this.empresa = JSON.parse(empresaString);
-    });
-    
-    this.parametros = [{key: 'empId' , value:this.empresa.empId}]
-    this.rest.get('optsnAsig', this.token,this.parametros).subscribe(data => {
-      this.optnAsig = data;
-    });
-    
-    this.rest.get('optAsig', this.token,this.parametros).subscribe(data => {
-      this.optAsig = data;
+      let empId = params['empresa'];
+      this.parametros = [{key : 'empId', value:empId}];  
+      this.rest.get('empresafil', this.token, this.parametros).subscribe((resp:any) => {
+          resp.forEach((element:any) => {
+
+            this.empresa = element;          
+            this.parametros = [{key: 'empId' , value:this.empresa.empId}]
+            this.rest.get('optsnAsig', this.token,this.parametros).subscribe(data => {
+              this.optnAsig = data;
+            });
+            
+            this.rest.get('optAsig', this.token,this.parametros).subscribe(data => {
+              this.optAsig = data;
+            });
+
+            setTimeout(()=> {
+              this.carga = 'visible';
+              this.loading = false;
+           },1500 );
+          });
+      });
     });
 
   }

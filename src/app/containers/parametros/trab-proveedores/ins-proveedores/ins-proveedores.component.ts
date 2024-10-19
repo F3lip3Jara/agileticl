@@ -112,15 +112,20 @@ export class InsProveedoresComponent implements OnInit {
         this.ins.controls['regId'].setValue('');
         this.ins.controls['comId'].setValue('');
         this.ins.controls['ciuId'].setValue('');
-        this.serviLoad.sumar.emit(1);
-        this.parametros = [{key :'paiId' ,value: field}];
-        this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
-          this.regiones = data;
-          });
+      
+          if(field != null){
+            this.serviLoad.sumar.emit(1);
+            this.parametros = [{key :'paiId' ,value: field}];
+            this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
+              this.regiones = data;
+            });
+          }
+         
+        
       });
 
       this.ins.controls['regId'].valueChanges.subscribe(field => {
-        if(field > 0){
+        if(field != null){
           this.ciudades= {};
           this.comunas = {};
           this.ins.controls['comId'].setValue('');
@@ -134,7 +139,7 @@ export class InsProveedoresComponent implements OnInit {
       });
 
       this.ins.controls['ciuId'].valueChanges.subscribe(field => {
-        if(field > 0){
+        if(field != null){
           this.comunas = {};
           this.ins.controls['comId'].setValue('');
           this.serviLoad.sumar.emit(1);

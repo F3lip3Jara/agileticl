@@ -11,9 +11,10 @@ export class DireccionComponent {
   @ViewChild('cenDir') cenDir!: ElementRef;
   @Output() onItemAdded: EventEmitter<any>;
   @Input() cenDes? : string;
+  private environment = new Environment();
 
   constructor(private renderer : Renderer2,
-              private environment :Environment
+              
   ){
     this.onItemAdded = new EventEmitter();
   }
@@ -25,8 +26,11 @@ export class DireccionComponent {
 
    // Carga el script de Google Maps
    public loadGoogleMaps() {
-    const script = document.createElement('script');
-    script.src = "https://maps.googleapis.com/maps/api/js?key="+ this.environment.keygoogle +"=places";
+   let url = this.environment.keygoogle;
+   console.log( url);
+   
+   const script = document.createElement('script');
+    script.src = url;
     script.async = true;
     script.defer = true;
     script.onload = () => this.initAutocomplete();

@@ -4,10 +4,16 @@
       <h5 class="card-title">Gestión de Empresa - Módulos</h5>
     </div>
     <!-- /.card-header -->
-    <div class="card-body row">
+    <div class="loading" *ngIf= "loading" >
+      <img src = "assets/Circles-menu-3.gif">
+     </div>
+
+    <div class="card-body row"  class="{{carga}}">
+
+      
       <div class="form-group col-md-6 p-4">
-      <label for=""  *ngIf="empresa.empDes.length > 0 ">Empresa</label>
-      <input *ngIf="empresa.empDes.length > 0 " type="text" class="form-control" id="" placeholder="" value="{{empresa.empDes}}"   disabled  #upregId>
+      <label for="" >Empresa</label>
+      <input type="text" class="form-control" id="" placeholder="" value="{{empresa.empDes}}"   disabled  #upregId>
       </div>
       
      

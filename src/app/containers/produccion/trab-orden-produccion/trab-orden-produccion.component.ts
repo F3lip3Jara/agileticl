@@ -7,9 +7,11 @@ import { Subject, OperatorFunction } from 'rxjs';
 import { NgbTypeahead, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { distinctUntilChanged, debounceTime, filter, map } from 'rxjs/operators';
+import { faAddressCard, faArrowTurnDown, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trab-orden-produccion',
@@ -46,13 +48,20 @@ export class TrabOrdenProduccionComponent implements OnInit {
   cargad       : boolean              = false;
   valJul       : boolean              = false;
   valEqui      : boolean              = true;
+  faFileExcel                         = faFileExcel;
+  faAddressCard                       = faAddressCard;
+  faPenToSquare                       = faPenToSquare;
+  faSquarePlus                        = faSquarePlus;
+  faTrash                             = faTrash;
+  faArrowTurnDown                     =faArrowTurnDown;
+  faSyncAlt                           = faSyncAlt;
 
   constructor(private servicio    : UsersService ,
               private servicioget : RestService,
               private modal       : NgbModal,
-              private fb          : UntypedFormBuilder,
+              private fb          : FormBuilder,
               private excel       : ExcelService,
-              private servicioLink: LinksService,
+              private router       : Router,
               private servicioAlert: AlertasService
     ) {
 
@@ -100,21 +109,21 @@ ngOnInit(): void {
       }
     }}
     this.parametros = [];
-    this.servicioget.get('opNumRea' , this.token, this.parametros).subscribe(data => {
+   /* this.servicioget.get('opNumRea' , this.token, this.parametros).subscribe(data => {
       this.statesx = data;
      this.statesx.forEach((element: any) => {
        this.states.push(element.orpNumRea);
      });
-
-     this.servicioget.get('diaJul', this.token , this.parametros).subscribe(data =>{ 
+*/
+/*     this.servicioget.get('diaJul', this.token , this.parametros).subscribe(data =>{ 
        if(data =='0'){
          this.valJul = true;
        }else{
          this.loading = false;
          this.carga   = 'visible';
        }
-     });
-   });
+     });*/
+  
 
 }
 
@@ -181,8 +190,7 @@ ngAfterViewInit(): void {
   }
 
   public ordNuevo(){
-    const d = 'insOp';
-    this.servicioLink.disparador.emit(d);
+    this.router.navigate(['home/produccion/ordenProduccion/ingreso']);
  }
 
  addOT(orden: any , content : any){

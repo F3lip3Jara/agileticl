@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule,  ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule, NgbDatepicker , NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {  ModalModule } from '@coreui/angular';
@@ -17,7 +16,7 @@ import{VerInyeccionComponent} from './visualizadores/ver-inyeccion/ver-inyeccion
 import{VerInyeccionDetComponent} from './visualizadores/ver-inyeccion/ver-inyeccion-det/ver-inyeccion-det.component';
 import{VerTermoformadoComponent} from './visualizadores/ver-termoformado/ver-termoformado.component';
 import{VerTermoformadoDetComponent} from './visualizadores/ver-termoformado/ver-termoformado-det/ver-termoformado-det.component';
-
+import {InsOrdenProduccionComponent} from './trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
 @NgModule({
   declarations: [TrabExtrusionComponent , 
                  TrabMezclaComponent,
@@ -28,7 +27,8 @@ import{VerTermoformadoDetComponent} from './visualizadores/ver-termoformado/ver-
                  VerInyeccionComponent,
                  VerInyeccionDetComponent,
                  VerTermoformadoComponent,
-                 VerTermoformadoDetComponent],
+                 VerTermoformadoDetComponent,
+                 InsOrdenProduccionComponent],
   imports: [
     ProduccionRoutingModule,
     CommonModule,

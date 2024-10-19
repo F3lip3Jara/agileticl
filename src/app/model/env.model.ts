@@ -6,5 +6,5 @@ export class Environment {
  public wsPort      = '6001';
  public forceTLS    = 'false';
  public disableStats= 'false';
- public keygoogle   = "AIzaSyADuggTVu7JnRb0L_fIENMWltBUgHBCSkI";
+ public keygoogle   = "https://maps.googleapis.com/maps/api/js?key=AIzaSyADuggTVu7JnRb0L_fIENMWltBUgHBCSkI&libraries=places&solution_channel=GMP_QB_addressselection_v2_cABC";
 }

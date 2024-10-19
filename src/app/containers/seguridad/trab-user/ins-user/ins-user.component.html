@@ -96,7 +96,7 @@
     </div>
     <div class="col-md-12 form-group mt-4">
           <label for="">Avatar</label>
-          <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)" />
+          <input type="file" accept=".jpg,.png"  class="form-control form-control-sm" (change)="fileChangeEvent($event)" />
             <image-cropper
               [imageChangedEvent]="imageChangedEvent"
               [maintainAspectRatio]="true"

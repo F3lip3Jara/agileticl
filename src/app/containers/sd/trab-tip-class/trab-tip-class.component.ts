@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { faAddressCard, faBuildingCircleArrowRight, faEye, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ExcelService } from 'src/app/servicios/excel.service';
@@ -9,19 +9,17 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 
 @Component({
-  selector: 'app-trab-venta-web',
-  templateUrl: './trab-venta-web.component.html',
-  styleUrls: ['./trab-venta-web.component.scss']
+  selector: 'app-trab-tip-class',
+  templateUrl: './trab-tip-class.component.html',
+  styleUrls: ['./trab-tip-class.component.scss']
 })
-export class TrabVentaWebComponent {
-
+export class TrabTipClassComponent {
 
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
-
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
-  tblObj       : any                  = {};
+  tblObj       : any                 = {};
   token        : string               = '';
   parametros   : any []               = [];
   carga        : string               = "invisible";
@@ -30,15 +28,9 @@ export class TrabVentaWebComponent {
   faPenToSquare                       = faPenToSquare;
   faSquarePlus                        = faSquarePlus;
   faTrash                             = faTrash;
-  accion      : string                = '';
-  tipo        : any                   = {};
-  cenDir      : string                = '';
-  places      : any                   = {};
-  dt          :any                    = {};
-  faBuildingCircleArrowRight          = faBuildingCircleArrowRight;
-  faEye                               = faEye;
-  prd         :any                    = {};
-  faSyncAlt                           = faSyncAlt;
+  accion      : string                =  '';
+  tipo        : any                   =  {};
+  tipos                               = [{clasTip: "Entrada"},{clasTip:"Salida"}];
 
   constructor(
               private servicio     : UsersService,
@@ -82,7 +74,7 @@ export class TrabVentaWebComponent {
   public tblData(){
     this.serviLoad.sumar.emit(1);
     this.tblObj = {};
-    this.rest.get('trabVentaWeb' , this.token, this.parametros).subscribe(data => {
+    this.rest.get('trabSdClass' , this.token, this.parametros).subscribe(data => {
         this.tblObj = data;
     });
     setTimeout(()=> {
@@ -92,29 +84,55 @@ export class TrabVentaWebComponent {
    }
 
   public Excel(){
-    this.excel.exportAsExcelFile(this.tblObj, 'ordenes_web');
+    this.excel.exportAsExcelFile(this.tblObj, 'tipo_clase');
      return false;
   }
 
-  public ver(data:any , content:any){
-    this.dt = data;
-    this.parametros = [{key:'opedId' , value:this.dt.opedId}];
-    this.rest.get('venta_det' , this.token, this.parametros).subscribe((data:any) => {
-        this.prd = data;
-    });
+  public ins(content: any, accion:any){ 
     this.modal.open(content);
+    this.accion = accion;
   }
-  public generaSalida(data:any){
-    this.parametros =[ {'opedId': data.opedId}];
 
-    this.rest.post('insSdOrden' , this.token, this.parametros).subscribe(data => {
-        console.log(data);
-        
+  
+  public up(content: any, accion:any , tipo : any){
+    this.modal.open(content);
+    this.accion = accion;
+    this.tipo = tipo;
+  }
+  
+
+  guardar(clasTipDes:any , clasTip:any , tipo :string ){
+    let url      = '';
+    this.carga   = 'invisible';
+    this.loading = true;   
+
+    if(tipo =='up'){
+      url      = 'updSdClass';
+    }else{
+      url      = 'insSdClass';
+    }
+    let data = {clasTipId: this.tipo.clasTipId , clasTip:clasTip , clasTipDes:clasTipDes };    
+       this.serviLoad.sumar.emit(1);
+    this.rest.post(url, this.token, data ).subscribe(resp => {
+      this.modal.dismissAll(); 
+      this.loading = false; 
+      this.tblData();
     });
+   
+    return false;
   }
 
-  refrescar(){
-    this.tblData();
+  del(tipo: any){
+    let url = 'delOpciones';
+    this.serviLoad.sumar.emit(1);
+    this.rest.post(url, this.token, tipo ).subscribe(resp => {
+      this.modal.dismissAll(); 
+      this.loading = false; 
+      this.tblData();
+    });
+ 
+    return false;
   }
 
+ 
 }

@@ -88,6 +88,7 @@ export class TrabEmpresaComponent implements OnInit {
 
   public actualizar(empresa:any){
     const empresaString = JSON.stringify(empresa);  
+    console.log(empresa);
     this.router.navigate(['home/seguridad/administracion/empresa/up/' + empresaString]);
   }
 

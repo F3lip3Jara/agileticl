@@ -4,6 +4,7 @@ import {TrabExtrusionComponent} from './trab-extrusion/trab-extrusion.component'
 import { TrabMezclaComponent } from "./trab-mezcla/trab-mezcla.component";
 import { TrabOrdenProduccionComponent } from "./trab-orden-produccion/trab-orden-produccion.component";
 import { TrabOrdenTrabajoComponent } from "./trab-orden-trabajo/trab-orden-trabajo/trab-orden-trabajo.component";
+import { InsOrdenProduccionComponent } from "./trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,13 @@ const routes: Routes = [
       {
         path: 'ordenProduccion',
         component: TrabOrdenProduccionComponent,
+        data: {
+          title: 'Orden de Producción',
+        }
+      },
+      {
+        path: 'ordenProduccion/ingreso',
+        component: InsOrdenProduccionComponent,
         data: {
           title: 'Orden de Producción',
         }

@@ -17,10 +17,6 @@ export class TrabCentroComponent {
 
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
- 
-
- 
-
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
   tblObj       : any                 = {};
@@ -149,10 +145,4 @@ export class TrabCentroComponent {
     this.cenDir = event.cenDir;
     this.places  = event.place; 
   }
-
-  
-
-  
-
-
 }

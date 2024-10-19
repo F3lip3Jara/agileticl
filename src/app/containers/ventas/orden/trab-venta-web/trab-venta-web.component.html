@@ -1,1 +1,124 @@
-<p>trab-venta-web works!</p>
+<div class="card card-primary card-outline">
+    <div class="card-header">
+      <h5 class="card-title">Ordenes Web</h5>   
+    </div>
+    <div class="card-body">
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel
+        </button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)= "refrescar()">
+            <fa-icon [icon]="faSyncAlt"></fa-icon>
+            Refrescar
+        </button>
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>
+   <div>
+    <br>
+    <div class="table-responsive"   *ngIf="tblObj.length > 0" class="{{carga}}">
+        <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>Id</th>            
+              <th>Codígo Externo</th>
+              <th>Fecha de Creación</th>
+              <th>Nombre Cliente</th>
+              <th>Teléfono</th>
+              <th>Email</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Moneda</th>
+              <th>Total</th>
+              <th>Metodo de Pago</th>              
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tblObj">
+              <th>{{data.opedId}}</th>
+              <th>{{data.opedparentid}}</th>
+              <th>{{data.opedfechaCreacion}}</th>
+              <th>{{data.clinombre}} {{data.cliapellido}}</th>
+              <th>{{data.clitelefono}}</th>
+              <th>{{data.cliemail}}</th>
+              <th>{{data.opedEntrega}}</th>
+              <th>{{data.opedstatus}}</th>
+              <th>{{data.opedmoneda}}</th>
+              <th>{{data.opedtotal | number:'1.0-0'}}</th>
+              <th>{{data.opedtituloMetodoPago}}</th>
+              <th>
+                <a style= "margin : 1px ;" (click) = "ver(data,content)" class="btn btn-warning btn-xs" ngbTooltip="Ver">
+                    <fa-icon [icon]="faEye"></fa-icon>
+                  </a>
+                <a style= "margin : 1px ;" (click) = "generaSalida(data)" class="btn btn-warning btn-xs" ngbTooltip="Solicitar">
+                  <fa-icon [icon]="faBuildingCircleArrowRight"></fa-icon>
+                </a>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      
+    </div>
+    <!-- /.card-footer-->
+  </div>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Pedido #{{dt.opedparentid}}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <!-- Detalles de facturación -->
+            <div class="col-6">
+                <h5>Detalles de facturación</h5>
+                <p><strong>{{dt.clinombre}} {{dt.cliapellido}} </strong></p>
+                <p>{{dt.clidireccion_1}}</p>
+                <p>{{dt.clidireccion_2}}</p>
+                <p><strong>Correo electrónico:</strong> {{dt.cliemail}}</p>
+                <p><strong>Iva:</strong> {{dt.opedenvioImpuesto | number:'1.0-0'}}</p>                            
+                <p><strong>Total:</strong> {{dt.opedtotal | number:'1.0-0'}}</p>
+            </div>
+
+            <!-- Detalles de envío -->
+            <div class="col-6">
+                <h5>Detalles de envío</h5>
+                <p><strong>{{dt.clinombre}} {{dt.cliapellido}} </strong></p>
+                <p>{{dt.clidireccion_1}}</p>
+                <p>{{dt.clidireccion_2}}</p>
+                <p><strong>Teléfono:</strong> {{dt.clitelefono}}</p>
+                <p><strong>Pago mediante:</strong> {{dt.opedtituloMetodoPago}}</p>
+                <p><strong>Total Envío:</strong> {{dt.opedenvioTotal | number:'1.0-0'}}</p>
+            </div>
+        </div>
+        <hr>
+        <!-- Tabla de productos -->
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>                        
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr *ngFor="let obj of prd">
+                        <td>{{obj.opeddnombreProducto}}</td>
+                        <td>{{obj.opeddcantidad}}</td>                      
+                        <td>${{obj.opeddtotal | number:'1.0-0' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+    </div>
+</ng-template>

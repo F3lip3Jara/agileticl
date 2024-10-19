@@ -13,8 +13,12 @@
               <!-- /.card-tools -->
             </div>
             <!-- /.card-header -->
-            <div class="card-body">            
-                  <div class="row">                    
+            <div class="card-body">    
+              <div class="loading" *ngIf= "loading" >
+                <img src = "assets/Circles-menu-3.gif">
+               </div>
+
+                  <div class="row" class="{{carga}}">                    
                     <div class="col-md-6 form-group">
                         <label for="empRut">Rut (99999999-0)</label>
                         <div class="input-group input-group-sm">
@@ -76,9 +80,9 @@
                             shape="rounded-1"
                             size="md"
                             src="{{avatar}}"
-                           *ngIf="avatar.length > 2"
+                           *ngIf="avatarval > 0"
                           />
-                          <div   *ngIf="avatar.length ==0">
+                          <div   *ngIf="avatarval == 0">
                             <i class="spinner-grow spinner-grow-sm"></i>
                             <i class="spinner-grow spinner-grow-sm"></i>
                             <i class="spinner-grow spinner-grow-sm"></i>
@@ -94,7 +98,7 @@
                                 (cropperReady)="cropperReady()"
                                 (loadImageFailed)="loadImageFailed()"
                               ></image-cropper> 
-                            <input type="file" class="form-control form-control-sm" (change)="fileChangeEvent($event)"   />
+                            <input type="file" accept=".jpg,.png"  class="form-control form-control-sm" (change)="fileChangeEvent($event)" />
                     </div>
                     <div class="col-md-12">
                       <button type="submit" class="btn btn-outline-primary btn-sm mb-3 mt-2"  *ngIf ="up.valid" [disabled]="val" >

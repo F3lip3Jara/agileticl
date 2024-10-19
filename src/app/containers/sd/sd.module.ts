@@ -17,13 +17,15 @@ import { StepperModule } from 'primeng/stepper';
 import { TrabCentroComponent } from './centro/trab-centro/trab-centro.component';
 import { GoogleMapsModule } from '@angular/google-maps';
 import {AgileModule} from '../../AgileModule.module';
-import { TrabAlmacenComponent } from './centro/trab-almacen/trab-almacen.component'
+import { TrabAlmacenComponent } from './centro/trab-almacen/trab-almacen.component';
+import { TrabTipClassComponent } from './trab-tip-class/trab-tip-class.component'
 
 
 @NgModule({
   declarations: [
     TrabCentroComponent,
     TrabAlmacenComponent,
+    TrabTipClassComponent,
   
                 ],
   imports: [

@@ -22,10 +22,13 @@ export class UpEmpresaComponent {
   valRut          : boolean = false;
   mensaje         : string  = '';
   faArrowTurnDown           = faArrowTurnDown;
-  imageChangedEvent: any    = '';
+  imageChangedEvent: any    =  '';
   croppedImage     : any    =  '';
   avatar           : any    =  '';
-  empresa          :any ;
+  avatarval                 = 0;
+  empresa          :any     = {};
+  loading      : boolean    = true;
+  carga        : string     = "invisible";
  
   constructor(fgIns                : FormBuilder,
               private servicio     : UsersService,
@@ -33,39 +36,64 @@ export class UpEmpresaComponent {
               private serviLoad    : LoadingService,
               private router       : Router,
               private route        : ActivatedRoute ){
+
                 
-                this.route.params.subscribe(params => {
-                  const empresaString = params['empresa'];
-                  this.empresa = JSON.parse(empresaString);
-                });
+                this.token = this.servicio.getToken();             
                 
                 this.up = fgIns.group({
-                  empDes : [this.empresa.empDes , Validators.compose([
+                  empDes : ['' , Validators.compose([
                     Validators.required,
                    ])],
-                   empDir : [this.empresa.empDir , Validators.compose([
+                   empDir : ['' , Validators.compose([
                      Validators.required
                     ])],
                 
-                  empGiro : [this.empresa.empGiro , Validators.compose([
+                  empGiro : ['', Validators.compose([
                       Validators.required
                      ])],
-                  empFono : [this.empresa.empFono , Validators.compose([
+                  empFono : ['' , Validators.compose([
                       Validators.required
                     ])],
-                    empTokenOMS:[this.empresa.empTokenOMS]
+                    empTokenOMS:['']
                 });
 
-                this.token = this.servicio.getToken();
           
       }
 
     ngOnInit(){
-      this.parametros = [{key : 'empresa', value:this.empresa.empId}];  
-      this.rest.get('upImg', this.token, this.parametros).subscribe((resp:any) => {
-          resp.forEach((element:any) => {
-              this.avatar = element.empImg;  
-          });        
+     
+      this.serviLoad.sumar.emit(2);
+     
+      this.route.params.subscribe(params => {
+        let empId = params['empresa'];
+        this.parametros = [{key : 'empId', value:empId}];  
+        this.rest.get('empresafil', this.token, this.parametros).subscribe((resp:any) => {
+            resp.forEach((element:any) => {
+
+              this.empresa = element;
+              this.parametros = [{key : 'empresa', value:this.empresa.empId}];  
+              this.rest.get('upImg', this.token, this.parametros).subscribe((resp:any) => {
+                  resp.forEach((element:any) => {
+                      this.avatar = element.empImg;  
+                      if(this.avatar.length > 0){
+                        this.avatarval =1 ;
+                      }
+                  });        
+              });
+
+              this.up.controls['empDes'].setValue(this.empresa.empDes);
+              this.up.controls['empDir'].setValue(this.empresa.empDir);
+              this.up.controls['empGiro'].setValue(this.empresa.empGiro);
+              this.up.controls['empFono'].setValue(this.empresa.empFono);
+              this.up.controls['empTokenOMS'].setValue(this.empresa.empTokenOMS);
+            
+              setTimeout(()=> {
+                this.carga = 'visible';
+                this.loading = false;
+             },1500 );
+            
+            });
+        });
       });
     }
 
@@ -116,8 +144,8 @@ export class UpEmpresaComponent {
           const ctx = canvas.getContext('2d');
 
           // Ajusta el tamaño deseado, por ejemplo, 800x600
-          canvas.width  = 800;
-          canvas.height = 600;
+          canvas.width  = 100;
+          canvas.height = 100;
 
           // Dibuja la imagen en el lienzo
           ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
