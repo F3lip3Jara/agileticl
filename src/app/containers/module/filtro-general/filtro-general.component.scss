@@ -1,0 +1,43 @@
+.dropdown{
+    display: inline !important;
+}
+
+.p-height {
+    max-height: 35px !important;
+}
+
+
+@media only screen and (max-width : 760px) {
+ .filtros_dropdown{
+    min-width: 308px !important;
+    margin: 10px !important;
+    padding: 10px;
+  } 
+  .trash-btn{
+    text-align: left;
+  }
+
+}
+
+ @media only screen and (min-width : 761px )and (max-width : 899px){
+    .filtros_dropdown{
+       min-width: 428px !important;
+       margin: 10px !important;
+       padding: 10px;
+     } 
+     .trash-btn{
+       text-align: left;
+     }
+   
+   }
+@media only screen and (min-width : 901px) {
+    .filtros_dropdown{
+        min-width: 500px !important;
+        padding: 10px;
+        margin:0px;
+      }
+      .trash-btn{
+        text-align: right;
+      }
+    
+}

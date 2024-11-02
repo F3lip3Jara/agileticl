@@ -8,7 +8,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faSyncAlt, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -42,7 +42,9 @@ export class TrabComunaComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
-
+  faTrashCan                          = faTrashCan;
+  faSyncAlt                           = faSyncAlt;
+  colums: string[]                    = [];
 
   constructor(private fb            : FormBuilder,
               private servicio      : UsersService,
@@ -107,14 +109,14 @@ export class TrabComunaComponent implements OnInit {
         }
       }}
       this.serviLoad.sumar.emit(1);
-      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.paises = data;
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe((data : any) => {
+        this.paises = data.data;
         });
 
         this.ins.controls['paiId'].valueChanges.subscribe(field => {
           this.regiones = {};
           this.parametros = [{key :'paiId' ,value: field}];
-          this.rest.get('regPai' , this.token, this.parametros).subscribe(data => {
+          this.rest.get('regPai' , this.token, this.parametros).subscribe((data:any) => {
             this.regiones = data;
             });
         });
@@ -141,13 +143,15 @@ export class TrabComunaComponent implements OnInit {
   public tblData(){
     this.serviLoad.sumar.emit(1);
     this.tblComuna = {};
-    this.rest.get('trabComuna' , this.token, this.parametros).subscribe(data => {
-        this.tblComuna = data;
+    this.loading   = true;
+    this.rest.get('trabComuna' , this.token, this.parametros).subscribe((data:any) => {
+        this.tblComuna = data.data;
+        this.colums    = data.colums;
     });
     setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
-     },3000 );
+     },1500 );
    }
 
    public modalIns(content : any ){
@@ -220,5 +224,15 @@ public validaRegion(comCod : string){
 
   });
  }
+
+ public refrescar(){
+  this.parametros = [];
+  this.tblData();
+}
+
+ public addFilter(parametros: any){
+  this.parametros = parametros;
+  this.tblData();
+}
 
 }

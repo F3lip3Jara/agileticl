@@ -1,21 +1,15 @@
 <div class="row" >
-  <form  [formGroup] = "insOrd"
-  (ngSubmit)  = "generaOP(insOrd.controls['orpFech'].value ,
-                          insOrd.controls['orpNumOc'].value,
-                          insOrd.controls['orpNumRea'].value,
-                          insOrd.controls['orpObs'].value,
-                          insOrd.controls['idEta'].value
+  <form  [formGroup] = "ins"
+  (ngSubmit)  = "generaOP(ins.controls['orpFech'].value ,
+                          ins.controls['orpNumOc'].value,
+                          ins.controls['orpNumRea'].value,
+                          ins.controls['orpObs'].value
                           )" >
-    <div class="col-md-9">
+
       <div class="col-md-12">
         <div class="card card-outline card-primary">
           <div class="card-header">
-            <h3 class="card-title">Ingreso de Orden de Producción</h3>
-            <div class="card-tools">
-              <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                <i class="fas fa-minus"></i>
-              </button>
-            </div>
+            <h5 class="card-title">Ingreso de Orden de Producción</h5>
             <!-- /.card-tools -->
           </div>
           <!-- /.card-header -->
@@ -25,25 +19,31 @@
                 <img src = "assets/Circles-menu-3.gif">
                </div>
                 <div class="row"  class="{{carga}}">
-                  <div class="col-md-12">
-                    <label for="nombre">Fecha</label>
-                    <div class="input-group input-group-sm">
-                      <input class="form-control" placeholder="yyyy-mm-dd"
-                             name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName = 'orpFech' >
-                      <div class="input-group-append">
-                        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><i class="far fa-calendar-alt"></i></button>
+                  <div class="col-md-6">
+                    <h6>General</h6>
+                    <div class="col-12">
+                      <label for="nombre">Fecha</label>
+                      <div class="input-group input-group-sm ">                       
+                        <input class="form-control" placeholder="yyyy-mm-dd"
+                               name="dp"  ngbDatepicker #d="ngbDatepicker" formControlName = 'orpFech' >
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"><fa-icon [icon]="faCalendarWeek"></fa-icon></button>
+                        </div>
+                        <div *ngIf = "ins.controls['orpFech'].hasError('required')">
+                          <span class="text-danger">Campo obligatorio!</span>
+                        </div>
                       </div>
                     </div>
-                    <div *ngIf = "insOrd.controls['orpFech'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
+                    <div class="col-12">
+                      <label for="nombre">Nro OC</label>
+                      <div class="input-group input-group-sm">                       
+                        <input class="form-control"  type="text" formControlName = 'orpNumOc'  />                     
+                      </div>
+                      <div *ngIf = "ins.controls['orpNumOc'].hasError('required')">
+                        <span class="text-danger">Campo obligatorio!</span>
+                      </div>                     
                     </div>
-                    <label for="nombre">Nro OC</label>
-                    <div class="input-group input-group-sm">
-                      <input class="form-control"  type="text" formControlName = 'orpNumOc'  />
-                    </div>
-                    <div *ngIf = "insOrd.controls['orpNumOc'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
+                  <div class="col-12">
                     <label for="nombre">Nro OP</label>
                     <div class="input-group input-group-sm">
                       <input class="form-control"  type="text"  formControlName = 'orpNumRea'   />
@@ -51,97 +51,115 @@
                     <div *ngIf = "valcod">
                       <span class="text-danger">El Nro OP ya existe!</span>
                     </div>
-                    <div *ngIf = "insOrd.controls['orpNumRea'].hasError('required')">
+                    <div *ngIf = "ins.controls['orpNumRea'].hasError('required')">
                       <span class="text-danger">Campo obligatorio!</span>
                     </div>
-                    <label for="nombre">CLIENTE</label>
-                    <div class="input-group input-group-sm">
-                      <input type="text" class="form-control" id="" placeholder="" value="{{prvNom}}"   disabled>
-                        <div class="input-group-append">
-                          <button class="btn btn-outline-secondary calendar" (click)="proveedor(modalSelPrv)" type="button"><i class="fas fa-address-book"></i></button>
-                        </div>
-                    </div>
+                  </div>
+                   <div class="col-12">
+                    <app-select-producto (onItemAdded)="proveedores()"></app-select-producto>               
                     <div *ngIf = "!prvNom">
                       <span class="text-danger">Campo obligatorio!</span>
                     </div>
-                    <div class="form-group">
-                      <label for="">Destino</label>
-                        <div  *ngIf=" !etapas.length ">
-                         <div class="spinner-border spinner-border-sm" role="status">
-                           <span class="sr-only">Loading...</span>
-                         </div>
-                         <div class="spinner-grow spinner-grow-sm" role="status">
-                           <span class="sr-only">Loading...</span>
-                         </div>
-                       </div>
-                        <div class=" input-group-sm" *ngIf="etapas.length > 0">
-                         <select  class="custom-select rounded-0" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true"  formControlName = idEta >
-                           <option   value="">Seleccione</option>
-                           <option  *ngFor = "let etapa of etapas"  value="{{etapa.idEta}}">{{etapa.etaDes}}</option>
-                         </select>
-                     </div>
-                     </div>
-                     <div *ngIf = "insOrd.controls['idEta'].hasError('required')">
-                      <span class="text-danger">Campo obligatorio!</span>
-                    </div>
+                   </div>  
+                   <div class="col-12">
                     <label for="nombre">Observaciones</label>
                     <div class="input-group input-group-sm">
-                      <input class="form-control"  type="text" formControlName = 'orpObs'  />
+                      <input type="text" class="form-control"  formControlName = 'orpObs'/>
                     </div>
-                    <hr>
-                   <h6>Detalles</h6>
-                   <button type="button" (click)="selPrd(modalInsPrd)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
-                   <br>
-                  <br>
-                   <div class="table-responsive">
-                    <table class="table table-hover text-nowrap">
-                      <thead>
-                          <tr>
-                              <td>Cód Producto</td>
-                              <td>Nombre</td>
-                              <td>Cantidad Sol</td>
-                              <td>Stock Disponible</td>
-                              <td>Total Producir</td>
-                              <td>Obs</td>
-                              <td>Acciones</td>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr *ngFor="let ord of ordenes; let i= index;">
-                              <td>
-                                  <span>{{ord.prdCod}}</span>
-                              </td>
-                              <td>
-                                <span>{{ord.prdDes}}</span>
-                              </td>
-                              <td>
-                                <span>{{ord.orpdCant}}</span>
-                              </td>
-                              <td>
-                                <span>{{ord.orpdCantDis}}</span>
-                              </td>
-                              <td>
-                                <span>{{ord.orpdTotP}}</span>
-                              </td>
-                              <td>
-                                <span>{{ord.orpdObs}}</span>
-                              </td>
-                              <td>
-                                  <div>
-                                    <a (click) = "delPrd(i)"  class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
-                                  </div>
-                              </td>
-                          </tr>
-                      </tbody>
-                      </table>
-                      <div *ngIf = "ordenes.length == 0">
-                        <span class="text-danger">Debe ingresar productos!</span>
-                      </div>
+                   </div>                           
                   </div>
-                </div>
+                  <div class="col-md-6">
+                    <h6>Envío</h6>
+                    <div class="form-group">            
+                      <label for="nombre">Centro</label>
+                      <div  *ngIf="!centro.length">
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                      </div>
+                       <div class="" *ngIf="centro.length > 0">
+                        <ng-select  
+                          [items]="centro"
+                          bindLabel="cenDes"
+                          bindValue="centroId"
+                          formControlName="centroId"
+                          >
+                        </ng-select >
+                      </div>
+                    </div>
+                    <div class="form-group">            
+                      <label for="nombre">Almacen</label>
+                      <div  *ngIf="!cProductos.length">
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                        <i class="spinner-grow spinner-grow-sm"></i>
+                      </div>
+                      <div class="" *ngIf="cProductos.length > 0">
+                        <ng-select  
+                          [items]="cProductos"
+                          bindLabel="prdDes"
+                          bindValue="PrdCod"
+                          formControlName="almId"
+                          >
+                        </ng-select >
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="mt-4 p-3">
+                  <div class="col-12">
+                    <h6>Detalles</h6>
+                    <button type="button" (click)="selPrd(modalInsPrd)" class="btn btn-danger btn-sm"><i class="fas fa-plus-circle"></i></button>
+                    <br>
+                   <br>
+                    <div class="table-responsive">
+                     <table class="table table-hover text-nowrap">
+                       <thead>
+                           <tr>
+                               <td>Cód Producto</td>
+                               <td>Nombre</td>
+                               <td>Cantidad Sol</td>
+                               <td>Stock Disponible</td>
+                               <td>Total Producir</td>
+                               <td>Obs</td>
+                               <td>Acciones</td>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr *ngFor="let ord of ordenes; let i= index;">
+                               <td>
+                                   <span>{{ord.prdCod}}</span>
+                               </td>
+                               <td>
+                                 <span>{{ord.prdDes}}</span>
+                               </td>
+                               <td>
+                                 <span>{{ord.orpdCant}}</span>
+                               </td>
+                               <td>
+                                 <span>{{ord.orpdCantDis}}</span>
+                               </td>
+                               <td>
+                                 <span>{{ord.orpdTotP}}</span>
+                               </td>
+                               <td>
+                                 <span>{{ord.orpdObs}}</span>
+                               </td>
+                               <td>
+                                   <div>
+                                     <a (click) = "delPrd(i)"  class="btn btn-warning btn-xs" placeholder="eliminar"><i class="fas fa-trash-alt" aria-hidden="true"></i></a>
+                                   </div>
+                               </td>
+                           </tr>
+                       </tbody>
+                       </table>
+                       <div *ngIf = "ordenes.length == 0">
+                         <span class="text-danger">Debe ingresar productos!</span>
+                       </div>
+                   </div>
+                  </div>
               </div>
                 <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary btn-block" *ngIf="insOrd.valid && ordenes.length > 0  && prvNom " [disabled]="val">
+                  <button type="submit" class="btn btn-primary btn-block" *ngIf="ins.valid && ordenes.length > 0  && prvNom " [disabled]="val">
                     <div *ngIf= "val">
                       Guardando..
                       <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -159,56 +177,10 @@
           <!-- /.card-body -->
         </div>
       </div>
-      </div>
   </form>
   </div>
   
-  <ng-template #modalSelPrv let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title">Selección Proveedor</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-        <div class="card-body">
-          <div  *ngIf=" !proveedores?.length ">
-            <div class="spinner-border spinner-border-sm" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-            <div class="spinner-grow spinner-grow-sm" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
-          </div>
-          <div class="table-responsive"   *ngIf="proveedores?.length > 0" class="{{carga}}">
-            <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Rut</th>
-                  <th>Nombre</th>
-                  <th>Seleccionar</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor = "let proveedor of proveedores">
-                  <th>{{proveedor.id}}</th>
-                  <th>{{proveedor.rut}}</th>
-                  <th>{{proveedor.nombre}}</th>
-                  <th>
-                    <a (click) = "cambio(proveedor)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-        <!-- /.card-body -->
-    </div>
-   </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
-    </div>
-  </ng-template>
+  
 
   <ng-template #modalInsPrd let-modal>
     <div class="modal-header">
@@ -218,42 +190,33 @@
       </button>
     </div>
     <form  [formGroup] = "insPrd"
-    (ngSubmit)  = "agregar(insPrd.controls['prdCod'].value ,
-                           prdDes.value ,
-                           insPrd.controls['orpdCant'].value ,
-                           insPrd.controls['orpdCantDis'].value ,
+    (ngSubmit)  = "agregar(insPrd.controls['prdCod'].value ,                      
+                           insPrd.controls['orpdCant'].value,                         
                            insPrd.controls['orpdObs'].value)">
     <div class="modal-body" >
         <div class="card-body">
-          <div class="form-group">
-            <label for="">Cód. Producto</label>
-            <div *ngIf = "valprod">
-              <span class="text-danger">Producto no existe!</span>
+          <div class="form-group">            
+            <label for="nombre">Producto</label>
+            <div  *ngIf="!cProductos.length">
+              <i class="spinner-grow spinner-grow-sm"></i>
+              <i class="spinner-grow spinner-grow-sm"></i>
+              <i class="spinner-grow spinner-grow-sm"></i>
             </div>
-            <div  *ngIf=" !cProductos.length ">
-              <div class="spinner-border spinner-border-sm" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
-              <div class="spinner-grow spinner-grow-sm" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
+            <div class="" *ngIf="cProductos.length > 0">
+              <ng-select  
+                [items]="cProductos"
+                bindLabel="prdDes"
+                bindValue="PrdCod"
+                formControlName="gerencia"
+                >
+              </ng-select >
             </div>
-            <input *ngIf="cProductos.length > 0" type="text" class="form-control" name = "prdCod" id="prdCod" placeholder="" value="" formControlName = 'prdCod' oninput="this.value = this.value.toUpperCase()" autocomplete="off"  >
-            <ul *ngIf="productos.length > 0 "[ngClass]="(productos.length > 0) ? 'ulOrd': ''" >
-              <li *ngFor="let producto of productos">
-                <a  class="" placeholder="actualizar" (click)="selectorPrd(producto)"><span class="select2-selection__rendered">{{producto.prdCod }} , [{{producto.prdDes}}]</span></a>
-              </li>
-            </ul>
           </div>
           <div *ngIf = "insPrd.controls['prdCod'].hasError('required')">
             <span class="text-danger">Campo obligatorio!</span>
           </div>
           <div *ngIf = "valproddet">
             <span class="text-danger">Producto ya esta ingresado en OP!</span>
-          </div>
-          <div class="form-group">
-            <label for="">Descripción</label>
-            <input type="text" class="form-control" name = "prdDes" id="prdDes" placeholder="" value="" disabled  #prdDes>
           </div>
         </div>
         <div class="form-group">
@@ -266,16 +229,7 @@
         <div *ngIf = "insPrd.controls['orpdCant'].hasError('pattern')">
           <span class="text-danger">formato incorrecto!</span>
         </div>
-        <div class="form-group">
-          <label for="">Cantidad Disponible</label>
-          <input type="text" class="form-control" name = "orpdCantDis" id="orpdCantDis" placeholder="" value="" formControlName = 'orpdCantDis' oninput="this.value = this.value.toUpperCase()">
-        </div>
-        <div *ngIf = "insPrd.controls['orpdCantDis'].hasError('required')">
-          <span class="text-danger">Campo obligatorio!</span>
-        </div>
-        <div *ngIf = "insPrd.controls['orpdCantDis'].hasError('pattern')">
-          <span class="text-danger">formato incorrecto!</span>
-        </div>
+       
         <div class="form-group">
           <label for="">Observaciones</label>
           <input type="text" class="form-control" name = "orpdObs" id="orpdObs" placeholder="" value="" formControlName = 'orpdObs' oninput="this.value = this.value.toUpperCase()">

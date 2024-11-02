@@ -1,0 +1,51 @@
+<c-dropdown #dropdown="cDropdown" [autoClose]="'outside'" direction="center">
+    <button cButton cDropdownToggle class="btn btn-outline-primary btn-sm">
+      <fa-icon [icon]="faFilter"></fa-icon> Filtro
+    </button>
+    <div cDropdownMenu class="col-md-8 p-1 filtros_dropdown">
+      <div class="col-md-12">
+        <div *ngIf="!colums.length">
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+        </div>
+    
+        <div *ngIf="colums.length > 0">
+          <!-- Iteramos sobre los filtros -->
+          <div *ngFor="let filter of selectedFilters; let i = index;index " class="row align-items-center mb-2"  (change)="onColumnChange(filter)">
+            <!-- Ícono de Basura (Eliminar Filtro) -->
+            <div class="col-md-1 trash-btn">
+              <a (click)="removeFilter(i)" class="btn btn-outline-danger btn-sm">
+                <fa-icon [icon]="faTrashCan"></fa-icon>
+              </a>
+            </div>
+            <!-- Select de las columnas -->
+            <div class="col-md-4">
+              <select class="form-select form-select-sm" [(ngModel)]="filter.column">
+                <option *ngFor="let column of getAvailableColumns(i)" [value]="column.column">
+                  {{ column.column }}
+                </option>
+              </select>
+            </div>
+    
+            <!-- Componente p-chips -->
+            <div class="col-md-7 pt-3">
+              <p-chips
+                [(ngModel)]="filter.values"
+                [max]="2"
+                placeholder="máximo 2 items"
+                [style]="{'max-height.px': 113}">
+              </p-chips>
+            </div>
+          </div>                  
+          <div cDropdownDivider></div>
+          <!-- Botones para agregar, limpiar y aplicar -->
+          <div class="col-md-12">
+            <button (click)="addFilter()" class="btn btn-primary m-1">Agregar</button>             
+            <button  (click)="applyFilters()" class="btn btn-primary m-1"  >Aplicar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </c-dropdown>
+

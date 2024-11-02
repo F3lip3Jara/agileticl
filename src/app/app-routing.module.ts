@@ -47,6 +47,12 @@ const routes: Routes = [
         loadChildren: () =>
           import('./containers/ventas/venta.module').then((m) => m.VentaModule)
       },
+      {
+        path: 'comex',
+        loadChildren: () =>
+          import('./containers/comex/comex.module').then((m) => m.ComexModule)
+      },
+      
       
     ]
   },

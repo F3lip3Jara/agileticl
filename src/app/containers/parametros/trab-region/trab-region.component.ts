@@ -6,10 +6,9 @@ import { DataTableDirective } from 'angular-datatables';
 import { RestService } from 'src/app/servicios/rest.service';
 import { UsersService } from 'src/app/servicios/users.service';
 import { Region } from 'src/app/model/region.model';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faSyncAlt, faTrash, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trab-region',
@@ -20,8 +19,6 @@ export class TrabRegionComponent implements OnInit {
 
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
-
-
   loading      : boolean              = true;
   dtOptions    : DataTables.Settings  = {} ;
   tblRegion    : any                  = {};
@@ -40,6 +37,10 @@ export class TrabRegionComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
+  faTrashCan                          = faTrashCan;
+  faSyncAlt                           = faSyncAlt;
+  colums: string[]                    = [];
+
 
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
@@ -93,8 +94,8 @@ export class TrabRegionComponent implements OnInit {
         }
       }}
       this.serviLoad.sumar.emit(1);
-      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.paises = data;
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe((data:any) => {
+            this.paises = data.data;
         });
 
       this.ins.controls['regCod'].valueChanges.pipe(
@@ -110,8 +111,9 @@ export class TrabRegionComponent implements OnInit {
   public tblData(){
     this.serviLoad.sumar.emit(1);
     this.tblRegion = {};
-    this.rest.get('trabRegion' , this.token, this.parametros).subscribe(data => {
-        this.tblRegion = data;
+    this.rest.get('trabRegion' , this.token, this.parametros).subscribe((data:any) => {
+        this.tblRegion = data.data;
+        this.colums    = data.colums;
     });
     setTimeout(()=> {
         this.carga = 'visible';
@@ -189,5 +191,16 @@ public validaRegion(regCod : string){
 
   });
  }
+
+ public refrescar(){
+  this.parametros = [];
+  this.tblData();
+}
+
+ public addFilter(parametros: any){
+  this.parametros = parametros;
+  this.tblData();
+}
+
 
 }

@@ -8,7 +8,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trab-pais',
@@ -38,7 +38,8 @@ export class TrabPaisComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
-
+  colums      : string []             = [];
+  faSyncAlt                           = faSyncAlt;
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
               private rest        : RestService,
@@ -93,8 +94,6 @@ export class TrabPaisComponent implements OnInit {
       }}
 
       this.tblData();
-
-
       this.ins.controls['paiCod'].valueChanges.pipe(
         filter(text => text.length > 1),
         debounceTime(200),
@@ -105,10 +104,12 @@ export class TrabPaisComponent implements OnInit {
   }
 
   public tblData(){
+    this.loading = true;
     this.tblPais = {};
     this.serviLoad.sumar.emit(1);
-    this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.tblPais = data;
+    this.rest.get('trabPais' , this.token, this.parametros).subscribe((data:any) => {      
+        this.tblPais = data.data;
+        this.colums = data.colums; // Columnas originales   
     });
    
     setTimeout(()=> {
@@ -118,11 +119,9 @@ export class TrabPaisComponent implements OnInit {
   
   }
 
-   public modalIns(content : any ){
-
+  public modalIns(content : any ){
     this.modal.open(content);
-
- }
+  }
 
  public modelUp(content :any , xpais: any ){
   this.pais.setId(xpais.paiId);
@@ -189,6 +188,16 @@ public validaPais(paiCod : string){
   this.ins.controls['paiDes'].setValue('');
   this.ins.controls['paiCod'].setValue('');
  }
+ 
+ public refrescar(){
+  this.parametros = [];
+  this.tblData();
+}
+
+ public addFilter(parametros: any){
+  this.parametros = parametros;
+  this.tblData();
+}
 
 
 }

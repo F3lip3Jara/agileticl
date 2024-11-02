@@ -101,8 +101,8 @@ export class InsProveedoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.serviLoad.sumar.emit(1);
-    this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-      this.paises = data;
+    this.rest.get('trabPais' , this.token, this.parametros).subscribe((data:any) => {
+      this.paises = data.data;
       });
 
       this.ins.controls['paiId'].valueChanges.subscribe(field => {

@@ -1,0 +1,62 @@
+<div class="form-group col-md-12">
+  <label for="proveedor">Proveedor</label>
+    <div class="input-group mt-1">
+      <input type="text" class="form-control" id="proveedor" placeholder="Seleccionar proveedor" value="" disabled>
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" (click)="modalOpen(modal)" type="button">
+          <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+        </button>
+      </div>
+    </div>
+  
+</div>
+
+   <ng-template #modal let-modal>
+    <div id="modal">
+    <div class="modal-header">
+      <h5 class="modal-title">Selección Proveedor</h5>
+    </div>
+    <div class="modal-body">
+        <div class="card-body">
+            <div  *ngIf=" !proveedores?.length ">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+            <div class="table-responsive"   *ngIf="proveedores?.length > 0" class="{{carga}}">
+              <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Rut</th>
+                    <th>Nombre</th>
+                    <th>Seleccionar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor = "let proveedor of proveedores">
+                    <th>{{proveedor.id}}</th>
+                    <th>{{proveedor.rut}}</th>
+                    <th>{{proveedor.nombre}}</th>
+                    <th>
+                      <a (click) = "cambio(proveedor)" class="btn btn-warning btn-xs" placeholder="actualizar"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <!-- /.card-body -->
+      </div>
+   </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
+    </div>
+  </div>
+  </ng-template>
+
+
+
+

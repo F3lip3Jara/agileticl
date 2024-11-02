@@ -3,12 +3,16 @@
     <h5 class="card-title">Región</h5>    
   </div>
   <div class="card-body">
+    <button type = 'button' class="btn btn-outline-primary btn-sm" (click)= "refrescar()">
+      <fa-icon [icon]="faSyncAlt"></fa-icon>
+      Refrescar</button>
       <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
         <fa-icon [icon]="faFileExcel"></fa-icon>
         Excel</button>
       <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo">
         <fa-icon [icon]="faAddressCard"></fa-icon>
         Nuevo</a>
+     <app-filtro-general  [colums]="colums" (onItemAdded)="addFilter($event)" *ngIf="colums.length > 0"></app-filtro-general>       
     <div class="loading" *ngIf= "loading" >
       <img src = "assets/Circles-menu-3.gif">
      </div>

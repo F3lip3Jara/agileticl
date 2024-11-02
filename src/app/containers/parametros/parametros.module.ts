@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {  ModalModule } from '@coreui/angular';
+import { ModalModule } from '@coreui/angular';
 import { NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrabGerenciaComponent } from './trab-gerencia/trab-gerencia.component';
 import {TrabCalendarioJulComponent} from './trab-calendario-jul/trab-calendario-jul.component';
@@ -30,7 +30,6 @@ import {UpDesProveeedorComponent} from './trab-proveedores/up-proveedor/up-des-p
 import {ParametrosRoutingModule} from './parametros-routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TrabEtapasComponent } from './trab-etapas/trab-etapas.component';
-import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { BookCollectionComponent } from './book-collection/book-collection.component';
 import { BookListComponent } from './book-list/book-list.component';
@@ -40,6 +39,7 @@ import { collectionReducer } from './reducer_parametros/collection.reducer';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import { TrabTipPagoComponent } from './trab-tip-pago/trab-tip-pago.component';
 import { TrabTipDocComponent } from './trab-tip-doc/trab-tip-doc.component';
+import { AgileModule } from 'src/app/agileModule.module';
 
 @NgModule({
   declarations: [TrabGerenciaComponent , 
@@ -83,7 +83,8 @@ import { TrabTipDocComponent } from './trab-tip-doc/trab-tip-doc.component';
     NgbDatepicker,
     NgSelectModule,
     StoreModule.forRoot({ books: booksReducer, collection: collectionReducer }),
-    StoreDevtoolsModule.instrument({})
+    StoreDevtoolsModule.instrument({}),
+    AgileModule
   ]
 })
 export class ParametrosModule { }

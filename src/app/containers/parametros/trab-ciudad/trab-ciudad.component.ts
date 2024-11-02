@@ -8,7 +8,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faPlusCircle, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trab-ciudad',
@@ -41,6 +41,8 @@ export class TrabCiudadComponent implements OnInit {
   faFileExcel                         = faFileExcel;
   faAddressCard                       = faAddressCard;
   faPlusCircle                        = faPlusCircle;
+  faSyncAlt                           = faSyncAlt;
+  colums     :string []               = [];
 
   constructor(private fb          : FormBuilder,
               private servicio    : UsersService,
@@ -102,8 +104,8 @@ export class TrabCiudadComponent implements OnInit {
         }
       }}
       this.serviLoad.sumar.emit(1);
-      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.paises = data;
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe((data : any) => {
+        this.paises = data.data;
         });
 
         this.ins.controls['paiId'].valueChanges.subscribe(field => {
@@ -125,8 +127,9 @@ export class TrabCiudadComponent implements OnInit {
 
   public tblData(){
     this.tblCiudad = {};
-    this.rest.get('trabCiudad' , this.token, this.parametros).subscribe(data => {
-        this.tblCiudad = data;
+    this.rest.get('trabCiudad' , this.token, this.parametros).subscribe((data : any) => {
+        this.tblCiudad = data.data;
+        this.colums = data.colums;
     });
     setTimeout(()=> {
         this.carga = 'visible';
@@ -202,5 +205,15 @@ public validaCiudad(ciuCod : string){
 
   });
  }
+
+ public refrescar(){
+  this.parametros = [];
+  this.tblData();
+}
+ public addFilter(parametros: any){
+  this.parametros = parametros;
+  this.tblData();
+}
+
 
 }

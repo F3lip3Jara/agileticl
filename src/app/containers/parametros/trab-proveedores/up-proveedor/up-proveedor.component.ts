@@ -145,8 +145,8 @@ export class UpProveedorComponent implements OnInit {
       this.up.controls['prvTel'].setValue(this.proveedor.telefono);
       this.up.controls['prvMail'].setValue(this.proveedor.mail);
     
-      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.paises = data;
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe((data:any) => {
+        this.paises = data.data;
         this.up.controls['paiId'].setValue(this.proveedor.pais_id);
         this.up.controls['regId'].setValue(this.proveedor.region_id);
         this.up.controls['ciuId'].setValue(this.proveedor.ciudad_id);

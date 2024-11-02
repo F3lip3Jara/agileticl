@@ -17,6 +17,8 @@ import{VerInyeccionDetComponent} from './visualizadores/ver-inyeccion/ver-inyecc
 import{VerTermoformadoComponent} from './visualizadores/ver-termoformado/ver-termoformado.component';
 import{VerTermoformadoDetComponent} from './visualizadores/ver-termoformado/ver-termoformado-det/ver-termoformado-det.component';
 import {InsOrdenProduccionComponent} from './trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
+import { AgileModule } from "../../agileModule.module";
+import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [TrabExtrusionComponent , 
                  TrabMezclaComponent,
@@ -38,7 +40,9 @@ import {InsOrdenProduccionComponent} from './trab-orden-produccion/ins-orden-pro
     FontAwesomeModule,
     ModalModule,
     NgbModule,
-    NgbDatepicker
-  ]
+    NgbDatepicker,
+    AgileModule,
+    NgSelectModule
+]
 })
 export class ProduccionModule { }

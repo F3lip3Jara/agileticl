@@ -3,7 +3,6 @@ import { HttpEvent, HttpEventType, HttpHandler, HttpInterceptor, HttpRequest, Ht
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {throwError,catchError, tap} from 'rxjs';
-
 import { AlertasService } from '../servicios/alertas.service';
 import { Router } from '@angular/router';
 
@@ -19,8 +18,8 @@ export interface MensajesSystem{
 export class InterceptorsErrorService implements HttpInterceptor  {
 
 
-private servidor: string = 'https://app.back.agileti.cl/';
-//private servidor: string = 'http://127.0.0.1:8000/';
+//private servidor: string = 'https://app.back.agileti.cl/';
+private servidor: string = 'http://127.0.0.1:8000/';
 
 private excludedUrl  : any [] = [
   {url : 'https://www.googleapis.com/books/v1/volumes?maxResults=5&orderBy=relevance&q=oliver%20sacks'}

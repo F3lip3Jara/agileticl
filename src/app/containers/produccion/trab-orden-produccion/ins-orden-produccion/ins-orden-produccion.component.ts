@@ -6,8 +6,8 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { filter, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
   selector: 'app-ins-orden-produccion',
@@ -19,7 +19,7 @@ export class InsOrdenProduccionComponent implements OnInit {
   datatableElement?: DataTableDirective;
 
   insPrd       : FormGroup;
-  insOrd       : FormGroup;
+  ins       : FormGroup;
   token        :string                = '';
   proveedores  : any;
   carga        : string               = "";
@@ -30,14 +30,16 @@ export class InsOrdenProduccionComponent implements OnInit {
   prvNom       :string                = '';
   idPrv        :number                = 0;
   productos    : any [];
-  cProductos   : any ;
+  cProductos   : any                  = {};
   ordenes      : any []               = [];
   valcod       : boolean              = false;
   orpdTotP     : number               = 0;
   valprod                             = true;
   valproddet                          = false;
-  etapas       : any ;
   valcprod     : boolean              = false;
+  faCalendarWeek                      = faCalendarWeek;
+  centro       : any                  = [];
+  almacen      : any                  = [];
 
   constructor(
     private servicio     : UsersService,
@@ -49,7 +51,31 @@ export class InsOrdenProduccionComponent implements OnInit {
     ) {
 
       this.token    = this.servicio.getToken();
-      this.insPrd   = fb.group({
+      this.ins   = fb.group({
+        orpFech : ['' , Validators.compose([
+       
+         ])],
+         orpNumOc : ['' , Validators.compose([
+          Validators.required,
+         ])],
+
+         orpObs : ['' , Validators.compose([
+         ])],
+
+         orpNumRea : ['' , Validators.compose([
+          Validators.required,
+         ])],
+         centroId: ['' , Validators.compose([
+             
+        ])],
+        almId: ['' , Validators.compose([
+  
+        ])],
+
+      });
+
+
+      this.insPrd      = fb.group({
                                   prdCod : ['' , Validators.compose([
                                     Validators.required,
                                   ])],
@@ -64,32 +90,13 @@ export class InsOrdenProduccionComponent implements OnInit {
                                   orpdObs: ['' , Validators.compose([
                             
                                   ])]
+                                 
                         });
 
-      this.insOrd   = fb.group({
-                       orpFech : ['' , Validators.compose([
-                      
-                        ])],
-                        orpNumOc : ['' , Validators.compose([
-                         Validators.required,
-                        ])],
-               
-                        orpObs : ['' , Validators.compose([
-                        ])],
-               
-                        orpNumRea : ['' , Validators.compose([
-                         Validators.required,
-                        ])],
-               
-                        idEta:['', Validators.compose([
-                         Validators.required
-                       ]) ]
-               
-                     });
-
+   
         this.productos = [];
         this.cProductos= [];
-        this.etapas    = {};
+        
   }
 
   ngOnInit(): void {
@@ -114,129 +121,53 @@ export class InsOrdenProduccionComponent implements OnInit {
         }
       }}
 
-      this.rest.get('prodTerm' , this.token , this.parametros).subscribe(data => {
+      this.parametros = [{"key": "prdTip" , "value" :'T'}];
+
+      this.rest.get('prod' , this.token , this.parametros).subscribe(data => {
         this.cProductos = data;
       });
 
-      this.insPrd.controls['prdCod'].valueChanges.pipe(
-        filter(text => text != null &&  text.length > 1
-          ),
-        debounceTime(200),
-        distinctUntilChanged()
-      ).subscribe( field => {   
-        if(this.valcprod == true){
-            this.valcprod = false;
-        }else{
-          this.productos   = [];          
-          this.cProductos.filter(
-              (producto : any) =>{
-                  if((producto.prdCod.indexOf(field) > -1) == true){
-                    this.productos.push(producto);
-                    this.valprod   = false;
-                  }else{
-                  if((producto.prdDes.indexOf(field) > -1) == true){
-                    this.productos.push(producto);
-                    this.valprod   = false;
-                  }
-                  }
-              });
-        }        
+      this.rest.get('trabCentro' , this.token , this.parametros).subscribe(data => {
+        this.centro = data;
       });
-     
-      this.insOrd.controls['orpNumRea'].valueChanges.pipe(
-        filter(text => text.length > 1),
+
+      this.ins.controls['centroId'].valueChanges.pipe(
         debounceTime(200),
         distinctUntilChanged()).subscribe(field => {
-          this.validaNumRea(field);
+         console.log(field);
+         
         });
-
-        let etapas      = [5,7,8];
-        this.parametros = [{"key": "etapas" , "value" :etapas}];
-
-      this.rest.get('etapasProd' , this.token , this.parametros).subscribe(data =>{
-          this.etapas	= data;
-       });
-
-  }
-
-  proveedor(content : any){
-    this.valcod    = false;
-    this.productos = [];
-    this.valproddet= false;
-    this.modal.open(content , {size:'xl'});
-    this.tblData();
-  }
-
-  public tblData(){
-    this.proveedores = {};
-    this.rest.get('selCliente' , this.token, this.parametros).subscribe(data => {
-        this.proveedores = data;
-    });
-    setTimeout(()=> {
-        this.carga = 'visible';
-        this.loading = false;
-     },3000 );
-   }
-
-   cambio(xproveedor: any){
-      this.idPrv = xproveedor.id;
-      this.prvNom= xproveedor.nombre
-      this.modal.dismissAll();
-   }
-
-   agregar(prdCod : string , prdDes : string , orpdCant: any , orpdCantDis  : any , orpdObs:any){
-
-     this.orpdTotP = orpdCant - orpdCantDis;
-
-    if(this.orpdTotP <= 0){
-      this.servicioaler.setAlert('Revisar!! no se puede producir cantidades en negativo','warning');
-      this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-
-      setTimeout(()=>{
-        this.servicioaler.setAlert('','');
-      },2000);
-
-    }else{
-      this.parametros = [{"key": "prdCod" , "value" : prdCod}];  
       
-      this.rest.get('valPrdCod', this.token , this.parametros).subscribe(data => {
-        if(data == 1){       
-              this.valprod = false;
-        }else{        
-            this.valprod   = true;
-        }
-       });
-     
-       if(this.valprod == true){
-        this.servicioaler.setAlert('Producto no valido','warning');
-        this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-  
-        setTimeout(()=>{
-          this.servicioaler.setAlert('','');
-        },2000);
+  }
 
-        let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
+  
+   agregar(prdCod : any ,orpdCant: any ,  orpdObs:any){
+
+      this.parametros = [{"key": "prdCod" , "value" : prdCod}];
+      
+      /*  let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
         let elemprdDes   = <HTMLInputElement> document.getElementById('prdDes');
         elemprdCod.value = '';
-        elemprdDes.value = '';
+        elemprdDes.value = '';*/
   
-       }else{
         //Valido que no se puede agregar el mismo producto en el array
         let valiPrd      = false;
+        let prdDes       = "";
+
         this.ordenes.forEach(element => {
             if(element.prdCod == prdCod){
               valiPrd =true;
             }
         });        
+
         if(valiPrd == false){
           this.ordenes.push({
             'prdCod'      : prdCod,
             'prdDes'      : prdDes,
             'orpdCant'    : orpdCant,
-            'orpdCantDis' : orpdCantDis,
-            'orpdTotP'    : this.orpdTotP,
             'orpdObs'     : orpdObs
         });
+
         }else{
           this.servicioaler.setAlert('No se puede solicitar el mismo producto en un OP','warning');
           this.servicioaler.disparador.emit(this.servicioaler.getAlert());        } 
@@ -244,8 +175,7 @@ export class InsOrdenProduccionComponent implements OnInit {
           this.modal.dismissAll();
           this.valcprod     = false;
        }      
-    }
-   }
+    
 
 
    selPrd(selprd: any){
@@ -266,7 +196,7 @@ export class InsOrdenProduccionComponent implements OnInit {
      this.ordenes.splice(index , 1);
    }
 
-   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any , idEta: any ){
+   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any ){
        let ordenPrd : any [] = [];
        this.val              = true;
       ordenPrd.push({
@@ -276,7 +206,7 @@ export class InsOrdenProduccionComponent implements OnInit {
           'orpObs'   : orpObs,
           'idPrv'    : this.idPrv,
           'ordenes'  : this.ordenes,
-          'idEta'    : idEta
+         
       });
 
       this.rest.post('insOrd', this.token, ordenPrd).subscribe(resp => {

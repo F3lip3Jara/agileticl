@@ -1,18 +1,17 @@
-import { UsersService } from 'src/app/servicios/users.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import * as $ from 'jquery';
-import { RestService } from 'src/app/servicios/rest.service';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { IconSubset } from 'src/app/icons/icon-subset';
 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RestService } from 'src/app/servicios/rest.service';
+import { UsersService } from 'src/app/servicios/users.service';
+import * as $ from 'jquery';
 
 @Component({
-  selector: 'app-select-icon',
-  templateUrl: './select-icon.component.html',
-  styleUrls: ['./select-icon.component.scss']
+  selector: 'app-select-producto',
+  templateUrl: './select-producto.component.html',
+  styleUrls: ['./select-producto.component.scss']
 })
-export class SelectIconComponent {
+export class SelectProductoComponent {
 
   extrusiones  : any;
   carga        : string                = "";
@@ -20,9 +19,10 @@ export class SelectIconComponent {
   parametros   : any []                = [];
   token        : string                = '';
   faMagnifyingGlass                    = faMagnifyingGlass;
-  iconSubset   :any[]                  = Object.keys(IconSubset);  
-  @Input() icono :string = '';
   @Output() onItemAdded: EventEmitter<any>;
+  data         : any                   = {};
+  proveedores  : any                   = {};
+  loading                              = false;
 
   constructor(private modal        : NgbModal,
               private rest         : RestService,
@@ -60,14 +60,26 @@ export class SelectIconComponent {
 
   modalOpen(content : any){
     this.modal.open(content , { size: 'lg' });
+    this.tblData();
   }
 
-  cambio(icon : any){
-    this.onItemAdded.emit(icon);
-    this.modal.dismissAll();
-    this.icono = icon;
+  cambio(data : any){
+    this.onItemAdded.emit(data);
+    //this.modal.dismissAll();
+    $("#modal .close").click();
+    this.data = data;
     return false;
   }
 
+  public tblData(){
+    this.proveedores = {};
+    this.rest.get('selCliente' , this.token, this.parametros).subscribe(data => {
+        this.proveedores = data;
+    });
+    setTimeout(()=> {
+        this.carga = 'visible';
+        this.loading = false;
+     },3000 );
+   }
 
 }

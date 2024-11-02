@@ -1,16 +1,13 @@
 import { LoadingService } from './../../../servicios/loading.service';
 import { ProductosServiceService } from './../../../servicios/productos-service.service';
-import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { Observable, OperatorFunction, merge } from 'rxjs';
-import { Subject } from 'rxjs';
-import { NgbTypeahead, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {  NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component,  OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
 import { RestService } from 'src/app/servicios/rest.service';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { faFileExcel , faAddressCard, faPenToSquare, faTrash , faPlusCircle , faSearch, faSyncAlt} from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel , faAddressCard, faPenToSquare, faTrash , faPlusCircle , faSearch, faSyncAlt, faFilter, faTrashCan} from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 
 
@@ -22,24 +19,17 @@ import { Router } from '@angular/router';
 export class TrabProductosComponent implements OnInit {
 
   @ViewChild(DataTableDirective, {static: false})
-  datatableElement?: DataTableDirective;
-  @ViewChild("prdDesx")  prdDesx? : ElementRef;
-
-  @ViewChild('instance', {static: true}) instance?: NgbTypeahead;
-  focus$ = new Subject<string>();
-  click$ = new Subject<string>();
-
+  datatableElement?: DataTableDirective; 
   dtOptions    : DataTables.Settings  = {} ;
   loading      : boolean              = true;
   tblProductos : any                  = {};
-  producto     : any                  = {};
-  filtroPrd    : FormGroup;
+  producto     : any                  = {};  
   token        : string               = '';
   parametros   : any []               = [];
   statesx      : any                  ;
   states       : string[]             = [];
   upPrd        : FormGroup             ;
-  carga        : string              = "invisible";
+  carga        : string               = "invisible";
   model        : any;
   faPenToSquare                       = faPenToSquare;  
   faTrash                             = faTrash;
@@ -48,6 +38,9 @@ export class TrabProductosComponent implements OnInit {
   faPlusCircle                        = faPlusCircle;
   faSyncAlt                           = faSyncAlt;
   faSearch                            = faSearch;
+  faFilter                            = faFilter;
+  faTrashCan                          = faTrashCan;
+  colums: string[]                    = [];
 
 
   constructor(private servicio     : UsersService ,
@@ -60,32 +53,13 @@ export class TrabProductosComponent implements OnInit {
               private router       : Router
 
     ) {
-
-      this.filtroPrd = fb.group({
-      prdDes : [''],
-      created_at : [''],
-      });
       this.token = this.servicio.getToken();
-
       this.upPrd = fb.group({
-      upPrdDes : ['', Validators.compose([
-      Validators.required
-      ])]
+        upPrdDes : ['', Validators.compose([
+         Validators.required
+        ])]
       });
-      }
-
-      search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) => {
-      const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
-      const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance?.isPopupOpen()));
-      const inputFocus$ = this.focus$;
-
-      return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(
-      map(term => (term === '' ? this.states
-      : this.states.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1)).slice(0, 10))
-      );
-      }
-
-
+  }
 
 ngOnInit(): void {
   this.tblData();
@@ -93,7 +67,6 @@ ngOnInit(): void {
     pagingType: 'full_numbers',
     pageLength: 20,
     lengthMenu : [20,50,100, 200],
-
     processing: true,
     language: {
       emptyTable: '',
@@ -110,77 +83,28 @@ ngOnInit(): void {
         previous: 'Ant.'
       }
     }}
-    this.serviLoad.sumar.emit(1);
-    this.servicioget.get('prdDes' , this.token, this.parametros).subscribe(data => {
-       this.statesx = data;
-      this.statesx.forEach((element: { prdDes: string; }) => {
-        this.states.push(element.prdDes);
-      });
-
-    });
-
 }
 
 
 ngAfterViewInit(): void {
 }
 
-public buscar(prdDes : string  , created_at : string ){
-
-    if (prdDes){
-      this.loading      = true;
-      let parm : any[]  = [{key :'prdDes' ,value: prdDes} ];
-      this.tblProductos = {};
-
-      this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-        dtInstance.destroy().draw();
-      });
-      this.serviLoad.sumar.emit(1);
-      this.servicioget.get('filPrdDes' , this.token, parm).subscribe(respuesta => {
-          this.tblProductos = respuesta;
-          this.loading      = false;
-         });
-    }else{
-   
-    }
-   }
-
-
-  public tblData(){
-    this.tblProductos = {};
+public tblData(){
+    this.tblProductos       = {};
     this.serviLoad.sumar.emit(1);
-    this.servicioget.get('trabProducto' , this.token, this.parametros).subscribe(respuesta => {
-      this.tblProductos = respuesta;
+    this.servicioget.get('trabProducto' , this.token, this.parametros).subscribe((respuesta:any) => {
+      this.tblProductos = respuesta.data;
+       this.colums = respuesta.colums; // Columnas originales   
      });
-
      setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
-     },3000 );
-
+     },1500 );
   }
 
   public refrescar(){
-     this.loading       = true;
-     this.carga         = 'invisible';
-     this.tblProductos  = {};
-
-     this.datatableElement?.dtInstance.then((dtInstance : DataTables.Api) => {
-      dtInstance.destroy().draw();
-    });
-    this.serviLoad.sumar.emit(1);
-     this.servicioget.get('trabProducto' , this.token, this.parametros).subscribe(respuesta => {
-       this.tblProductos = respuesta;
-       setTimeout(()=> {
-        this.loading = false;
-        this.carga   = 'visible';
-      },1000);
-    });
-
-    this.filtroPrd = this.fb.group({
-        prdDes : [''],
-        created_at : [''],
-      });
+    this.parametros = [];
+    this.tblData();
   }
 
   public Excel(){
@@ -195,7 +119,12 @@ public buscar(prdDes : string  , created_at : string ){
  public modelUp(xproductos : any){
   const objstring = JSON.stringify(xproductos.id);    
   this.router.navigate(['home/parametros/productos/actualizar/'  + objstring]);
-
  }
+
+ public addFilter(parametros: any){
+    this.parametros = parametros;
+    this.tblData();
+ }
+
 
 }

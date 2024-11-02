@@ -3,15 +3,20 @@
     <h5 class="card-title">País</h5>
   </div>
   <div class="card-body">
-      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+    <button type = 'button' class="btn btn-outline-primary btn-sm" (click)="refrescar()">
+      <fa-icon [icon]="faSyncAlt"></fa-icon>
+      Refrescar</button>
+      <button type = 'button' class="btn  btn-outline-primary btn-sm" (click)="Excel()" ngbTooltip="Excel" >
         <fa-icon [icon]="faFileExcel"></fa-icon>
         Excel</button>
-      <a (click) = "modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo">
+      <a (click)="modalIns(modalPaisIns)" class="btn  btn-outline-primary btn-sm" ngbTooltip="Nuevo">
         <fa-icon [icon]="faAddressCard"></fa-icon>
         Nuevo</a>
-    <div class="loading" *ngIf= "loading" >
+     <app-filtro-general [colums]="colums" (onItemAdded)="addFilter($event)" *ngIf="colums.length > 0"></app-filtro-general>
+     <div class="loading" *ngIf= "loading" >
       <img src = "assets/Circles-menu-3.gif">
      </div>
+  <br>
   <br>
   <div class="table-responsive"   *ngIf="tblPais?.length > 0" class="{{carga}}">
     <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >

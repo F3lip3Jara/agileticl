@@ -2,7 +2,7 @@ import { LoadingService } from './../../../servicios/loading.service';
 import { Proveedor } from './../../../model/proveedor.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { LinksService } from 'src/app/servicios/links.service';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -34,7 +34,7 @@ export class TrabProveedoresComponent implements OnInit {
   archivos        : any []               = [];
   rol             : any;
   gerencia        : any;
-  ins         : UntypedFormGroup;
+  ins             : FormGroup;
   valGuar         : boolean              = false;
   tblProveedor    : any                  = {};
   regiones        : any;
@@ -50,6 +50,7 @@ export class TrabProveedoresComponent implements OnInit {
   faPlusCircle                             = faPlusCircle;
   faSyncAlt                                = faSyncAlt;
   faTruck                                  = faTruck;
+  colums     :string []                    = [];
 
   constructor(
     private servicio        : UsersService,
@@ -57,7 +58,7 @@ export class TrabProveedoresComponent implements OnInit {
     private servicioLink    : LinksService,
     private excel           : ExcelService,
     private modal           : NgbModal,   
-    private fg              : UntypedFormBuilder,
+    private fg              : FormBuilder,
     private router          : Router,
     private serProveedor    : ProveedoresService,
     private serviLoad       : LoadingService,
@@ -120,8 +121,8 @@ export class TrabProveedoresComponent implements OnInit {
       }}
       this.serviLoad.sumar.emit(1);
 
-      this.rest.get('trabPais' , this.token, this.parametros).subscribe(data => {
-        this.paises = data;
+      this.rest.get('trabPais' , this.token, this.parametros).subscribe((data:any) => {
+        this.paises = data.data;
         });
 
         this.ins.controls['idPai'].valueChanges.subscribe(field => {
@@ -172,8 +173,9 @@ export class TrabProveedoresComponent implements OnInit {
   public tblData(){
     this.tblProveedor = {};
     this.serviLoad.sumar.emit(1);
-    this.rest.get('trabProveedor' , this.token, this.parametros).subscribe(data => {
-      this.tblProveedor = data;
+    this.rest.get('trabProveedor' , this.token, this.parametros).subscribe((data:any) => {
+      this.tblProveedor = data.data;
+      this.colums       = data.colums;
     });
     setTimeout(()=> {
         this.carga = 'visible';
@@ -226,6 +228,16 @@ export class TrabProveedoresComponent implements OnInit {
       this.router.navigate(['home/parametros/proveedor/actualizar/' + objstring]);
 
   }
+
+  public refrescar(){
+    this.parametros = [];
+    this.tblData();
+  }
+   public addFilter(parametros: any){
+    this.parametros = parametros;
+    this.tblData();
+  }
+  
 
 
 
