@@ -17,8 +17,8 @@ import{VerInyeccionDetComponent} from './visualizadores/ver-inyeccion/ver-inyecc
 import{VerTermoformadoComponent} from './visualizadores/ver-termoformado/ver-termoformado.component';
 import{VerTermoformadoDetComponent} from './visualizadores/ver-termoformado/ver-termoformado-det/ver-termoformado-det.component';
 import {InsOrdenProduccionComponent} from './trab-orden-produccion/ins-orden-produccion/ins-orden-produccion.component';
-import { AgileModule } from "../../agileModule.module";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AgileModule } from 'src/app/agileModule.module';
 @NgModule({
   declarations: [TrabExtrusionComponent , 
                  TrabMezclaComponent,

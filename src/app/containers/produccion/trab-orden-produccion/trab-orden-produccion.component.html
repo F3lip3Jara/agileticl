@@ -12,10 +12,12 @@
     <a (click)="ordNuevo()" class="btn  btn-outline-primary btn-sm"  ngbTooltip="Nuevo">
       <fa-icon [icon]="faAddressCard"></fa-icon>Nuevo
     </a>
+    <app-filtro-general  [colums]="colums" (onItemAdded)="addFilter($event)" *ngIf="colums.length > 0"></app-filtro-general>       
+
     <div class="loading" *ngIf= "loading" >
       <img src = "../../../assets/Circles-menu-3.gif">
      </div>
-
+  <br>
   <br>
   <div class="table-responsive">
     <div  *ngIf="tblOrdenPrd?.length > 0" class="{{carga}}">
@@ -31,10 +33,11 @@
             <th>Estado Ord</th>
             <th>Estado Prod</th>
             <th>Prd Totales</th>
-            <th>Prd Gestionados</th>
-            <th>Prd Pendientes</th>
-            <th>Etapa</th>
-            <th>Observaciones</th>
+            <th>Tipo</th>
+            <th>Tipo Des</th>
+            <th>Centro Dest</th>
+            <th>Almacen Dest</th>
+            <th></th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -44,19 +47,23 @@
             <th>{{orden.usuario}}</th>
             <th>{{orden.orden_compra}}</th>
             <th>{{orden.orden_produccion}}</th>
-            <th>{{orden.rut_cliente}}</th>
+            <th>{{orden.rut}}</th>
             <th>{{orden.fecha}}</th>
             <th>{{orden.estado_ord}}</th>
             <th>{{orden.estado_pro}}</th>         
-            <th>{{orden.prd_total}}</th>
-            <th>{{orden.prd_total-orden.prd_pendientes}}</th>
-            <th>{{orden.prd_pendientes}}</th>
-            <th>{{orden.etapa}}</th>
+            <th>{{orden.prd_total}}</th>        
+            <th>{{orden.tipo}}</th>
+            <th>{{orden.tipo_des}}</th>
+            <th>{{orden.centro_destino}}</th>
+            <th>{{orden.almacen_destino}}</th>
             <th>{{orden.observaciones}}</th>
-            <th> 
-            <a *ngIf="orden.prd_pendientes == 0"  class="btn btn-success btn-xs"  ngbTooltip="Orden sin Pendientes" ><i class="fas  fa-check"></i></a>
-            <a *ngIf="orden.prd_pendientes > 0 "      (click)="addOT(orden , modalCiuUdp)" class="btn btn-warning btn-xs"  ngbTooltip="Orden de trabajo" ><i class="fas fa-folder-plus"></i></a>
-            <a style= "margin : 1px;"   class="btn btn-warning btn-xs"    (click)="verOT(orden , modalVerOrd)"         ngbTooltip="Ver"><i class="fas fa-eye"></i></a> 
+            <th>
+            <!--<a *ngIf="orden.prd_pendientes == 0"  class="btn btn-success btn-xs"  ngbTooltip="Orden sin Pendientes" ><i class="fas  fa-check"></i></a>
+            <a *ngIf="orden.prd_pendientes > 0 "      (click)="addOT(orden , modalCiuUdp)" class="btn btn-warning btn-xs"  ngbTooltip="Orden de trabajo" ><i class="fas fa-folder-plus"></i></a> -->
+            <a style= "margin : 1px;"   class="btn btn-warning btn-xs"    (click)="verOT(orden , modalVerOrd)"         ngbTooltip="Ver"><fa-icon [icon]="faEye"></fa-icon></a> 
+            <a style= "margin : 1px ;" (click)="generaSalida(orden)" class="btn btn-warning btn-xs" ngbTooltip="Solicitar">
+              <fa-icon [icon]="faBuildingCircleArrowRight"></fa-icon>
+            </a>
           </th>
         </tbody>
       </table>
@@ -67,7 +74,6 @@
 
   <!-- /.card-body -->
 </div>
-
 
 <ng-template #modalCiuUdp let-modal>
   <div class="modal-header">
@@ -145,7 +151,7 @@
           <tbody>
               <tr *ngFor="let ord of xorddet; let i= index;">
                     <td>
-                        <input type="checkbox" ng-true-value="S" ng-false-value="N"  (change)="argrerDet(ord , $event.target  )"  >
+                  <!--     <input type="checkbox" ng-true-value="S" ng-false-value="N"  (change)="argrerDet(ord , $event.target  )"  >--> 
                    </td>
                    <td>
                       <span>{{ord.orpdPrdCod}}</span>
@@ -167,7 +173,7 @@
       </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block"  [disabled]="val" *ngIf="ot.length > 0 && orptPrio.value && valEqui == false " (click)="guardarOT(idOrp.value , orptPrio.value)" >
+   <!--<button type="submit" class="btn btn-primary btn-block"  [disabled]="val" *ngIf="ot.length > 0 && orptPrio.value && valEqui == false " (click)="guardarOT(idOrp.value , orptPrio.value)" >
       <div *ngIf= "val" >
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>
@@ -175,7 +181,7 @@
       <div *ngIf= "!val">
         Guardar
       </div>
-    </button>
+    </button>--> 
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
 </form>
@@ -186,8 +192,7 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)='modal.dismiss()' >
       <span aria-hidden="true">&times;</span>
     </button>
-  </div>
-  <form>
+  </div> 
   <div class="modal-body">
       <div class="card-body">
         <div class="form-group">
@@ -249,12 +254,11 @@
           </table>
 
       </div>
-      <!-- /.card-body -->
-      </div>
+    </div>
+      <!-- /.card-body -->   
   </div>
   <div class="modal-footer">   
     <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
   </div>
-</form>
 </ng-template>
 

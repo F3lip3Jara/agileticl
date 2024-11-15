@@ -4,10 +4,9 @@ import { UsersService } from '../../../../servicios/users.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
-import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AlertasService } from 'src/app/servicios/alertas.service';
 
 @Component({
   selector: 'app-trab-opciones',
@@ -31,8 +30,9 @@ export class TrabOpcionesComponent {
   faSquarePlus                        = faSquarePlus;
   faTrash                             = faTrash;
   accion      : string                =  '';
-  opcion      : any                   =  {};
-
+  opcion      : any                   = {};
+  colums     :string []               = []
+  faSyncAlt                           = faSyncAlt;
   constructor(
               private servicio     : UsersService,
               private rest         : RestService,
@@ -72,9 +72,11 @@ export class TrabOpcionesComponent {
   public tblData(){
     this.serviLoad.sumar.emit(1);
     this.tblOpciones = {};
-    this.rest.get('trabOpciones' , this.token, this.parametros).subscribe(data => {
-        this.tblOpciones = data;
+    this.rest.get('trabOpciones' , this.token, this.parametros).subscribe((data:any) => {
+        this.tblOpciones = data.data;
+        this.colums = data.colums;
     });
+
     setTimeout(()=> {
         this.carga = 'visible';
         this.loading = false;
@@ -136,4 +138,14 @@ export class TrabOpcionesComponent {
  
     return false;
   }
+  public refrescar(){
+    this.parametros = [];
+    this.tblData();
+  }
+
+   public addFilter(parametros: any){
+    this.parametros = parametros;
+    this.tblData();
+  }
+
 }

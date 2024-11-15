@@ -1,6 +1,6 @@
 <div class="card card-primary card-outline">
     <div class="card-header">
-      <h5 class="card-title">Almacén</h5>   
+      <h5 class="card-title">Sectores</h5>   
     </div>
     <div class="card-body">
         <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
@@ -19,28 +19,28 @@
         <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
           <thead>
             <tr>
-              <th>Centro</th>     
-              <th>ID</th>                   
+              <th>Centro</th>  
+              <th>Almacén</th>
+              <th>ID</th>
+              <th>Código</th>                   
               <th>Descripción</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let data of tblObj">
-              <th>{{data.cenDes}}</th>
-              <th>{{data.almId}}</th>
+              <th>{{data.cenDes}}</th>            
               <th>{{data.almDes}}</th>
+              <th>{{data.sectorId}}</th>
+              <th>{{data.secCod}}</th>
+              <th>{{data.secDes}}</th>
               <th>
                 <a style= "margin : 1px ;" (click)="up(modalUp , 'Actualizar', data )" class="btn btn-warning btn-xs" ngbTooltip="Actualizar">
                   <fa-icon [icon]="faPenToSquare"></fa-icon>
-                </a>
-                <a style= "margin : 1px ;" (click)="sectores(data)" class="btn btn-warning btn-xs" ngbTooltip="Sector">
-                  <fa-icon [icon]="faSquarePlus"></fa-icon>
-                </a>
+                </a>              
                 <a style= "margin : 1px ;" (click)="del(data)"  class="btn btn-warning btn-xs" ngbTooltip="Eliminar">
                   <fa-icon [icon]="faTrash"></fa-icon>
-                </a>
-               
+                </a>               
               </th>
             </tr>
           </tbody>
@@ -50,7 +50,7 @@
   </div>
     <!-- /.card-body -->
     <div class="card-footer">
-        <a routerLink="../.." class="btn btn-outline-primary btn-sm mb-3 mt-2">
+        <a routerLink="/home/sd/centro/" class="btn btn-outline-primary btn-sm mb-3 mt-2">
             <fa-icon [icon]="faArrowTurnDown"></fa-icon>
             Volver
           </a>
@@ -65,16 +65,24 @@
     <form >          
     <div class="modal-body">                                         
           <div class="form-group">
+            <label for="">Código</label>
+            <input type="text" class="form-control"  placeholder="" value="" #secCod
+             [ngClass]="(!secCod.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!secCod.value">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="">Descripción</label>
-            <input type="text" class="form-control"  placeholder="" value="" #almDes
-             [ngClass]="(!almDes.value)? 'was-validated' : 'is-valid'" >
-             <div *ngIf="!almDes.value">
+            <input type="text" class="form-control"  placeholder="" value="" #secDes
+             [ngClass]="(!secDes.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!secDes.value">
               <span class="text-danger">Campo obligatorio!</span>
             </div>
           </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary"  [disabled]="loading" (click)="guardar(almDes.value,  'ins')" *ngIf="almDes.value != '' ">Guardar</button>
+      <button type="button" class="btn btn-primary"  [disabled]="loading" (click)="guardar(secCod.value, secDes.value, 'ins')" *ngIf="secCod.value != '' && secDes.value != '' ">Guardar</button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
     </div>
   </form>
@@ -85,19 +93,27 @@
       <h5 class="modal-title">Modal {{accion}} Opciones</h5>
     </div> 
     <form >          
-    <div class="modal-body">                                         
+    <div class="modal-body"> 
+        <div class="form-group">
+            <label for="">Código</label>
+            <input type="text" class="form-control"  placeholder="" value="{{sector.secCod}}" #secCod
+             [ngClass]="(!secCod.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!secCod.value">
+              <span class="text-danger">Campo obligatorio!</span>
+            </div>
+          </div>                                        
           <div class="form-group">
             <label for="">Descripción</label>
-            <input type="text" class="form-control"  placeholder="" value="{{almacen.almDes}}" #almDes
-             [ngClass]="(!almDes.value)? 'was-validated' : 'is-valid'" >
-             <div *ngIf="!almDes.value">
+            <input type="text" class="form-control"  placeholder="" value="{{sector.secDes}}" #secDes
+             [ngClass]="(!secDes.value)? 'was-validated' : 'is-valid'" >
+             <div *ngIf="!secDes.value">
               <span class="text-danger">Campo obligatorio!</span>
             </div>
           </div>
         
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-primary"  [disabled]="loading" (click)="guardar(almDes.value , 'up')" *ngIf="almDes.value != ''">Guardar</button>
+      <button type="button" class="btn btn-primary"  [disabled]="loading" (click)="guardar(secCod.value , secDes.value, 'up')" *ngIf="secCod.value != '' && secDes.value != ''">Guardar</button>
       <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)='modal.close()'>Cerrar</button>
     </div>
   </form>

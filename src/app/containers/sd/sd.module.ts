@@ -18,7 +18,9 @@ import { TrabCentroComponent } from './centro/trab-centro/trab-centro.component'
 import { GoogleMapsModule } from '@angular/google-maps';
 import {AgileModule} from '../../agileModule.module';
 import { TrabAlmacenComponent } from './centro/trab-almacen/trab-almacen.component';
-import { TrabTipClassComponent } from './trab-tip-class/trab-tip-class.component'
+import { TrabTipClassComponent } from './trab-tip-class/trab-tip-class.component';
+import { TrabOrdenesWmsComponent } from './trab-ordenes-wms/trab-ordenes-wms.component';
+import { TrabSectorComponent } from './centro/trab-sector/trab-sector.component'
 
 
 @NgModule({
@@ -26,6 +28,8 @@ import { TrabTipClassComponent } from './trab-tip-class/trab-tip-class.component
     TrabCentroComponent,
     TrabAlmacenComponent,
     TrabTipClassComponent,
+    TrabOrdenesWmsComponent,
+    TrabSectorComponent,
   
                 ],
   imports: [

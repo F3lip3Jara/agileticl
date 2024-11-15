@@ -6,7 +6,7 @@ import { UsersService } from 'src/app/servicios/users.service';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
+import { faArrowTurnDown, faCalendarWeek, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 
 @Component({
@@ -19,16 +19,16 @@ export class InsOrdenProduccionComponent implements OnInit {
   datatableElement?: DataTableDirective;
 
   insPrd       : FormGroup;
-  ins       : FormGroup;
+  ins          : FormGroup;
   token        :string                = '';
-  proveedores  : any;
+  proveedores  : any                  = {};
   carga        : string               = "";
   val          : boolean              = false;
   loading      : boolean              = false;
   dtOptions    : DataTables.Settings  = {} ;
   parametros   : any []               = [];
-  prvNom       :string                = '';
-  idPrv        :number                = 0;
+  prvId        :number                = 0;
+  producto     : any                  = {};
   productos    : any [];
   cProductos   : any                  = {};
   ordenes      : any []               = [];
@@ -40,6 +40,10 @@ export class InsOrdenProduccionComponent implements OnInit {
   faCalendarWeek                      = faCalendarWeek;
   centro       : any                  = [];
   almacen      : any                  = [];
+  clasTip      : any                  = [];
+  faPlus                              = faPlus;
+  faTrash                             = faTrash;
+  faArrowTurnDown                     = faArrowTurnDown;
 
   constructor(
     private servicio     : UsersService,
@@ -53,29 +57,31 @@ export class InsOrdenProduccionComponent implements OnInit {
       this.token    = this.servicio.getToken();
       this.ins   = fb.group({
         orpFech : ['' , Validators.compose([
-       
+          Validators.required
          ])],
          orpNumOc : ['' , Validators.compose([
-          Validators.required,
+          
          ])],
 
          orpObs : ['' , Validators.compose([
          ])],
 
          orpNumRea : ['' , Validators.compose([
-          Validators.required,
+        
          ])],
          centroId: ['' , Validators.compose([
-             
+          Validators.required,
         ])],
         almId: ['' , Validators.compose([
-  
+          Validators.required,
         ])],
+        clasTipId:['' , Validators.compose([
+          Validators.required,])]
 
       });
 
 
-      this.insPrd      = fb.group({
+      this.insPrd = fb.group({
                                   prdCod : ['' , Validators.compose([
                                     Validators.required,
                                   ])],
@@ -83,15 +89,14 @@ export class InsOrdenProduccionComponent implements OnInit {
                                     Validators.required,
                                     Validators.pattern('^-?[0-9]\\d*?$')
                                   ])],
-                                  orpdCantDis: ['' , Validators.compose([
-                                    Validators.required,
+                                  orpdCantDis: ['' , Validators.compose([                                   
                                     Validators.pattern('^-?[0-9]\\d*?$')
                                   ])],
                                   orpdObs: ['' , Validators.compose([
                             
                                   ])]
                                  
-                        });
+                      });
 
    
         this.productos = [];
@@ -131,29 +136,28 @@ export class InsOrdenProduccionComponent implements OnInit {
         this.centro = data;
       });
 
-      this.ins.controls['centroId'].valueChanges.pipe(
-        debounceTime(200),
-        distinctUntilChanged()).subscribe(field => {
-         console.log(field);
-         
+      this.rest.get('trabSdClass' , this.token , this.parametros).subscribe(data => {
+        this.clasTip = data;
+      });
+
+      this.ins.controls['centroId'].valueChanges.pipe(        
+        distinctUntilChanged()).subscribe((field:any) => {
+          this.almacen = [];
+          this.parametros = [{"key": "centroId" , "value" :field}];
+          this.rest.get('almacenFil' , this.token , this.parametros).subscribe(data => {
+            this.almacen = data;
+          });
+  
         });
       
   }
 
   
    agregar(prdCod : any ,orpdCant: any ,  orpdObs:any){
-
-      this.parametros = [{"key": "prdCod" , "value" : prdCod}];
-      
-      /*  let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
-        let elemprdDes   = <HTMLInputElement> document.getElementById('prdDes');
-        elemprdCod.value = '';
-        elemprdDes.value = '';*/
-  
         //Valido que no se puede agregar el mismo producto en el array
         let valiPrd      = false;
-        let prdDes       = "";
-
+        let prdDes       = this.producto.prdDes;
+        this.orpdTotP    = orpdCant;
         this.ordenes.forEach(element => {
             if(element.prdCod == prdCod){
               valiPrd =true;
@@ -165,65 +169,48 @@ export class InsOrdenProduccionComponent implements OnInit {
             'prdCod'      : prdCod,
             'prdDes'      : prdDes,
             'orpdCant'    : orpdCant,
-            'orpdObs'     : orpdObs
+            'orpdObs'     : orpdObs,
+            'orpdTotP'    : this.orpdTotP
         });
 
         }else{
-          this.servicioaler.setAlert('No se puede solicitar el mismo producto en un OP','warning');
+          this.servicioaler.setAlert('No se puede solicitar el mismo producto en un OP','info');
           this.servicioaler.disparador.emit(this.servicioaler.getAlert());        } 
           this.insPrd.reset();
           this.modal.dismissAll();
           this.valcprod     = false;
-       }      
+    }      
     
-
 
    selPrd(selprd: any){
       this.modal.open(selprd);
    }
 
- selectorPrd(xproducto:any){
-     this.productos   = [];
-     let elemprdCod   = <HTMLInputElement> document.getElementById('prdCod');
-     let elemprdDes   = <HTMLInputElement> document.getElementById('prdDes');
-     elemprdCod.value = xproducto.prdCod;
-     elemprdDes.value = xproducto.prdDes;
-     this.insPrd.controls['prdCod'].setValue( xproducto.prdCod);
-     this.valcprod    = true; 
-   }
-
+ 
    delPrd(index:any){
      this.ordenes.splice(index , 1);
    }
 
-   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any ){
+   generaOP(orpFech: any ,orpNumOc : any , orpNumRea: any  , orpObs : any  , centroId:any, almId:any, clasTipId:any){
        let ordenPrd : any [] = [];
        this.val              = true;
       ordenPrd.push({
-          'orpFech'  : orpFech,
-          'orpNumOc' : orpNumOc,
-          'orpNumRea': orpNumRea,
-          'orpObs'   : orpObs,
-          'idPrv'    : this.idPrv,
-          'ordenes'  : this.ordenes,
+          'orpFech'   : orpFech,
+          'orpNumOc'  : orpNumOc,
+          'orpNumRea' : orpNumRea,
+          'orpObs'    : orpObs,
+          'proveedor': this.proveedores,
+          'ordenes'   : this.ordenes,
+          'centroId'  : centroId,
+          'almId'     : almId,
+          'clasTipId' : clasTipId
          
       });
-
-      this.rest.post('insOrd', this.token, ordenPrd).subscribe(resp => {
-       resp.forEach((elementx : any)  => {
-        this.servicioaler.disparador.emit(this.servicioaler.getAlert());
-        if(elementx.error == '0'){      
-              this.servicioaler.setAlert('','');
-              this.val        = false;
-              this.valproddet = false;
-              const d = 'op';             
-              this.insPrd.reset();
-              this.servicioLink.disparador.emit(d);
-        }else {
-          this.val      = false;
-        }
+      console.log(ordenPrd);
+      
+      this.rest.post('insOrdProduccion', this.token, ordenPrd).subscribe(resp => {
+           
       });
-    });
 
    }
 
@@ -239,8 +226,16 @@ export class InsOrdenProduccionComponent implements OnInit {
   }
 
   public volver(){
-    const d = 'op';
-    this.servicioLink.disparador.emit(d);
-    return false;
+  
+  }
+
+  public proveedor(proveedor : any){
+    this.proveedores = proveedor;
+    this.prvId  = proveedor.id;
+  }
+
+  public onProductoSeleccionado(producto : any){
+      this.producto = producto;
+    
   }
 }

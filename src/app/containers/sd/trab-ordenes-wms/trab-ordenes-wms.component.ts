@@ -1,20 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { faAddressCard, faBuildingCircleArrowRight, faEye, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective } from 'angular-datatables';
+import { faAddressCard, faBuildingCircleArrowRight, faClipboardList, faEye, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ExcelService } from 'src/app/servicios/excel.service';
-import { LoadingService } from 'src/app/servicios/loading.service';
-import { RestService } from 'src/app/servicios/rest.service';
+import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
+import { RestService } from 'src/app/servicios/rest.service';
+import { LoadingService } from 'src/app/servicios/loading.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-trab-venta-web',
-  templateUrl: './trab-venta-web.component.html',
-  styleUrls: ['./trab-venta-web.component.scss']
+  selector: 'app-trab-ordenes-wms',
+  templateUrl: './trab-ordenes-wms.component.html',
+  styleUrls: ['./trab-ordenes-wms.component.scss']
 })
-export class TrabVentaWebComponent {
-
+export class TrabOrdenesWmsComponent {
 
   @ViewChild(DataTableDirective, {static: false})
   datatableElement?: DataTableDirective;
@@ -40,6 +39,12 @@ export class TrabVentaWebComponent {
   prd         :any                    = {};
   faSyncAlt                           = faSyncAlt;
   colums     :string []               = [];
+  isQuantityValid: boolean            = false;
+  faClipboardList                     = faClipboardList;
+  sectorFil : any                     = {};
+  val       : boolean                = false;
+  disable   : boolean                = false;
+  
 
   constructor(
               private servicio     : UsersService,
@@ -53,8 +58,6 @@ export class TrabVentaWebComponent {
             this.token = this.servicio.getToken();
     }
  
-
-
   ngOnInit(): void {
     this.tblData();
    
@@ -83,7 +86,7 @@ export class TrabVentaWebComponent {
   public tblData(){
     this.serviLoad.sumar.emit(1);
     this.tblObj = {};
-    this.rest.get('trabVentaWeb' , this.token, this.parametros).subscribe((data : any) => {
+    this.rest.get('trabSdOrden' , this.token, this.parametros).subscribe((data : any) => {
         this.tblObj = data.data;
         this.colums = data.colums;
     });
@@ -94,25 +97,43 @@ export class TrabVentaWebComponent {
    }
 
   public Excel(){
-    this.excel.exportAsExcelFile(this.tblObj, 'ordenes_web');
+    this.excel.exportAsExcelFile(this.tblObj, 'ordenes_wms');
      return false;
   }
 
   public ver(data:any , content:any){
-    this.dt = data;
-    this.parametros = [{key:'opedId' , value:this.dt.opedId}];
-    this.rest.get('venta_det' , this.token, this.parametros).subscribe((data:any) => {
+    this.dt = data;    
+    this.parametros = [{key:'ordId' , value:this.dt.ordId}];
+    this.rest.get('verSdOrden' , this.token, this.parametros).subscribe((data:any) => {
         this.prd = data;
     });
     this.modal.open(content);
   }
-  public generaSalida(data:any){
+  public verificarEE(data:any , content : any ){
   /*  this.parametros =[ {'id': data.opedId} , {'tipPed': 'WEB'}];
     this.rest.post('insSdOrden' , this.token, this.parametros).subscribe(data => {
         
     });*/
+    this.dt = data;    
+    this.parametros = [{key:'centroId' , value:this.dt.centroId} , {key:'almId' , value:this.dt.almId}];
+    this.rest.get('sectorFil' , this.token, this.parametros).subscribe((data:any) => {
+        this.sectorFil = data;
+    });
+
+    this.parametros = [{key:'ordId' , value:this.dt.ordId}];
+    this.rest.get('verSdOrden' , this.token, this.parametros).subscribe((data:any) => {
+        this.prd = data;
+    });
+
+    this.modal.open(content , { size: 'xl' });
     console.log(data);
   }
+
+  validateQuantities() {
+    // Comprueba si al menos un producto tiene cantidad mayor a 0
+     this.isQuantityValid = this.prd.some((item: any) => item.enteredQty && item.enteredQty > 0);
+  }
+
 
   refrescar(){
     this.parametros =[];
@@ -123,5 +144,11 @@ export class TrabVentaWebComponent {
     this.tblData();
   }
   
-
+  generarIBLPN(orden:any , prd:any){
+    console.log(orden);
+    console.log(prd);
+    this.disable = true;
+    this.disable = false;
+    
+  } 
 }

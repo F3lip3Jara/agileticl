@@ -19,6 +19,7 @@ import { UpUsuariosComponent } from './trab-usuarios/up-usuarios/up-usuarios.com
 import { AvatarModule } from '@coreui/angular';
 import { PickListModule } from 'primeng/picklist';
 import { UpEmpresaComponent } from './trab-empresa/up-empresa/up-empresa.component';
+import { AgileModule } from 'src/app/agileModule.module';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { UpEmpresaComponent } from './trab-empresa/up-empresa/up-empresa.compone
     NgSelectModule,
     ImageCropperModule,
     AvatarModule,    
-    PickListModule
+    PickListModule,
+    AgileModule
     
   ],
 })

@@ -147,6 +147,11 @@ export class TrabAlmacenComponent {
     return false;
   }
 
+  sectores(almacen:any){
+    const objstring = JSON.stringify(almacen);    
+    //sd/centro/almacen/
+    this.router.navigate(['home/sd/centro/almacen/sector/'  + objstring]);
+  }
   
 
 

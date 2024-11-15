@@ -15,6 +15,7 @@ import { PickListModule } from 'primeng/picklist';
 import { StepperModule } from 'primeng/stepper';
 import { VentaRoutingModule } from './venta-routing.module';
 import {TrabVentaWebComponent} from './orden/trab-venta-web/trab-venta-web.component'
+import { AgileModule } from 'src/app/agileModule.module';
 
 
 
@@ -41,7 +42,8 @@ import {TrabVentaWebComponent} from './orden/trab-venta-web/trab-venta-web.compo
     StepsModule,
     ButtonModuleP,
     PickListModule,
-    StepperModule
+    StepperModule,
+    AgileModule
    
   ],
  

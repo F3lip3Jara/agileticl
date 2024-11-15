@@ -1,0 +1,204 @@
+<div class="card card-primary card-outline">
+    <div class="card-header">
+      <h5 class="card-title">Ordenes Wms</h5>   
+    </div>
+    <div class="card-body">
+      <button type = 'button' class="btn btn-outline-primary btn-sm" (click)= "refrescar()">       
+          <fa-icon [icon]="faSyncAlt"></fa-icon>
+          Refrescar
+      </button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel
+        </button>
+        <app-filtro-general  [colums]="colums" (onItemAdded)="addFilter($event)" *ngIf="colums.length > 0"></app-filtro-general>       
+
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>
+   <div>
+    <br>
+    <div class="table-responsive"   *ngIf="tblObj.length > 0" class="{{carga}}">
+        <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>Id</th>            
+              <th>Codígo Externo</th>
+              <th>Fecha de Creación</th>
+              <th>Centro</th>
+              <th>Almacen</th>
+              <th>Rut Proveedor</th>            
+              <th>Proveedor</th> 
+              <th>Estado</th>   
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tblObj">
+              <th>{{data.ordId}}</th>
+              <th>{{data.ordNumber}}</th>
+              <th>{{data.created_at}}</th>
+              <th>{{data.cenDes}}</th>
+              <th>{{data.almDes}}</th>
+              <th>{{data.ordHdrCustShortText13}}</th>
+              <th>{{data.ordHdrCustShortText7}}</th>
+              <th><span *ngIf="data.ordestatus =='L'">Liberado</span>
+                  <span *ngIf="data.ordestatus =='V'">Verificado</span>
+              </th>
+             
+              <th>
+                 <a style= "margin : 1px ;" (click)="ver(data,content)" class="btn btn-warning btn-xs" ngbTooltip="Ver">
+                    <fa-icon [icon]="faEye"></fa-icon>
+                  </a>
+                  <a style= "margin : 1px ;" (click)="verificarEE(data , contentVerificar)" class="btn btn-warning btn-xs" ngbTooltip="VerificarEE">
+                    <fa-icon [icon]="faClipboardList"></fa-icon>
+                  </a>
+              </th>          
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">      
+    </div>
+    <!-- /.card-footer-->
+  </div>
+
+  <ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Pedido #{{dt.ordId}} - {{dt.ordNumber}}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <!-- Detalles de facturación -->
+            <div class="col-6">
+                <h5>Detalles de facturación</h5>         
+                <p>{{dt.created_at}}</p>
+                <p>{{dt.cenDir}}</p> 
+                <p><strong>Rut Proveedor: </strong> {{dt.ordHdrCustShortText13}}</p>
+                <p><strong>Proveedor:</strong> {{dt.ordHdrCustShortText7}}</p>
+            </div>
+            <!-- Detalles de envío -->
+            <div class="col-6">
+              <h5>Detalles de Envío</h5>     
+              <p><strong>Centro: </strong> {{dt.cenDes}}</p>
+                <p><strong>Almacen: </strong> {{dt.almDes}}</p>
+                <p><strong>Tipo: </strong> {{dt.ordTipDes}}</p>
+                <p><strong>Estado: </strong> 
+                  <span *ngIf="dt.ordestatus =='L'">Liberado</span>
+                  <span *ngIf="dt.ordestatus =='V'">Verificado</span>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <!-- Tabla de productos -->
+        <div  *ngIf="!prd.length">
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+          <i class="spinner-grow spinner-grow-sm"></i>
+        </div>
+        <div class="table-responsive" *ngIf="prd.length > 0">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th>Producto</th>
+                      <th>Descripción</th>
+                      <th>Cantidad</th>  
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr *ngFor="let obj of prd">
+                        <td>{{obj.ordDtlCustShortText1}}</td>
+                        <td>{{obj.ordDtlCustShortText2}}</td>  
+                        <td>{{obj.orddQtySol}}</td>  
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+    </div>
+</ng-template>
+<ng-template #contentVerificar let-modal>
+  <div class="modal-header">
+      <h5 class="modal-title">Generar IBLPN para Orden #{{dt.ordId}} - {{dt.ordNumber}}</h5>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+      <div class="row"> 
+             <!-- Detalles de facturación -->
+            <div class="col-6">
+              <h5>Detalles de facturación</h5>         
+              <p>{{dt.created_at}}</p>
+              <p>{{dt.cenDir}}</p> 
+              <p><strong>Rut Proveedor: </strong> {{dt.ordHdrCustShortText13}}</p>
+              <p><strong>Proveedor: </strong> {{dt.ordHdrCustShortText7}}</p>
+          </div>
+          <!-- Detalles de envío -->
+          <div class="col-6">
+            <h5>Detalles de Envío</h5>     
+            <p><strong>Centro: </strong> {{dt.cenDes}}</p>
+              <p><strong>Almacen: </strong> {{dt.almDes}}</p>
+              <p><strong>Tipo: </strong> {{dt.ordTipDes}}</p>
+              <p><strong>Estado: </strong> 
+                <span *ngIf="dt.ordestatus =='L'">Liberado</span>
+                <span *ngIf="dt.ordestatus =='V'">Verificado</span>
+              </p>
+          </div>  
+      <hr>
+      <!-- Tabla de productos -->
+      <div *ngIf="!prd.length">
+        <i class="spinner-grow spinner-grow-sm"></i>
+        <i class="spinner-grow spinner-grow-sm"></i>
+        <i class="spinner-grow spinner-grow-sm"></i>
+      </div>
+      <div class="table-responsive" *ngIf="prd.length > 0">
+          <table class="table">
+              <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Descripción</th>
+                    <th>Cantidad Sol</th>                
+                    <th>Cantidad</th> 
+                    <th>Sector</th>  
+                  </tr>
+              </thead>
+              <tbody >
+                  <tr *ngFor="let obj of prd ; let i = index">
+                      <td>{{obj.ordDtlCustShortText1}}</td>
+                      <td>{{obj.ordDtlCustShortText2}}</td>  
+                      <td>{{obj.orddQtySol}}</td>                       
+                      <td>
+                        <input type="number" [(ngModel)]="prd[i].enteredQty" (input)="validateQuantities()"  class="form-control" min="0" placeholder="Cantidad" >
+                      </td>
+                      <td>
+                        <ng-select  [items]="sectorFil"
+                        bindLabel="secDes"
+                        bindValue="sectorId"
+                        [(ngModel)]="prd[i].sectorId"
+                        >
+                      </ng-select >
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-primary  "  *ngIf ="isQuantityValid" [disabled]="val" (click)="generarIBLPN(dt,prd)">
+      <div *ngIf= "val">
+        Guardando..
+        <span class="spinner-border spinner-border-sm mr-2"></span>
+      </div>
+      <div *ngIf= "!val">
+        Guardar
+      </div>
+    </button>
+      <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
+  </div>
+</ng-template>
