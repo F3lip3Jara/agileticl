@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { faAddressCard, faBuildingCircleArrowRight, faClipboardList, faEye, faFileExcel, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard, faBuildingCircleArrowRight, faClipboardList, faEye, faFileExcel, faFilePdf, faPenToSquare, faSquarePlus, faSyncAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ExcelService } from 'src/app/servicios/excel.service';
 import { DataTableDirective } from 'angular-datatables';
 import { UsersService } from 'src/app/servicios/users.service';
@@ -7,6 +7,9 @@ import { RestService } from 'src/app/servicios/rest.service';
 import { LoadingService } from 'src/app/servicios/loading.service';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import * as JsBarcode from 'jsbarcode';
 
 @Component({
   selector: 'app-trab-ordenes-wms',
@@ -42,8 +45,9 @@ export class TrabOrdenesWmsComponent {
   isQuantityValid: boolean            = false;
   faClipboardList                     = faClipboardList;
   sectorFil : any                     = {};
-  val       : boolean                = false;
-  disable   : boolean                = false;
+  val       : boolean                 = false;
+  disable   : boolean                 = false;
+  faFilePdf                           = faFilePdf;
   
 
   constructor(
@@ -145,10 +149,66 @@ export class TrabOrdenesWmsComponent {
   }
   
   generarIBLPN(orden:any , prd:any){
-    console.log(orden);
-    console.log(prd);
     this.disable = true;
-    this.disable = false;
+    this.val     = true;
+    this.parametros = [{'prd':prd}];
+
+    this.rest.post('insSdStock' , this.token, this.parametros).subscribe(data => {
+      this.val = false;
+      this.disable = false;
+      this.modal.dismissAll();
+    });
+
+  }
+  
+  generarPDFTraslado(){
+     
+    const canvas = document.createElement('canvas');
+    JsBarcode(canvas, this.dt.ordNumber, {
+      format: 'CODE128',
+      width: 2,
+      height: 50,
+      displayValue: true,
+    });
+
+    // Convertir el código de barras a imagen base64
+    const barcodeImage = canvas.toDataURL('image/png');
+
+    // Crear una nueva instancia de jsPDF
+     const doc = new jsPDF();
+     
+     // Agregar título al PDF
+     doc.text('Orden de Traslado interno WMS', 10, 10);
+ 
+     // Agregar información adicional
+     doc.text('Fecha: ' + new Date().toLocaleDateString(), 10, 20);
+     doc.text('Centro:' + this.dt.cenDes , 10, 30);
+     doc.text('Proveedor: ' + this.dt.ordHdrCustShortText7 , 10, 40);
+     doc.text('N° Order:' + this.dt.ordNumber , 10, 50);
+     doc.addImage(barcodeImage, 'PNG', 80, 50, 80, 20);
+ 
+     // Datos de ejemplo (puedes reemplazarlos con datos dinámicos)
+     const rows = [
+       ["Producto", "Descripción", "Cantidad Solicitada", "Cantidad", "Sector Destino"],
+     ];
+     
+     this.prd.forEach((element: any) => {
+      console.log(element);
+      
+       rows.push([element.ordDtlCustShortText1, element.ordDtlCustShortText2, element.orddQtySol, element.enteredQty, element.sectorFil.secDes]);
+     });
+     // Usar autoTable para generar la tabla
+     autoTable(doc, {
+       head: [rows[0]], // Definir los encabezados
+       body: rows.slice(1), // Definir el cuerpo (omitimos la primera fila)
+       startY: 80, // Posición Y de inicio de la tabla
+     });
+
+     // Agregar el código de barras al PDF
     
-  } 
+ 
+     // Guardar el archivo PDF
+     doc.save('orden-wms_' + this.dt.ordNumber + '.pdf');
+
+  }
 }

@@ -53,6 +53,9 @@
                   <a style= "margin : 1px ;" (click)="verificarEE(data , contentVerificar)" class="btn btn-warning btn-xs" ngbTooltip="VerificarEE">
                     <fa-icon [icon]="faClipboardList"></fa-icon>
                   </a>
+                  <a *ngIf="dt.ordestatus =='V'"  style= "margin : 1px ;" (click)="generarPDFTraslado()" class="btn btn-warning btn-xs" ngbTooltip="Generar PDF">
+                    <fa-icon [icon]="faFilePdf"></fa-icon>
+                  </a>
               </th>          
             </tr>
           </tbody>
@@ -66,7 +69,7 @@
     <!-- /.card-footer-->
   </div>
 
-  <ng-template #content let-modal>
+<ng-template #content let-modal>
     <div class="modal-header">
         <h5 class="modal-title">Pedido #{{dt.ordId}} - {{dt.ordNumber}}</h5>
         <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
@@ -173,13 +176,14 @@
                       <td>{{obj.ordDtlCustShortText2}}</td>  
                       <td>{{obj.orddQtySol}}</td>                       
                       <td>
-                        <input type="number" [(ngModel)]="prd[i].enteredQty" (input)="validateQuantities()"  class="form-control" min="0" placeholder="Cantidad" >
+                        <input type="number" [(ngModel)]="prd[i].enteredQty" (input)="validateQuantities()"  class="form-control" min="0" placeholder="Cantidad" [disabled]="disable">
                       </td>
                       <td>
-                        <ng-select  [items]="sectorFil"
-                        bindLabel="secDes"
-                        bindValue="sectorId"
-                        [(ngModel)]="prd[i].sectorId"
+                        <ng-select   
+                        [items]="sectorFil"
+                        bindLabel="secDes" 
+                        [(ngModel)]="prd[i].sectorFil" 
+                        [disabled]="disable"
                         >
                       </ng-select >
                       </td>
@@ -190,7 +194,7 @@
       </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-primary  "  *ngIf ="isQuantityValid" [disabled]="val" (click)="generarIBLPN(dt,prd)">
+    <button type="button" class="btn btn-outline-primary  "  dis *ngIf ="isQuantityValid" [disabled]="val" (click)="generarIBLPN(dt,prd)">
       <div *ngIf= "val">
         Guardando..
         <span class="spinner-border spinner-border-sm mr-2"></span>

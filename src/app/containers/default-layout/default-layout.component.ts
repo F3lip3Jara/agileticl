@@ -81,9 +81,6 @@ export class DefaultLayoutComponent {
         this.avatar = next;
         this.servicioUser.setUsuario(this.name, this.rol, this.menu, this.avatar, this.empresa, this.logo);  
     });
-      
-   
-    
   
   }
 

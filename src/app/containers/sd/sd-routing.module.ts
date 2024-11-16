@@ -4,6 +4,7 @@ import { TrabAlmacenComponent } from "./centro/trab-almacen/trab-almacen.compone
 import { TrabTipClassComponent } from "./trab-tip-class/trab-tip-class.component";
 import { TrabOrdenesWmsComponent } from "./trab-ordenes-wms/trab-ordenes-wms.component";
 import { TrabSectorComponent } from "./centro/trab-sector/trab-sector.component";
+import { TrabStocksComponent } from "./trab-stocks/trab-stocks.component";
 
 const routes: Routes = [
   {
@@ -46,8 +47,14 @@ const routes: Routes = [
         data: {
           title: 'Sectores',
         }
+      },
+      {
+        path: 'stocks',
+        component: TrabStocksComponent,
+        data: {
+          title: 'Stocks',
+        }
       }
-
       
     
     ],

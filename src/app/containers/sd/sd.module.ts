@@ -20,7 +20,8 @@ import {AgileModule} from '../../agileModule.module';
 import { TrabAlmacenComponent } from './centro/trab-almacen/trab-almacen.component';
 import { TrabTipClassComponent } from './trab-tip-class/trab-tip-class.component';
 import { TrabOrdenesWmsComponent } from './trab-ordenes-wms/trab-ordenes-wms.component';
-import { TrabSectorComponent } from './centro/trab-sector/trab-sector.component'
+import { TrabSectorComponent } from './centro/trab-sector/trab-sector.component';
+import { TrabStocksComponent } from './trab-stocks/trab-stocks.component'
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { TrabSectorComponent } from './centro/trab-sector/trab-sector.component'
     TrabTipClassComponent,
     TrabOrdenesWmsComponent,
     TrabSectorComponent,
+    TrabStocksComponent,
   
                 ],
   imports: [

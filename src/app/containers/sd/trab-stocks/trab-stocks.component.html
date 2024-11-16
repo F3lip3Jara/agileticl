@@ -1,0 +1,51 @@
+<div class="card card-primary card-outline">
+    <div class="card-header">
+      <h5 class="card-title">Stock's</h5>   
+    </div>
+    <div class="card-body">
+        <button type = 'button' class="btn btn-outline-primary btn-sm" (click)="refrescar()">
+            <fa-icon [icon]="faSyncAlt"></fa-icon>
+            Refrescar</button>
+        <button type = 'button' class="btn  btn-outline-primary btn-sm" (click) = "Excel()" ngbTooltip="Excel" >
+          <fa-icon [icon]="faFileExcel"></fa-icon>
+          Excel
+        </button>
+        <app-filtro-general [colums]="colums" (onItemAdded)="addFilter($event)" *ngIf="colums.length > 0"></app-filtro-general>
+    
+      <div class="loading" *ngIf= "loading" >
+        <img src = "assets/Circles-menu-3.gif">
+       </div>
+   <div>
+    <br>
+    <div class="table-responsive"   *ngIf="tblObj.length > 0" class="{{carga}}">
+        <table #datatableElement datatable  id="tblProductos" class="table table-hover text-nowrap"[dtOptions]="dtOptions" >
+          <thead>
+            <tr>
+              <th>Id</th>            
+              <th>Centro</th>
+              <th>Almacen</th>
+              <th>Producto</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tblObj">
+              <th>{{data.stockId}}</th>
+              <th>{{data.cenDes}}</th>
+              <th>{{data.almDes}}</th>
+              <th>{{data.prdDes}}</th>
+              <th>{{data.stockQty}}</th>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    </div>
+  </div>
+    <!-- /.card-body -->
+    <div class="card-footer">
+      
+    </div>
+    <!-- /.card-footer-->
+  </div>
+  
+ 

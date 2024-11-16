@@ -82,19 +82,19 @@ export class InsOrdenProduccionComponent implements OnInit {
 
 
       this.insPrd = fb.group({
-                                  prdCod : ['' , Validators.compose([
-                                    Validators.required,
-                                  ])],
-                                  orpdCant: ['' , Validators.compose([
-                                    Validators.required,
-                                    Validators.pattern('^-?[0-9]\\d*?$')
-                                  ])],
-                                  orpdCantDis: ['' , Validators.compose([                                   
-                                    Validators.pattern('^-?[0-9]\\d*?$')
-                                  ])],
-                                  orpdObs: ['' , Validators.compose([
-                            
-                                  ])]
+                         prdCod : ['' , Validators.compose([
+                           Validators.required,
+                         ])],
+                         orpdCant: ['' , Validators.compose([
+                           Validators.required,
+                           Validators.pattern('^-?[0-9]\\d*?$')
+                         ])],
+                         orpdCantDis: ['' , Validators.compose([                                   
+                           Validators.pattern('^-?[0-9]\\d*?$')
+                         ])],
+                         orpdObs: ['' , Validators.compose([
+                   
+                         ])]
                                  
                       });
 
