@@ -64,8 +64,7 @@ export class InsEmpresaComponent {
           this.parametros = [{key :'prvRut' ,value: field.trim()}];
           this.rest.get('valPrvRut', this.token , this.parametros).subscribe( (data : any) => {
             data.forEach((elementx : any)  => {
-              console.log(elementx);
-              
+                      
                 if(elementx.error === '1'  ){
                   this.valRut = true;
                   this.mensaje= '';            
@@ -86,7 +85,7 @@ export class InsEmpresaComponent {
      resp.forEach((elementx : any)  => {
           if(elementx.error == '0' ){           
             this.val = false;
-            this.router.navigate(['./..']);         
+            this.router.navigate(['seguridad/administracion/empresa']);         
           }
       });
     });

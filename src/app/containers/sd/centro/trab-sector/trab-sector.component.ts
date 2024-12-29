@@ -30,9 +30,9 @@ export class TrabSectorComponent {
     faSquarePlus                        = faSquarePlus;
     faTrash                             = faTrash;
     faArrowTurnDown                     = faArrowTurnDown;
-    accion      : string                = '';
-    almacen      : any                   = {};
-    sector       : any                   = {};
+    accion       : string               = '';
+    almacen      : any                  = {};
+    sector       : any                  = {};
   
     constructor(
                 private servicio     : UsersService,

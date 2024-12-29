@@ -12,7 +12,7 @@ import { INavData } from "@coreui/angular";
 export class UsersService {
 
   @Output() disparador  :EventEmitter <any> = new EventEmitter();   
-  modulo : any         = [];
+  modulo  : any        = [];
   navItems: INavData[] = [];
   menu    : any        = [];
 
@@ -122,6 +122,8 @@ export class UsersService {
     });
     return this.navItems;
    }
+
+   
   
 
 }

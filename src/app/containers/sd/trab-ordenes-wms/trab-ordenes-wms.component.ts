@@ -114,10 +114,6 @@ export class TrabOrdenesWmsComponent {
     this.modal.open(content);
   }
   public verificarEE(data:any , content : any ){
-  /*  this.parametros =[ {'id': data.opedId} , {'tipPed': 'WEB'}];
-    this.rest.post('insSdOrden' , this.token, this.parametros).subscribe(data => {
-        
-    });*/
     this.dt = data;    
     this.parametros = [{key:'centroId' , value:this.dt.centroId} , {key:'almId' , value:this.dt.almId}];
     this.rest.get('sectorFil' , this.token, this.parametros).subscribe((data:any) => {
@@ -151,9 +147,8 @@ export class TrabOrdenesWmsComponent {
   generarIBLPN(orden:any , prd:any){
     this.disable = true;
     this.val     = true;
-    this.parametros = [{'prd':prd}];
-
-    this.rest.post('insSdStock' , this.token, this.parametros).subscribe(data => {
+    this.parametros = [{'prd':prd , 'centroId':orden.centroId , 'almId':orden.almId }];
+    this.rest.post('insOrdTrasInt' , this.token, this.parametros).subscribe(data => {
       this.val = false;
       this.disable = false;
       this.modal.dismissAll();
@@ -161,54 +156,111 @@ export class TrabOrdenesWmsComponent {
 
   }
   
-  generarPDFTraslado(){
-     
-    const canvas = document.createElement('canvas');
-    JsBarcode(canvas, this.dt.ordNumber, {
-      format: 'CODE128',
-      width: 2,
-      height: 50,
-      displayValue: true,
-    });
+  generarPDFTraslado(data:any){
+    this.dt = data;    
+    this.parametros = [{key:'ordId' , value:this.dt.ordId}];
 
-    // Convertir el código de barras a imagen base64
-    const barcodeImage = canvas.toDataURL('image/png');
+    this.rest.get('pdfOrden' , this.token, this.parametros).subscribe((data:any) => {
+        this.prd = data;       
+        console.log(data);
+        
+        const canvas = document.createElement('canvas');
+        
+        JsBarcode(canvas, this.dt.ordNumber, {
+          format: 'CODE128',
+          width: 2,
+          height: 50,
+          displayValue: true,
+        });
 
-    // Crear una nueva instancia de jsPDF
-     const doc = new jsPDF();
-     
-     // Agregar título al PDF
-     doc.text('Orden de Traslado interno WMS', 10, 10);
- 
-     // Agregar información adicional
-     doc.text('Fecha: ' + new Date().toLocaleDateString(), 10, 20);
-     doc.text('Centro:' + this.dt.cenDes , 10, 30);
-     doc.text('Proveedor: ' + this.dt.ordHdrCustShortText7 , 10, 40);
-     doc.text('N° Order:' + this.dt.ordNumber , 10, 50);
-     doc.addImage(barcodeImage, 'PNG', 80, 50, 80, 20);
- 
-     // Datos de ejemplo (puedes reemplazarlos con datos dinámicos)
-     const rows = [
-       ["Producto", "Descripción", "Cantidad Solicitada", "Cantidad", "Sector Destino"],
-     ];
-     
-     this.prd.forEach((element: any) => {
-      console.log(element);
-      
-       rows.push([element.ordDtlCustShortText1, element.ordDtlCustShortText2, element.orddQtySol, element.enteredQty, element.sectorFil.secDes]);
-     });
-     // Usar autoTable para generar la tabla
-     autoTable(doc, {
-       head: [rows[0]], // Definir los encabezados
-       body: rows.slice(1), // Definir el cuerpo (omitimos la primera fila)
-       startY: 80, // Posición Y de inicio de la tabla
-     });
+        // Convertir el código de barras a imagen base64
+        const barcodeImage = canvas.toDataURL('image/png');
 
-     // Agregar el código de barras al PDF
+        // Crear una nueva instancia de jsPDF
+        const doc = new jsPDF();
+        
+        // Agregar título al PDF
+        doc.text('Orden de Traslado interno WMS', 10, 10);
     
- 
-     // Guardar el archivo PDF
-     doc.save('orden-wms_' + this.dt.ordNumber + '.pdf');
+        // Agregar información adicional
+        doc.text('Fecha: ' + new Date().toLocaleDateString(), 10, 20);
+        doc.text('Centro:' + this.dt.cenDes , 10, 30);
+        doc.text('Proveedor: ' + this.dt.ordHdrCustShortText7 , 10, 40);
+        doc.text('N° Orden:' + this.dt.ordNumber , 10, 50);
+        doc.addImage(barcodeImage, 'PNG', 80, 50, 80, 20);
+    
+        // Configuración para las filas
+        const tableRows: any[] = [];
+        const startY = 80; // Posición inicial de la tabla
 
+        // Encabezados de la tabla
+        const headers = ["Producto", "Qty Sol", "Cantidad", "Sector Destino", "Iblpn", "IblCode"];
+
+        
+        this.prd.forEach((element: any) => {
+             // Generar código de barras para cada fila
+            JsBarcode(canvas, element.iblpnOriginalBarcode, {
+              format: 'CODE128',
+              width: 2,
+              height: 30,
+              displayValue: false,
+            });
+
+            // Convertir el código de barras a imagen base64
+            const barcodeImageRow = canvas.toDataURL('image/png');
+
+            // Agregar datos a la tabla
+            tableRows.push({
+              producto: element.prdCod,
+              cantidadSolicitada: element.iblpnHdrCustShortText6,
+              cantidad: element.iblpnQty,
+              sectorDestino: element.trasSecDesDes,
+              iblpn : element.iblpnOriginalBarcode,
+              barcode: barcodeImageRow, // Guardamos la imagen base64 aquí
+            });
+        }); //producto 
+
+        autoTable(doc, {
+          head: [headers],
+          body: tableRows.map(row => [
+            row.producto,
+            row.cantidadSolicitada,
+            row.cantidad,
+            row.sectorDestino,
+            row.iblpn,
+            {
+              content: '', // Celda vacía donde irá el código de barras
+              styles: { cellWidth: 50, minCellHeight: 30 }, // Aumenta el alto de la celda
+            },
+          ]),
+          styles: {
+            halign: 'center', // Alineación horizontal: center, left, right
+            valign: 'middle', // Alineación vertical: top, middle, bottom
+            fillColor: [255, 255, 255], // Fondo blanco
+            textColor: [0, 0, 0],       // Texto negro
+            lineColor: [0, 0, 0],       // Líneas negras
+            lineWidth: 0.1,             // Grosor de las líneas
+          },
+          headStyles: {
+            fillColor: [255, 255, 255],       // Fondo negro para el encabezado
+            textColor: [0,0, 0], // Texto blanco para el encabezado
+          },
+          startY: startY, // Asegúrate de que esta posición esté después del encabezado
+          didDrawCell: (data: any) => {
+            if (data.column.index === 5 && data.row.index !== -1) {
+              // Inserta el código de barras únicamente en las celdas correspondientes
+              const barcodeRow = tableRows[data.row.index]?.barcode;
+              if (barcodeRow) {
+                const xPos = data.cell.x + 3; // Ajusta la posición X
+                const yPos = data.cell.y + 7.5; // Ajusta la posición Y para no pisar el encabezado
+                doc.addImage(barcodeRow, 'PNG', xPos, yPos, 45, 15);
+              }
+            }
+          },
+        });
+      
+        // Guardar el archivo PDF
+        doc.save('orden-wms_' + this.dt.ordNumber + '.pdf');
+      });
   }
 }

@@ -8,15 +8,11 @@
       <img src = "assets/Circles-menu-3.gif">
      </div>
 
-    <div class="card-body row"  class="{{carga}}">
-
-      
+    <div class="card-body row"  class="{{carga}}">      
       <div class="form-group col-md-6 p-4">
       <label for="" >Empresa</label>
       <input type="text" class="form-control" id="" placeholder="" value="{{empresa.empDes}}"   disabled  #upregId>
-      </div>
-      
-     
+      </div>    
       <p-pickList 
         [source]="optnAsig" 
         [target]="optAsig" 
@@ -26,15 +22,15 @@
         [responsive]="true"
         [sourceStyle]="{ height: '30rem' }" 
         [targetStyle]="{ height: '30rem' }" 
-        breakpoint="1400px"
+       
         >   
             <ng-template let-optnAsig pTemplate="item">          
-                <div class="flex flex-wrap p-2 align-items-center gap-3  border-1 border-black">                 
-                    <div class="flex-1 flex flex-column gap-2 ">
+                <div class="flex flex-wrap p-1 align-items-center gap-1  border-1 border-black">                 
+                    <div class="flex-1 flex flex-column gap-1 ">
                         <span class="font-bold">
                             {{ optnAsig.optDes }}
                         </span>
-                        <div class="flex align-items-center gap-2">
+                        <div class="flex align-items-center gap-1">
                           <fa-icon [icon]=" faGear"></fa-icon>          
                             <span>
                                 {{ optnAsig.optDes }}

@@ -42,18 +42,24 @@
               <th>{{data.almDes}}</th>
               <th>{{data.ordHdrCustShortText13}}</th>
               <th>{{data.ordHdrCustShortText7}}</th>
-              <th><span *ngIf="data.ordestatus =='L'">Liberado</span>
+              <th>
+                  <span *ngIf="data.ordestatus =='L'">Liberado</span>
                   <span *ngIf="data.ordestatus =='V'">Verificado</span>
+                  <span *ngIf="data.ordestatus =='U'">Ubicado</span>
+                  <span *ngIf="data.ordestatus =='A'">Almacenado</span>
               </th>
              
               <th>
                  <a style= "margin : 1px ;" (click)="ver(data,content)" class="btn btn-warning btn-xs" ngbTooltip="Ver">
                     <fa-icon [icon]="faEye"></fa-icon>
                   </a>
-                  <a style= "margin : 1px ;" (click)="verificarEE(data , contentVerificar)" class="btn btn-warning btn-xs" ngbTooltip="VerificarEE">
+                  <a *ngIf="data.ordestatus =='V' || data.ordestatus == 'A'" style= "margin : 1px ;"  class="btn btn-secondary btn-xs" ngbTooltip="VerificarEE" >
                     <fa-icon [icon]="faClipboardList"></fa-icon>
                   </a>
-                  <a *ngIf="dt.ordestatus =='V'"  style= "margin : 1px ;" (click)="generarPDFTraslado()" class="btn btn-warning btn-xs" ngbTooltip="Generar PDF">
+                  <a *ngIf="data.ordestatus =='L'" style= "margin : 1px ;" (click)="verificarEE(data , contentVerificar)" class="btn btn-warning btn-xs" ngbTooltip="VerificarEE">
+                    <fa-icon [icon]="faClipboardList"></fa-icon>
+                  </a>
+                  <a *ngIf="data.ordestatus =='V'"  style= "margin : 1px ;" (click)="generarPDFTraslado(data)" class="btn btn-warning btn-xs" ngbTooltip="Generar PDF">
                     <fa-icon [icon]="faFilePdf"></fa-icon>
                   </a>
               </th>          
@@ -159,7 +165,7 @@
         <i class="spinner-grow spinner-grow-sm"></i>
         <i class="spinner-grow spinner-grow-sm"></i>
       </div>
-      <div class="table-responsive" *ngIf="prd.length > 0">
+      <div class="table-responsive" *ngIf="prd.length > 0" style="min-height: 200px;">
           <table class="table">
               <thead>
                   <tr>
